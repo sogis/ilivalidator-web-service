@@ -1,4 +1,4 @@
-package ch.so.agi.interlis;
+package ch.so.agi.ilivalidator;
 
 import static io.restassured.RestAssured.given;
 

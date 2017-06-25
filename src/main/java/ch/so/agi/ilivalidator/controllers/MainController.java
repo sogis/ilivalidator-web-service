@@ -62,7 +62,7 @@ public class MainController {
 			Files.write(uploadFilePath, bytes);
 			
 			// Validate transfer file with ilivalidator library.
-			String logFileName = ilivalidator.validate(uploadFilePath.toString());
+			String logFileName = ilivalidator.validate(configFile, uploadFilePath.toString());
 
 			// Send log file back to client.
 			File logFile = new File(logFileName);

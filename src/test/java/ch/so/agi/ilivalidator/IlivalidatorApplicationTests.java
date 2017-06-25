@@ -1,4 +1,4 @@
-package ch.so.agi.interlis;
+package ch.so.agi.ilivalidator;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
