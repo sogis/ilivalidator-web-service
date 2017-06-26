@@ -45,7 +45,7 @@ public class IntegrationTests {
         	get("/ilivalidator/").
         then().
         	statusCode(200).
-        	body("html.head.title", equalTo("INTERLIS2 - Checkservice"));
+        	body("html.head.title", equalTo("ilivalidator web service"));
 	}
 
 	@Test
