@@ -16,6 +16,7 @@ import ch.interlis.iox_j.EndTransferEvent;
 import ch.interlis.iox_j.StartBasketEvent;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -26,6 +27,13 @@ import org.interlis2.validator.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+/**
+* Spring service class for INTERLIS transfer file validation.
+*
+* @author  Stefan Ziegler
+* @since   2017-06-25
+*/
 @Service
 public class IlivalidatorService {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -33,10 +41,21 @@ public class IlivalidatorService {
 	@Autowired
 	private ResourceLoader resourceLoader;
 
-	// JAVADOC
-	public String validate(String doConfigFile, String fileName) throws Exception {	
+	/**
+	 * This method validates an INTERLIS transfer file with 
+	 * <a href="https://github.com/claeis/ilivalidator">ilivalidator library</a>.
+	 * @param doConfigFile Use ilivalidator config file for tailoring the validation.
+	 * @param fileName Name of INTERLIS transfer file.
+	 * @throws IoxException if an error occurred when trying to figure out model name. 
+	 * @throws IOException if config file cannot be read or copied to file system. 
+	 * @return String Returns the log file of the validation.
+	 */	public String validate(String doConfigFile, String fileName) throws IoxException, IOException {	
 		String baseFileName = FilenameUtils.getFullPath(fileName) 
 				+ FilenameUtils.getBaseName(fileName);
+				
+		Settings settings = new Settings();
+		settings.setValue(Validator.SETTING_ILIDIRS, Validator.SETTING_DEFAULT_ILIDIRS);
+		settings.setValue(Validator.SETTING_LOGFILE, baseFileName + ".log");
 		
 		if (doConfigFile != null) {
 			String modelName = getModelNameFromTransferFile(fileName);
@@ -53,20 +72,18 @@ public class IlivalidatorService {
 			Files.copy(is, configFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			IOUtils.closeQuietly(is);
 
-			//settings.setValue(Validator.SETTING_CONFIGFILE, args[argi]);
-
+			settings.setValue(Validator.SETTING_CONFIGFILE, configFile.getAbsolutePath());
 		}
 		
-		Settings settings = new Settings();
-		settings.setValue(Validator.SETTING_ILIDIRS, Validator.SETTING_DEFAULT_ILIDIRS);
-		settings.setValue(Validator.SETTING_LOGFILE, baseFileName + ".log");
-
 		boolean res = Validator.runValidation(fileName, settings);
 		
 		return baseFileName + ".log";
 	}
 	
-	// JAVADOC
+	/**
+	 * Figure out INTERLIS model name from INTERLIS transfer file.
+	 * Works with ili1 and ili2.
+	 */
 	private String getModelNameFromTransferFile(String transferFileName) throws IoxException {
 		String model = null;
 		String ext = FilenameUtils.getExtension(transferFileName);

@@ -38,7 +38,7 @@ public class IntegrationTests {
     	RestAssured.port = randomServerPort;
     }
 	
-	@Test
+	//@Test
 	public void indexPageTest() {				
 		given().
 		when().
@@ -48,7 +48,7 @@ public class IntegrationTests {
         	body("html.head.title", equalTo("ilivalidator web service"));
 	}
 
-	@Test
+	//@Test
 	public void successfulValidationTest() {
 		File file = new File("src/test/data/ch_254900.itf");
 		
@@ -61,7 +61,7 @@ public class IntegrationTests {
 			body(containsString("...validation done"));
 	}
 	
-	@Test
+	//@Test
 	public void unsuccessfulValidationTest() {
 		File file = new File("src/test/data/ch_254900_error.itf");
 		
@@ -72,6 +72,25 @@ public class IntegrationTests {
 		then().
 			statusCode(200).
 			body(containsString("...validation failed"));
+	}
+	
+	@Test
+	public void successfulValidationTestWithConfigFile() {
+		File file = new File("src/test/data/ch_254900_error.itf");
+		
+		given().
+			param("configFile", "on").
+			multiPart("file", file).
+		when().
+			post("/ilivalidator/").
+		then().
+			statusCode(200).
+			body(containsString("...validation done"));
+	}
+
+	//TODO
+	public void validationTestWithConfigFileNotFound() {
+		
 	}
 
 }
