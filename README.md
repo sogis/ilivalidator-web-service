@@ -5,9 +5,11 @@ The ilivalidator web service is a spring boot application and uses [ilivalidator
 ## Features
 
 * checks INTERLIS 1+2 transfer files
-* uses server saved config file for validation tailoring
+* uses server saved config files for validation tailoring
 * see [https://github.com/claeis/ilivalidator](https://github.com/claeis/ilivalidator) for all the INTERLIS validation magic of ilivalidator 
 
 ## Status
 
-ilivalidator web service is in development state
+ilivalidator web service is in development state.
+
+## System Requirements
