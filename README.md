@@ -1,6 +1,6 @@
 # ilivalidator web service - a minimalist INTERLIS check service
 
-The ilivalidator web service is a spring boot application and uses [ilivalidator](https://github.com/claeis/ilivalidator) for the INTERLIS transfer file validation.
+The ilivalidator web service is a [spring boot](https://projects.spring.io/spring-boot/) application and uses [ilivalidator](https://github.com/claeis/ilivalidator) for the INTERLIS transfer file validation.
 
 ## Features
 
@@ -19,3 +19,69 @@ ilivalidator web service is in development state.
 ## System Requirements
 
 For the current version of ilivalidator web service, you will need a JRE (Java Runtime Environment) installed on your system, version 1.8 or later.
+
+## Developing
+
+ilivalidator web service is build as a Spring Boot Application.
+
+`git clone https://github.com/edigonzales/ilivalidator-web-service.git` 
+
+Use your favorite IDE (e.g. [Spring Tool Suite](https://spring.io/tools/sts/all)) for coding.
+
+### Testing
+
+Since ilivalidator is heavily tested in its own project, there are only functional tests of the web service implemented.
+
+`./gradlew clean test` will run all tests by starting the web service and uploading an INTERLIS transfer file.
+
+### Building
+
+`./gradlew clean build` will create an executable JAR.
+
+## Running
+
+See also the ["Installing Spring Boot application" section](https://docs.spring.io/spring-boot/docs/current/reference/html/deployment-install.html) of the official documentation.
+
+### Installation on Ubuntu
+
+* Copy the executable JAR to an appropriate directory, e.g. `/opt/apps/ilivalidator/ilivalidator.jar`.
+* `sudo ln -s /opt/apps/ilivalidator/ilivalidator.jar /etc/init.d/ilivalidator`
+* `sudo update-rc.d ilivalidator defaults`
+
+PID can be found at `/var/run/ilivalidator/ilivalidator.pid`.
+
+The log file can be found at ` /var/log/ilivalidator.log`.
+
+### Configuration
+
+You can override the [configuration parameters](blob/master/src/main/resources/application.properties) of the application (aka `application.properties`) if you place a copy of the file with your desired values next to the JAR. See [https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html).
+
+
+If you need to assign more memory to the app or choose another folder for the log file, you can to that by placing a `ilivalidator.conf` file next to the jar. See [https://docs.spring.io/spring-boot/docs/current/reference/html/deployment-install.html#deployment-script-customization-when-it-runs](https://docs.spring.io/spring-boot/docs/current/reference/html/deployment-install.html#deployment-script-customization-when-it-runs).
+
+### Filesystem access
+
+ilivalidator web service needs to temporally store the uploaded transfer file and the resulting log file on the file system. For every uploaded file a temporary directory in the operating system temporary directory (`java.io.tmpdir`) will be created. This can be changed by setting a `ch.so.agi.ilivalidator.uploadedFiles` property in the `application.properties` file.
+
+### Watchdog
+
+A small watchdog bash script can be found here: [blob/master/utils/watchdog.sh](blob/master/utils/watchdog.sh). You can run it e.g. as cron job.
+
+### Apache
+
+```
+ProxyPass /ilivalidator http://127.0.0.1:8888/ilivalidator
+ProxyPassReverse /ilivalidator http://127.0.0.1:8888/ilivalidator
+
+ProxyPass /ilivalidator/ http://127.0.0.1:8888/ilivalidator/
+ProxyPassReverse /ilivalidator/ http://127.0.0.1:8888/ilivalidator/
+```
+
+### ilivalidator configuration files
+
+The ilivalidator configurations files (aka `toml` files) are part of the distributed application and cannot be changed or overriden at the moment. There can be only one configuration file per INTERLIS model.
+
+These configuration files can be found in the resource directory of the source tree.
+
+### Docker
+To be done...

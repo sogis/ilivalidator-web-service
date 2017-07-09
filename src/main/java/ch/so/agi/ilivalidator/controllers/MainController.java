@@ -52,8 +52,12 @@ public class MainController {
 		try {
 			// Get the filename and build the local file path.
 			String filename = uploadFile.getOriginalFilename();
-			String directory = env.getProperty("ch.so.agi.ilivalidator.uploadedFiles");
+			String directory = env.getProperty("ch.so.agi.ilivalidator.uploadedFiles"); 
 
+			if (directory == null) {
+				directory = System.getProperty("java.io.tmpdir");
+			}
+			
 			Path tmpDirectory = Files.createTempDirectory(Paths.get(directory), FOLDER_PREFIX);
 			Path uploadFilePath = Paths.get(tmpDirectory.toString(), filename);
 
