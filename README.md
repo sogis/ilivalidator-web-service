@@ -54,7 +54,7 @@ The log file can be found at ` /var/log/ilivalidator.log`.
 
 ### Configuration
 
-You can override the [configuration parameters](blob/master/src/main/resources/application.properties) of the application (aka `application.properties`) if you place a copy of the file with your desired values next to the JAR. See [https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html).
+You can override the [configuration parameters](src/main/resources/application.properties) of the application (aka `application.properties`) if you place a copy of the file with your desired values next to the JAR. See [https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html).
 
 
 If you need to assign more memory to the app or choose another folder for the log file, you can to that by placing a `ilivalidator.conf` file next to the jar. See [https://docs.spring.io/spring-boot/docs/current/reference/html/deployment-install.html#deployment-script-customization-when-it-runs](https://docs.spring.io/spring-boot/docs/current/reference/html/deployment-install.html#deployment-script-customization-when-it-runs).
