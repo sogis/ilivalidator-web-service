@@ -65,7 +65,7 @@ ilivalidator web service needs to temporally store the uploaded transfer file an
 
 ### Watchdog
 
-A small watchdog bash script can be found here: [blob/master/utils/watchdog.sh](blob/master/utils/watchdog.sh). You can run it e.g. as cron job.
+A small watchdog bash script can be found here: [utils/watchdog.sh](utils/watchdog.sh). You can run it e.g. as cron job.
 
 ### Apache
 
