@@ -3,18 +3,22 @@ buildscript {
 		springBootVersion = '1.5.3.RELEASE'
 	}
 	repositories {
+		jcenter()
 		mavenCentral()
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("se.transmode.gradle:gradle-docker:1.2")
 	}
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'docker'
 
-group = 'ch.so.agi.ilivalidator-web-service'
+//group = 'ch.so.agi.ilivalidator-web-service'
+group = 'sogis'
 version = '0.0.8-SNAPSHOT'
 
 description = """ilivalidator web service"""
@@ -53,4 +57,16 @@ test {
 	testLogging {
 		showStandardStreams = true
 	}
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+  push = true
+  applicationName = jar.baseName
+  dockerfile = file('src/main/docker/Dockerfile')
+  doFirst {
+    copy {
+      from jar
+      into stageDir
+    }
+  }
 }
