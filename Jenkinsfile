@@ -24,7 +24,7 @@ pipeline {
             }
         }
         
-        /*
+        
         stage('Test') {
             steps {
                 echo 'Perform tests.'
@@ -40,7 +40,7 @@ pipeline {
                 ]
             }
         }
-        */
+        
 
         stage('Docker Build') {
             steps {
