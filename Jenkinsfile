@@ -45,7 +45,7 @@ pipeline {
         stage('Publish image') {
             steps {
                 echo "Publish docker image to hub.docker.com"
-                sh "./gradlew clean build buildDocker -x test"
+                sh "./gradlew clean build buildDocker -x test -s"
 
                 //archiveArtifacts artifacts: "build/libs/*.jar", onlyIfSuccessful: true, fingerprint: true
             }
