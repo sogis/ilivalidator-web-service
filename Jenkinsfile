@@ -43,17 +43,25 @@ pipeline {
         */
 
         stage('Publish image') {
+
+            docker.image('demo').push('latest')
             def image = docker.build("ilivalidator-web-service:0.0.8-62aad82")
                     docker.withRegistry("https://nexus.cifire.com", "nexus") {
             image.push()
             image.push('latest')
         }
-            //steps {
-                //echo "Publish docker image to hub.docker.com"
-                //sh "./gradlew clean build buildDocker -x test -s"
+            steps {
+                echo "Publish docker image to hub.docker.com"
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                    //docker.image('ilivalidator-web-service').push('0.0.8-62aad82')
+                    }
+                }
+                
+                sh "./gradlew clean build buildDocker -x test -s"
                 //sh "docker images"
                 //archiveArtifacts artifacts: "build/libs/*.jar", onlyIfSuccessful: true, fingerprint: true
-            //}
+            }
         }
 
         stage('Deploy UAT') {
