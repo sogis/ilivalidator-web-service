@@ -50,6 +50,9 @@ pipeline {
                         docker.image('sogis/ilivalidator-web-service').push('latest')
                     
                     }
+
+                    def projectVersion = sh script: "gradle getVersion()", returnStdout: true
+                    println projectVersion
                 }
                 
                 //sh "./gradlew clean build buildDocker -x test -s"
