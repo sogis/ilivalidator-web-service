@@ -46,13 +46,16 @@ pipeline {
             steps {
                 echo "Publish docker image to hub.docker.com"
                 script {
+                    // Get version of build from build.gradle.
+                    // Best approach I could figure out.
+                    def projectVersion = sh script: "./gradlew getVersion -q", returnStdout: true
+                    println projectVersion
+
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
                         //docker.image('sogis/ilivalidator-web-service').push('latest')
                     
                     }
-
-                    def projectVersion = sh script: "./gradlew getVersion", returnStdout: true
-                    println projectVersion
+                    
                 }
                 
                 //sh "./gradlew clean build buildDocker -x test -s"
