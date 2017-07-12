@@ -45,9 +45,11 @@ pipeline {
         stage('Publish image') {
             steps {
                 echo "Publish docker image to hub.docker.com"
-                sh "./gradlew clean build buildDocker -x test -s"
+                //sh "./gradlew clean build buildDocker -x test -s"
                 //sh "docker images"
                 //archiveArtifacts artifacts: "build/libs/*.jar", onlyIfSuccessful: true, fingerprint: true
+                def image = docker.build("ilivalidator-web-service:0.0.8-62aad82")
+
             }
         }
 
