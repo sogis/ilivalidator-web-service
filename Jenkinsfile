@@ -14,7 +14,7 @@ pipeline {
             }
         }
         
-        stage('Build') {
+        stage('Java Build') {
             steps {
                 echo "Build fatjar"
                 //sh "./gradlew clean build -x test"
@@ -42,9 +42,16 @@ pipeline {
         }
         */
 
-        stage('Publish image') {
+        stage('Docker Build') {
             steps {
-                echo "Publish docker image to hub.docker.com"
+                echo "Build docker image."
+                sh "./gradlew clean build buildDocker -x test"
+            }
+        }
+
+        stage('Docker Publish') {
+            steps {
+                echo "Publish docker image to hub.docker.com."
                 script {
                     // Get version of build from build.gradle.
                     // Best approach I could figure out.
@@ -52,9 +59,8 @@ pipeline {
                     println projectVersion
 
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        docker.image('sogis/ilivalidator-web-service').push('latest')
-                        docker.image('sogis/ilivalidator-web-service').push(projectVersion.trim())
-                    
+                        docker.image('sogis/ilivalidator-web-service:latest').push(projectVersion.trim())
+                        docker.image('sogis/ilivalidator-web-service:latest').push('latest')
                     }
                     
                 }
@@ -76,5 +82,7 @@ pipeline {
                 echo 'Deploying auf Produktion.'
             }
         }
+
+        // Perhaps we should clean the images and other stuff?
     }
 }
