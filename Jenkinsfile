@@ -24,7 +24,6 @@ pipeline {
             }
         }
         
-        /*
         stage('Java Test') {
             steps {
                 echo 'Perform tests.'
@@ -63,13 +62,8 @@ pipeline {
                     }
                     
                 }
-                
-                //sh "./gradlew clean build buildDocker -x test -s"
-                //sh "docker images"
-                //archiveArtifacts artifacts: "build/libs/*.jar", onlyIfSuccessful: true, fingerprint: true
             }
         }
-        */
 
         stage('Deploy UAT') {
             steps {
