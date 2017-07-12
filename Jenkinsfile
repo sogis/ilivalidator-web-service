@@ -16,7 +16,7 @@ pipeline {
         
         stage('Build') {
             steps {
-                echo "Build binary/jar."
+                echo "Build fatjar"
                 //sh "./gradlew clean build -x test"
 
                 archiveArtifacts artifacts: "build/libs/*.jar", onlyIfSuccessful: true, fingerprint: true
@@ -45,8 +45,8 @@ pipeline {
         stage('Publish image') {
             steps {
                 echo "Publish docker image to hub.docker.com"
-                //sh "./gradlew clean build buildDocker -x test -s"
-                sh "docker images"
+                sh "./gradlew clean build buildDocker -x test -s"
+                //sh "docker images"
                 //archiveArtifacts artifacts: "build/libs/*.jar", onlyIfSuccessful: true, fingerprint: true
             }
         }
