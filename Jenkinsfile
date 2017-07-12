@@ -47,7 +47,7 @@ pipeline {
                 echo "Publish docker image to hub.docker.com"
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                    docker.image('sogis/ilivalidator-web-service').push('0.0.8-c90a480')
+                    docker.image('sogis/ilivalidator-web-service').push()
                     
                     }
                 }
