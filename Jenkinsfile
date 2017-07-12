@@ -65,6 +65,9 @@ pipeline {
             }
         }
 
+        // Generally: How (technically) do I deploy?
+        // Depends on different boundary conditions?!
+
         stage('Deploy UAT') {
             steps {
                 echo 'Deploying User Acceptance Testing.'
@@ -78,13 +81,13 @@ pipeline {
                 echo 'Das darf ich NICHT alleine.'
 
                 script {
+                    // do not forget to set a time!
+                    // timeout(time: 1, unit: 'MINUTES') {...}
                     def result = input(id: 'Proceed1', message: 'Deploy to production?', parameters: [[$class: 'BooleanParameterDefinition', defaultValue: false, description: '', name: 'Please confirm you agree with this']])
                     echo 'result: ' + result
                 }    
             }  
         }  
-
-
         // Perhaps we should clean up the images and other stuff?
     }
 }
