@@ -78,17 +78,13 @@ pipeline {
             }
         }
 
-        stage('Deploy Production') {
+        stage("Deploy Production") {
             steps {
                 echo 'Deploying auf Produktion.'
                 echo 'Das darf ich NICHT alleine.'
-            }
-        }
 
-        stage("Stage with input") {
-            steps {
                 script {
-                    def result = input(id: 'Proceed1', message: 'Was this successful?', parameters: [[$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']])
+                    def result = input(id: 'Proceed1', message: 'Deploy to production?', parameters: [[$class: 'BooleanParameterDefinition', defaultValue: false, description: '', name: 'Please confirm you agree with this']])
                     echo 'result: ' + result
                 }    
             }  
