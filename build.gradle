@@ -9,6 +9,7 @@ buildscript {
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath("se.transmode.gradle:gradle-docker:1.2")
+		classpath("net.nemerosa:versioning:2.6.0")
 	}
 }
 
@@ -16,10 +17,11 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'docker'
+apply plugin: 'net.nemerosa.versioning'
 
 //group = 'ch.so.agi.ilivalidator-web-service'
 group = 'sogis'
-version = '0.0.8-SNAPSHOT'
+version = '0.0.8-'+versioning.info.build
 
 description = """ilivalidator web service"""
 
@@ -59,14 +61,27 @@ test {
 	}
 }
 
-task buildDocker(type: Docker, dependsOn: build) {
-  push = true
-  applicationName = jar.baseName
-  dockerfile = file('src/main/docker/Dockerfile')
-  doFirst {
-    copy {
-      from jar
-      into stageDir
-    }
-  }
+task XXXXbuildDocker(type: Docker, dependsOn: build) {
+	push = false // project.hasProperty('push') <-> "./gradlew buildDocker -Ppush"
+	applicationName = jar.baseName
+	dockerfile = file('src/main/docker/Dockerfile')
+	doFirst {
+		copy {
+			from jar
+			into stageDir
+		}
+	}
+}
+
+// What about "latest"?
+// Do it twice with tag='latest'?
+task buildDocker(type: Docker) {
+	baseImage = 'frolvlad/alpine-oraclejdk8:slim'
+	push = true // project.hasProperty('push')
+	applicationName = jar.baseName
+	addFile {
+		from jar
+		rename {'app.jar'}
+	}
+  	entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom', '-jar', '/app.jar'])
 }
