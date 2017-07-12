@@ -51,7 +51,7 @@ pipeline {
                     
                     }
 
-                    def projectVersion = sh script: "./gradlew getVersion()", returnStdout: true
+                    def projectVersion = sh script: "./gradlew getVersion", returnStdout: true
                     println projectVersion
                 }
                 
