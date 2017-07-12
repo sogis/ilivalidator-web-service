@@ -77,7 +77,7 @@ task XXXXbuildDocker(type: Docker, dependsOn: build) {
 // Do it twice with tag='latest'?
 task buildDocker(type: Docker) {
 	baseImage = 'frolvlad/alpine-oraclejdk8:slim'
-	push = false // project.hasProperty('push')
+	push = true // project.hasProperty('push')
 	applicationName = jar.baseName
 	addFile {
 		from jar
