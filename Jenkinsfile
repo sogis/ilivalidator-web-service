@@ -47,11 +47,12 @@ pipeline {
                 echo "Publish docker image to hub.docker.com"
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                    //docker.image('ilivalidator-web-service').push('0.0.8-62aad82')
+                    docker.image('sogis/ilivalidator-web-service').push('0.0.8-c90a480')
+                    
                     }
                 }
                 
-                sh "./gradlew clean build buildDocker -x test -s"
+                //sh "./gradlew clean build buildDocker -x test -s"
                 //sh "docker images"
                 //archiveArtifacts artifacts: "build/libs/*.jar", onlyIfSuccessful: true, fingerprint: true
             }
