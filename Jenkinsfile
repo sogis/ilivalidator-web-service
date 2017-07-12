@@ -24,8 +24,8 @@ pipeline {
             }
         }
         
-        
-        stage('Test') {
+        /*
+        stage('Java Test') {
             steps {
                 echo 'Perform tests.'
                 sh "./gradlew clean test"
@@ -41,7 +41,6 @@ pipeline {
             }
         }
         
-
         stage('Docker Build') {
             steps {
                 echo "Build docker image."
@@ -70,19 +69,32 @@ pipeline {
                 //archiveArtifacts artifacts: "build/libs/*.jar", onlyIfSuccessful: true, fingerprint: true
             }
         }
+        */
 
         stage('Deploy UAT') {
             steps {
                 echo 'Deploying User Acceptance Testing.'
+                echo 'Das darf ich alleine.'
             }
         }
 
         stage('Deploy Production') {
             steps {
                 echo 'Deploying auf Produktion.'
+                echo 'Das darf ich NICHT alleine.'
             }
         }
 
-        // Perhaps we should clean the images and other stuff?
+        stage("Stage with input") {
+            steps {
+                script {
+                    def result = input(id: 'Proceed1', message: 'Was this successful?', parameters: [[$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']])
+                    echo 'result: ' + result
+                }    
+            }  
+        }  
+
+
+        // Perhaps we should clean up the images and other stuff?
     }
 }

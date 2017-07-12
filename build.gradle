@@ -61,7 +61,8 @@ test {
 	}
 }
 
-task XXXXbuildDocker(type: Docker, dependsOn: build) {
+// Dockerfile is persistent.
+task XXXXbuildDockerXXXX(type: Docker, dependsOn: build) {
 	push = false // project.hasProperty('push') <-> "./gradlew buildDocker -Ppush"
 	applicationName = jar.baseName
 	dockerfile = file('src/main/docker/Dockerfile')
@@ -73,12 +74,11 @@ task XXXXbuildDocker(type: Docker, dependsOn: build) {
 	}
 }
 
-
 // Build
 task buildDocker(type: Docker) {
 	tagVersion = 'latest'
 	baseImage = 'frolvlad/alpine-oraclejdk8:slim'
-	push = false // project.hasProperty('push')
+	push = false // We push in the Jenkins pipeline (had troubles with credentials).
 	applicationName = jar.baseName
 	addFile {
 		from jar
@@ -87,7 +87,7 @@ task buildDocker(type: Docker) {
   	entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom', '-jar', '/app.jar'])
 }
 
-
+// Needed for Jenkins pipeline and Docker images tagging.
 task getVersion {
 	println project.version
 }
