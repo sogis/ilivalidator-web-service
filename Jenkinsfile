@@ -11,23 +11,20 @@ pipeline {
                 //checkout scm // not working with "Build now"? -> he checkout step will checkout code from source control; scm is a special variable which instructs the checkout step to clone the specific revision which triggered this Pipeline run.
 
                 git "https://github.com/edigonzales/ilivalidator-web-service.git/"
-
-                //echo "Construyendo el proyecto con Gradle Wrapper"
-                //sh './gradlew build -x test'
-
-                //archive 'build/libs/*.jar'
             }
         }
+        
         stage('Build') {
             steps {
                 echo "Build binary/jar."
-                sh "./gradlew build -x test"
+                sh "./gradlew clean build -x test"
 
                 archiveArtifacts artifacts: "build/libs/*.jar", onlyIfSuccessful: true, fingerprint: true
                 // do not forget javadocs: e.g. archiveArtifacts(artifacts: 'target/Nadia*javadoc.jar', fingerprint: true)
             }
         }
         
+        /*
         stage('Test') {
             steps {
                 echo 'Perform tests.'
@@ -43,11 +40,12 @@ pipeline {
                 ]
             }
         }
+        */
 
         stage('Publish image') {
             steps {
                 echo "Publish docker image to hub.docker.com"
-                //sh "./gradlew build -x test"
+                sh "./gradlew clean build buildDocker -x test"
 
                 //archiveArtifacts artifacts: "build/libs/*.jar", onlyIfSuccessful: true, fingerprint: true
             }
