@@ -17,7 +17,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Build binary/jar."
-                sh "./gradlew clean build -x test"
+                //sh "./gradlew clean build -x test"
 
                 archiveArtifacts artifacts: "build/libs/*.jar", onlyIfSuccessful: true, fingerprint: true
                 // do not forget javadocs: e.g. archiveArtifacts(artifacts: 'target/Nadia*javadoc.jar', fingerprint: true)
