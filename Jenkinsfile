@@ -43,13 +43,6 @@ pipeline {
         */
 
         stage('Publish image') {
-
-            docker.image('demo').push('latest')
-            def image = docker.build("ilivalidator-web-service:0.0.8-62aad82")
-                    docker.withRegistry("https://nexus.cifire.com", "nexus") {
-            image.push()
-            image.push('latest')
-        }
             steps {
                 echo "Publish docker image to hub.docker.com"
                 script {
