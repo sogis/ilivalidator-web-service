@@ -47,11 +47,11 @@ pipeline {
                 echo "Publish docker image to hub.docker.com"
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        docker.image('sogis/ilivalidator-web-service').push('latest')
+                        //docker.image('sogis/ilivalidator-web-service').push('latest')
                     
                     }
 
-                    def projectVersion = sh script: "gradle getVersion()", returnStdout: true
+                    def projectVersion = sh script: "./gradlew getVersion()", returnStdout: true
                     println projectVersion
                 }
                 
