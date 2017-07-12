@@ -51,9 +51,15 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy UAT') {
             steps {
-                echo 'Deploying macht Spass.'
+                echo 'Deploying User Acceptance Testing.'
+            }
+        }
+
+        stage('Deploy Production') {
+            steps {
+                echo 'Deploying auf Produktion.'
             }
         }
     }
