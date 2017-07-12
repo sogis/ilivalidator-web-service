@@ -73,8 +73,8 @@ task XXXXbuildDocker(type: Docker, dependsOn: build) {
 	}
 }
 
-// What about "latest"?
-// Do it twice with tag='latest'?
+
+// Build
 task buildDocker(type: Docker) {
 	tagVersion = 'latest'
 	baseImage = 'frolvlad/alpine-oraclejdk8:slim'

@@ -52,7 +52,8 @@ pipeline {
                     println projectVersion
 
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        //docker.image('sogis/ilivalidator-web-service').push('latest')
+                        docker.image('sogis/ilivalidator-web-service').push('latest')
+                        docker.image('sogis/ilivalidator-web-service').push(projectVersion.trimt())
                     
                     }
                     
