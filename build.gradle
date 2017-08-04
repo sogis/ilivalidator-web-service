@@ -61,7 +61,6 @@ test {
 	}
 }
 
-
 // Build
 task buildDocker(type: Docker) {
 	tagVersion = 'latest'

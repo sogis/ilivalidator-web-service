@@ -15,9 +15,12 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.File;
 
@@ -74,7 +77,12 @@ public class IntegrationTests {
 			body(containsString("...validation failed"));
 	}
 	
-	@Test
+	//@Test
+	/*
+	 * INTERLIS transfer file contains some errors but are ignored
+	 * or reduced to warnings by config file. Hence the validation
+	 * must be successfull.
+	 */
 	public void successfulValidationTestWithConfigFile() {
 		File file = new File("src/test/data/ch_254900_error.itf");
 		
@@ -85,11 +93,31 @@ public class IntegrationTests {
 			post("/ilivalidator/").
 		then().
 			statusCode(200).
-			body(containsString("...validation done"));
+			body(containsString("...validation done")).
+			body(containsString("Info: configFile"));
 	}
 
-	//TODO
-	public void validationTestWithConfigFileNotFound() {
+	@Test
+	/*
+	 * There is no according config file to the INTERLIS
+	 * transfer/model file. Nonetheless the validation is done.
+	 * We have to use another model, if there will be a config
+	 * file for this one.
+	 */
+	public void validationTestWithoutConfigFile() {
+		File file = new File("src/test/data/roh_20170717A.xtf");
+				
+		Response response =
+				given().
+					multiPart("file", file).
+				when().
+					post("/ilivalidator/").
+				then().extract()
+			.response();
+		
+		// http://www.vogella.com/tutorials/Hamcrest/article.html
+        assertThat(response.asString().indexOf("Info: configFile"), is(-1));
+
 		
 	}
 

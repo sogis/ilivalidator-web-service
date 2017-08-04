@@ -16,6 +16,7 @@ import ch.interlis.iox_j.EndTransferEvent;
 import ch.interlis.iox_j.StartBasketEvent;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -65,14 +66,19 @@ public class IlivalidatorService {
 			//InputStream is = getClass().getResourceAsStream("dm01avch24lv95d.toml");
 
 			// Spring offers a more elegant (?) way.
-			Resource resource = resourceLoader.getResource("classpath:toml/"+modelName.toLowerCase()+".toml");
-			InputStream is = resource.getInputStream();
-						
-			File configFile = new File(FilenameUtils.getFullPath(fileName), modelName.toLowerCase()+".toml");
-			Files.copy(is, configFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			IOUtils.closeQuietly(is);
+			try {
+				Resource resource = resourceLoader.getResource("classpath:toml/"+modelName.toLowerCase()+".toml");
+				InputStream is = resource.getInputStream();
+							
+				File configFile = new File(FilenameUtils.getFullPath(fileName), modelName.toLowerCase()+".toml");
+				Files.copy(is, configFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				IOUtils.closeQuietly(is);
 
-			settings.setValue(Validator.SETTING_CONFIGFILE, configFile.getAbsolutePath());
+				settings.setValue(Validator.SETTING_CONFIGFILE, configFile.getAbsolutePath());
+			} catch (FileNotFoundException e) {
+				log.warn(e.getMessage());
+				log.warn("Config/toml file not found. Continue validation w/o config/toml file.");
+			}
 		}
 		
 		boolean res = Validator.runValidation(fileName, settings);
