@@ -61,18 +61,6 @@ test {
 	}
 }
 
-// Dockerfile is persistent.
-task XXXXbuildDockerXXXX(type: Docker, dependsOn: build) {
-	push = false // project.hasProperty('push') <-> "./gradlew buildDocker -Ppush"
-	applicationName = jar.baseName
-	dockerfile = file('src/main/docker/Dockerfile')
-	doFirst {
-		copy {
-			from jar
-			into stageDir
-		}
-	}
-}
 
 // Build
 task buildDocker(type: Docker) {
