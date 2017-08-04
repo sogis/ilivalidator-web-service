@@ -112,13 +112,15 @@ public class IntegrationTests {
 					multiPart("file", file).
 				when().
 					post("/ilivalidator/").
-				then().extract()
+				then().
+					statusCode(200).
+				and().
+					body(containsString("...validation done")).
+				and().
+					extract()
 			.response();
 		
-		// http://www.vogella.com/tutorials/Hamcrest/article.html
-        assertThat(response.asString().indexOf("Info: configFile"), is(-1));
-
-		
+		// assertThat: http://www.vogella.com/tutorials/Hamcrest/article.html
+        assertThat(response.asString().indexOf("Info: configFile"), is(-1));		
 	}
-
 }
