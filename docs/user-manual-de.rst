@@ -11,7 +11,7 @@ Beim Aufruf des *ilivalidator web services* erscheint folgendes Webformular:
 
 .. image:: images/ilivalidator01.png
 
-Die zu prüfende Datei kann durch Knopfdruck auf "DURCHSUCHEN" ausgewählt werden:
+Die zu prüfende Datei kann durch Knopfdruck auf "DURCHSUCHEN" ausgewählt werden. Die Datei darf *nicht* gezippt sein.
 
 .. image:: images/ilivalidator02.png
 
@@ -27,34 +27,29 @@ Die Prüfung kann - je nach Grösse der Datei resp. des Dateiinhaltes - ein paar
 
 .. image:: images/ilivalidator05.png
 
-Der Output des Webservices scheint auf den ersten Blick verwirrend. Er wird detailliert im nächsten Kapitel erläutert. Befindet sich am Ende ``Info: ...validation done``, hat der Webservice keine Fehler gefunden.
-
-
-Hinweis
--------
-ilivalidator cli...
-
-
-asdfasdf 
-
-Ilivalidator ist ein in Java erstelltes Programm, das eine
-Interlis-Transferdatei (itf oder xtf) gemäss einem Interlis-Modell entsprechend
-(ili) überprüft.
-
-Es bestehen u.a. folgende Konfigurationsmöglichkeiten:
-- einzelne Prüfungen ein oder auszuschalten
-- eigene Fehlermeldungen inkl. Attributwerte zu definieren
-- zusätzliche Bedingung zu definieren
-- zusätzliche INTERLIS-Funktionen zu implementieren
-
-Laufzeitanforderungen
----------------------
-
-Das Programm setzt Java 1.6 voraus.
+Der Output des Webservices scheint auf den ersten Blick unübersichtlich. Er wird detailliert im nächsten Kapitel erläutert. Befindet sich am Ende ``Info: ...validation done``, hat der Webservice keine Fehler gefunden.
 
 Interpretation der Resultate
 ============================
 
 .. _Prüfresultat:
 
-asdfadf asdf asdf
+Im Output des Webservices stehen in der Regel viele Zeilen, die mit ``Info:`` beginnen. Dabei handelt es sich um reine Informationen, die für die allfällige Suche nach Fehlern resp. Interpretation eines Fehlers nicht relevant sind. Die letzte Zeile des Outputs der Prüfung zeigt, ob der Validator einen Fehler in der INTERLIS-Transferdatei gefunden hat. Steht ``Info: ...validation failed`` anstelle von ``Info: ...validation done`` als letzte Zeile im Output, wurden Fehler entdeckt. Informationen zu diesen Fehlern stehen ebenfalls im Output in den Zeilen, die mit ``Error:`` beginnen. Nachfolgend werden einige typische Fehlerbeispiele anhand eines kantonalen Datenmodelles erläutert.
+
+Allgemeine Hinweise
+-------------------
+
+Ein entdeckter Fehler wird im Ouput mit ``Error:`` ausgewiesen. Dementsprechend kann einfach nach diesem Schlüsselwort gesucht werden. Nach ``Error:`` wird eine Zeilennummer angezeigt (z.B. ``line 22:``). Dabei handelt es sich nicht um die Zeilennummer auf der sich der Fehler genau befindet, sondern um die Zeilennumer auf der das INTERLIS-Objekt mit dem Fehler *beginnt*. Nach der Linienummer folgt der qualifizierte Attributname, z.B. ``SO_Nutzungsplanung_20170105.Rechtsvorschriften.Dokument`` (<Modellname>.<Topicname>.<Klassenname>).
+
+
+Fehlendes zwingendes Attribut
+-----------------------------
+adsfasdf
+
+
+
+Weitere Hinweise
+================
+
+Der *ilivalidator web service* basiert auf dem `*ilivalidator*-Projekt <https://github.com/claeis/ilivalidator>`_. Die Prüfung von INTERLIS-Daten kann dementsprechend auch ohne Webservice erfolgen. Für die Funktionsweise von *ilivalidator* wird auf die `Projektdokumentation <https://github.com/claeis/ilivalidator/blob/master/docs/ilivalidator.rst>`_ verwiesen. 
+
