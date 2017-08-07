@@ -27,7 +27,7 @@ Die Prüfung kann - je nach Grösse der Datei resp. des Dateiinhaltes - ein paar
 
 .. image:: images/ilivalidator05.png
 
-Der Output des Webservices scheint auf den ersten Blick verwirrend. Er wird detailliert im nächsten Kapitel erläutert. Befindet sich am Ende `Info: ...validation done`, hat der Webservice keine Fehler gefunden.
+Der Output des Webservices scheint auf den ersten Blick verwirrend. Er wird detailliert im nächsten Kapitel erläutert. Befindet sich am Ende ``Info: ...validation done``, hat der Webservice keine Fehler gefunden.
 
 
 Hinweis
