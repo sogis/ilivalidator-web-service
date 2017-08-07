@@ -11,7 +11,7 @@ Beim Aufruf des *ilivalidator web services* erscheint folgendes Webformular:
 
 .. image:: images/ilivalidator01.png
 
-Die zu prüfende Datei kann durch Knopfdruck auf "DURCHSUCHEN" ausgewählt werden. Die Datei darf *nicht* gezippt sein.
+Die zu prüfende Datei kann durch Knopfdruck auf "DURCHSUCHEN" ausgewählt werden. Die Datei darf *nicht* gezippt sein und höchstens 50 Megabyte gross sein.
 
 .. image:: images/ilivalidator02.png
 
