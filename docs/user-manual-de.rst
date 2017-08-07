@@ -10,12 +10,6 @@ Der *ilivalidator web service* stellt eine einfache Art dar INTERLIS-Daten gegen
 
 Internal crossreferences, like example_.
 
-.. _example:
-
-This is an example crossreference target.
-
-
-
 Ilivalidator ist ein in Java erstelltes Programm, das eine
 Interlis-Transferdatei (itf oder xtf) gemäss einem Interlis-Modell entsprechend
 (ili) überprüft.
@@ -31,7 +25,7 @@ Laufzeitanforderungen
 
 Das Programm setzt Java 1.6 voraus.
 
-.. _ref_Tz:
+.. _example:
 
 Interpretation der Resultate
 ============================
