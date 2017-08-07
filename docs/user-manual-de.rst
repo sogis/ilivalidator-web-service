@@ -101,8 +101,7 @@ In Wertebereichs-Attribute können nur Werte innerhalb eines bestimmten Bereichs
 Mehrfach verwendeter Objektidentifikator
 ----------------------------------------
 
-``OID 12dd6ab7-8ed5-458a-a982-e1bf6e542c8c of object SO_Nutzungsplanung_20170105.Rechtsvorschriften.Dokument already exists in CLASS SO_Nutzungsplanung_20170105.Rechtsvorschriften.Dokument.
-``
+``OID 12dd6ab7-8ed5-458a-a982-e1bf6e542c8c of object SO_Nutzungsplanung_20170105.Rechtsvorschriften.Dokument already exists in CLASS SO_Nutzungsplanung_20170105.Rechtsvorschriften.Dokument.``
 
 Der Objektidentifikator muss in der INTERLIS-Transferdatei eindeutig sein. Wird der Objektidentifikator in einer anderen Klasse ein weiteres Mal verwendet, kann die Fehlermeldung nicht mehr ganz eindeutig sein (aufgrund von Folgefehlern).
 
