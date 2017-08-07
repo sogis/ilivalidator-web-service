@@ -36,7 +36,7 @@ Interpretation der Resultate
 
 .. _Prüfresultat:
 
-Im Output des Webservices stehen in der Regel viele Zeilen, die mit ``Info:`` beginnen. Dabei handelt es sich um reine Informationen, die für die allfällige Suche nach Fehlern resp. Interpretation eines Fehlers nicht relevant sind. Die letzte Zeile des Outputs der Prüfung zeigt, ob der Validator einen Fehler in der INTERLIS-Transferdatei gefunden hat. Steht ``Info: ...validation failed`` anstelle von ``Info: ...validation done`` als letzte Zeile im Output, wurden Fehler entdeckt. Informationen zu diesen Fehlern stehen ebenfalls im Output in den Zeilen, die mit ``Error:`` beginnen. Nachfolgend werden einige typische Fehlerbeispiele anhand eines kantonalen Datenmodelles erläutert.
+Im Output des Webservices stehen in der Regel viele Zeilen, die mit ``Info:`` beginnen. Dabei handelt es sich um reine Informationen, die für die allfällige Suche nach Fehlern resp. Interpretation eines Fehlers nicht relevant sind. Die letzte Zeile des Outputs der Prüfung zeigt, ob der Validator einen Fehler in der INTERLIS-Transferdatei gefunden hat. Steht ``Info: ...validation failed`` anstelle von ``Info: ...validation done`` als letzte Zeile im Output, wurden Fehler entdeckt. Informationen zu diesen Fehlern stehen ebenfalls im Output in den Zeilen, die mit ``Error:`` beginnen. Nachfolgend werden einige typische Fehlerbeispiele anhand eines `kantonalen Datenmodelles <http://geo.so.ch/models/ARP/SO_Nutzungsplanung_20170105.ili>`_ erläutert.
 
 Allgemeine Hinweise
 -------------------
@@ -61,7 +61,7 @@ Zu lange Attributwerte
 
 ``Attribute DokumentID is length restricted to 16``
 
-Das Attribut ``DokumentID`` darf höchsten 16 Zeichen (``DokumentID : TEXT*16;``) lang sein.
+Das Attribut ``DokumentID`` darf höchstens 16 Zeichen (``DokumentID : TEXT*16;``) lang sein.
 
 
 Weitere Hinweise
