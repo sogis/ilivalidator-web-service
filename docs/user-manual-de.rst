@@ -5,10 +5,7 @@ Benutzerhandbuch
 Bedienung des Webservices
 =========================
 
-Der *ilivalidator web service* stellt eine einfache Art dar INTERLIS-Daten gegenüber einem INTERLIS-Modell  zu prüfen (= Modellkonformität). Die zu prüfenden INTERLIS-Daten werden mittels Webformular auf einen Server hochgeladen, wo sie anschliessend automatisch geprüft werden. Das Prüfresultat wird direkt im Browser angezeigt. 
-
-
-Internal crossreferences, like example_.
+Der *ilivalidator web service* stellt eine einfache Art dar INTERLIS-Daten gegenüber einem INTERLIS-Modell  zu prüfen (= Modellkonformität). Die zu prüfenden INTERLIS-Daten werden mittels Webformular auf einen Server hochgeladen, wo sie anschliessend automatisch geprüft werden. Das Prüfresultat_ wird direkt im Browser angezeigt. 
 
 Ilivalidator ist ein in Java erstelltes Programm, das eine
 Interlis-Transferdatei (itf oder xtf) gemäss einem Interlis-Modell entsprechend
@@ -25,9 +22,9 @@ Laufzeitanforderungen
 
 Das Programm setzt Java 1.6 voraus.
 
-.. _example:
-
 Interpretation der Resultate
 ============================
 
-asdfadf
+.. _Prüfresultat:
+
+asdfadf asdf asdf
