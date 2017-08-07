@@ -11,6 +11,14 @@ Beim Aufruf des *ilivalidator web services* erscheint folgendes Webformular:
 
 .. image:: images/ilivalidator01.png
 
+Die zu prüfende Datei kann durch Knopfdruck auf "DURCHSUCHEN" ausgewählt werden:
+
+.. image:: images/ilivalidator02.png
+
+Im Feld "INTERLIS-Transferdatei" erscheint der Name der ausgewählten Datei.
+
+.. image:: images/ilivalidator03.png
+
 asdfasdf 
 
 Ilivalidator ist ein in Java erstelltes Programm, das eine
