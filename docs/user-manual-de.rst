@@ -67,5 +67,5 @@ Das Attribut ``DokumentID`` darf höchstens 16 Zeichen (``DokumentID : TEXT*16;`
 Weitere Hinweise
 ================
 
-Der *ilivalidator web service* basiert auf dem `*ilivalidator*-Projekt <https://github.com/claeis/ilivalidator>`_. Die Prüfung von INTERLIS-Daten kann dementsprechend auch ohne Webservice erfolgen. Für die Funktionsweise von *ilivalidator* wird auf die `Projektdokumentation <https://github.com/claeis/ilivalidator/blob/master/docs/ilivalidator.rst>`_ verwiesen. 
+Der *ilivalidator web service* basiert auf dem *`ilivalidator-Projekt <https://github.com/claeis/ilivalidator>`_*. Die Prüfung von INTERLIS-Daten kann dementsprechend auch ohne Webservice erfolgen. Für die Funktionsweise von *ilivalidator* wird auf die `Projektdokumentation <https://github.com/claeis/ilivalidator/blob/master/docs/ilivalidator.rst>`_ verwiesen. 
 
