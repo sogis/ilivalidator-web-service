@@ -29,6 +29,8 @@ Die Prüfung kann - je nach Grösse der Datei resp. des Dateiinhaltes - ein paar
 
 Der Output des Webservices scheint auf den ersten Blick unübersichtlich. Er wird detailliert im nächsten Kapitel erläutert. Befindet sich am Ende ``Info: ...validation done``, hat der Webservice keine Fehler gefunden.
 
+Mit dem Back-Button des Browsers kann eine neue Validierung gestartet werden.
+
 Interpretation der Resultate
 ============================
 
@@ -43,7 +45,7 @@ Ein entdeckter Fehler wird im Ouput mit ``Error:`` ausgewiesen. Dementsprechend 
 
 ``Error: line 22: SO_Nutzungsplanung_20170105.Rechtsvorschriften.Dokument: tid d53a9b32-668f-4d07-a10e-ef60a568a722: Attribute OffizielleNr requires a value``
 
-Nach ``Error:`` wird eine Zeilennummer angezeigt (z.B. ``line 22:``). Dabei handelt es sich nicht um die Zeilennummer auf der sich der Fehler genau befindet, sondern um die Zeilennumer auf der das INTERLIS-Objekt mit dem Fehler beginnt. Nach der Linienummer folgt der qualifizierte Attributname, z.B. ``SO_Nutzungsplanung_20170105.Rechtsvorschriften.Dokument`` (<Modellname>.<Topicname>.<Klassenname>). Nach dem qualifizierten Klassennamen folgt der Transferidentifikator des Objektes (``tid d53a9b32-668f-4d07-a10e-ef60a568a722:``). Werden im INTERLIS-Modell stabile Identifikatoren verlangt, kann dieser beim Auffinden des fehlerhaften Objektes im Erfassungssystem hilfreich sein. Als letzte Information folgt die eigentliche Fehlermeldung, z.B.: ``Attribute OffizielleNr requires a value``.
+Nach ``Error:`` wird eine Zeilennummer angezeigt (z.B. ``line 22:``). Dabei handelt es sich nicht um die Zeilennummer auf der sich der Fehler genau befindet, sondern um die Zeilennumer auf der das INTERLIS-Objekt mit dem Fehler beginnt. Nach der Zeilennummer folgt der qualifizierte Attributname, z.B. ``SO_Nutzungsplanung_20170105.Rechtsvorschriften.Dokument`` (<Modellname>.<Topicname>.<Klassenname>). Nach dem qualifizierten Klassennamen folgt der Transferidentifikator des Objektes (``tid d53a9b32-668f-4d07-a10e-ef60a568a722:``). Werden im INTERLIS-Modell stabile Identifikatoren verlangt, können diese beim Auffinden des fehlerhaften Objektes im Erfassungssystem hilfreich sein. Als letzte Information folgt die eigentliche Fehlermeldung, z.B.: ``Attribute OffizielleNr requires a value``.
 
 
 Fehlendes zwingendes Attribut
@@ -51,10 +53,15 @@ Fehlendes zwingendes Attribut
 
 ``Attribute OffizielleNr requires a value``
 
-Für das Attribut ``OffizielleNr`` müssen gemäss Modell zwingend Werte erfasst werden. 
+Für das Attribut ``OffizielleNr`` müssen gemäss Modell (``OffizielleNr : MANDATORY TEXT*20;``
+) zwingend Werte erfasst werden. 
 
+Zu lange Attributwerte
+----------------------
 
+``Attribute DokumentID is length restricted to 16``
 
+Das Attribut ``DokumentID`` darf höchsten 16 Zeichen (``DokumentID : TEXT*16;``) lang sein.
 
 
 Weitere Hinweise
