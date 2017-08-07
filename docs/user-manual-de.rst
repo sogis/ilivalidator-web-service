@@ -79,8 +79,78 @@ Falsches Datum
 
 ``date value <24-11-1981> is not in range``
 
-Ein ganz grob falsches Datum oder ein falsch formatiertes Datum wird erkannt.
+Ein ganz grob falsches Datum oder ein falsch formatiertes Datum wird erkannt. 
 
+
+Falscher BOOLEAN-Typ
+--------------------
+
+``value <richtig> is not a BOOLEAN```
+
+Attribute vom Typ BOOLEAN müssen korrekt in der INTERLIS-Transferdatei codiert werden (``true`` resp. ``false``).
+
+
+Falscher Wertebereich
+---------------------
+
+``value 10.40 is out of range``
+
+In Wertebereichs-Attribute können nur Werte innerhalb eines bestimmten Bereichs gespeichert werden, z.B. ``Nutzungsziffer : 0.00 .. 9.00;``. Wurde ein zu hoher oder zu tiefer Wert abgespeichert, wird der Fehler erkannt.
+
+
+Mehrfach verwendeter Objektidentifikator
+----------------------------------------
+
+``OID 12dd6ab7-8ed5-458a-a982-e1bf6e542c8c of object SO_Nutzungsplanung_20170105.Rechtsvorschriften.Dokument already exists in CLASS SO_Nutzungsplanung_20170105.Rechtsvorschriften.Dokument.
+``
+
+Der Objektidentifikator muss in der INTERLIS-Transferdatei eindeutig sein. Wird der Objektidentifikator in einer anderen Klasse ein weiteres Mal verwendet, kann die Fehlermeldung nicht mehr ganz eindeutig sein (aufgrund von Folgefehlern).
+
+
+Mehrfach verwendeter Basketidentifikator
+----------------------------------------
+
+``BID x123 of SO_Nutzungsplanung_20170105.Erschliessungsplanung already exists in SO_Nutzungsplanung_20170105.Rechtsvorschriften``
+
+Basketidentifikatoren müssen in der INTERLIS-Transferdatei eindeutig sein.
+
+
+Mehrfach verwendete UNIQUE-Werte
+--------------------------------
+
+``Unique is violated! Values 4300 already exist in Object: 68dcb08f-2939-4c1a-84fb-ea3def2272f6```
+
+Attributewerte können in einer Klasse eindeutig sein (``UNIQUE Code_kommunal;``). Wird diese Bedingung verletzt, erscheint eine Fehlermeldung.
+
+
+Verweis auf ein nicht-existierendes Objekt
+------------------------------------------
+
+``No object found with OID XXXX68dcb08f-2939-4c1a-84fb-ea3def2272f6 in basket SO_Nutzungsplanung_20170105.Nutzungsplanung.```
+
+Wird in Assoziationen oder in Klassen auf Objekte verwiesen, die nicht existieren, erscheint eine Fehlermeldung.
+
+
+TODO: validate multiplicity of role
+-----------------------------------
+
+Beispiel ``Grundnutzung -- {1..*} Grundnutzung``...
+
+Nach Bugfixing ilivalidator (?)
+
+
+TODO: validate target of role
+----------------------------
+
+Was macht das genau?
+
+
+TODO: Fehlerhafte Flächenbildung (AREA-Bedingung)
+-------------------------------------------------
+
+``Fehlermeldung nach Bugfixing``
+
+Falls im Modell eine überlappungsfreie Geometrie in einer Klasse vorgesehen ist (sogenannte AREA-Geometrie), wird ein Fehler erkannt, falls sich die einzelnen Geometrien dieser Klasse überlappen. Lücken sind technisch erlaubt, aber oftmals nicht gewünscht. Diese Lücken werden nicht erkannt.
 
 
 Weitere Hinweise
