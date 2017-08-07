@@ -56,6 +56,7 @@ Fehlendes zwingendes Attribut
 Für das Attribut ``OffizielleNr`` müssen gemäss Modell (``OffizielleNr : MANDATORY TEXT*20;``
 ) zwingend Werte erfasst werden. 
 
+
 Zu lange Attributwerte
 ----------------------
 
@@ -64,8 +65,25 @@ Zu lange Attributwerte
 Das Attribut ``DokumentID`` darf höchstens 16 Zeichen (``DokumentID : TEXT*16;``) lang sein.
 
 
+Falscher Wert eines Aufzähltyps
+-------------------------------
+
+``value AA is not a member of the enumeration```
+
+Bei Aufzähltyp-Attributen dürfen nur bestimmte Werte eingetragen werden. Wurde ein falscher Wert eingetragen, erscheint eine Fehlermeldung.
+
+Falsches Datum
+--------------
+
+``date value <92002-04-23> is not in range``
+``date value <24-11-1981> is not in range``
+
+Ein ganz grob falsches Datum oder ein falsch formatiertes Datum wird erkannt.
+
+
+
 Weitere Hinweise
 ================
 
-Der *ilivalidator web service* basiert auf dem *`ilivalidator-Projekt <https://github.com/claeis/ilivalidator>`_*. Die Prüfung von INTERLIS-Daten kann dementsprechend auch ohne Webservice erfolgen. Für die Funktionsweise von *ilivalidator* wird auf die `Projektdokumentation <https://github.com/claeis/ilivalidator/blob/master/docs/ilivalidator.rst>`_ verwiesen. 
+Der *ilivalidator web service* basiert auf dem `ilivalidator-Projekt <https://github.com/claeis/ilivalidator>`_. Die Prüfung von INTERLIS-Daten kann dementsprechend auch ohne Webservice erfolgen. Für die Funktionsweise von *ilivalidator* wird auf die `Projektdokumentation <https://github.com/claeis/ilivalidator/blob/master/docs/ilivalidator.rst>`_ verwiesen. 
 
