@@ -23,12 +23,16 @@ Die Validierung kann durch Knopfdruck auf "HOCHLADEN" gestartet werden. Der Knop
 
 .. image:: images/ilivalidator04.png
 
-Die Prüfung kann - je nach Grösse der Datei resp. des Dateiinhaltes - ein paar Sekunden bis zu einigen Minuten dauern. Das Prüfresultat wird direkt im Browser dargstellt:
+Die Prüfung kann - je nach Grösse der Datei resp. des Dateiinhaltes - ein paar Sekunden bis zu einigen Minuten dauern. Das Prüfresultat wird direkt im Browser dargestellt:
 
 .. image:: images/ilivalidator05.png
 
+Der Output des Webservices scheint auf den ersten Blick verwirrend. Er wird detailliert im nächsten Kapitel erläutert. Befindet sich am Ende `Info: ...validation done`, hat der Webservice keine Fehler gefunden.
 
 
+Hinweis
+-------
+ilivalidator cli...
 
 
 asdfasdf 
