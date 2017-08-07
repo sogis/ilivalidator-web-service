@@ -39,12 +39,21 @@ Im Output des Webservices stehen in der Regel viele Zeilen, die mit ``Info:`` be
 Allgemeine Hinweise
 -------------------
 
-Ein entdeckter Fehler wird im Ouput mit ``Error:`` ausgewiesen. Dementsprechend kann einfach nach diesem Schlüsselwort gesucht werden. Nach ``Error:`` wird eine Zeilennummer angezeigt (z.B. ``line 22:``). Dabei handelt es sich nicht um die Zeilennummer auf der sich der Fehler genau befindet, sondern um die Zeilennumer auf der das INTERLIS-Objekt mit dem Fehler *beginnt*. Nach der Linienummer folgt der qualifizierte Attributname, z.B. ``SO_Nutzungsplanung_20170105.Rechtsvorschriften.Dokument`` (<Modellname>.<Topicname>.<Klassenname>).
+Ein entdeckter Fehler wird im Ouput mit ``Error:`` ausgewiesen. Dementsprechend kann einfach nach diesem Schlüsselwort gesucht werden. Ein einfaches Beispiel sieht so aus:
+
+``Error: line 22: SO_Nutzungsplanung_20170105.Rechtsvorschriften.Dokument: tid d53a9b32-668f-4d07-a10e-ef60a568a722: Attribute OffizielleNr requires a value``
+
+Nach ``Error:`` wird eine Zeilennummer angezeigt (z.B. ``line 22:``). Dabei handelt es sich nicht um die Zeilennummer auf der sich der Fehler genau befindet, sondern um die Zeilennumer auf der das INTERLIS-Objekt mit dem Fehler beginnt. Nach der Linienummer folgt der qualifizierte Attributname, z.B. ``SO_Nutzungsplanung_20170105.Rechtsvorschriften.Dokument`` (<Modellname>.<Topicname>.<Klassenname>). Nach dem qualifizierten Klassennamen folgt der Transferidentifikator des Objektes (``tid d53a9b32-668f-4d07-a10e-ef60a568a722:``). Werden im INTERLIS-Modell stabile Identifikatoren verlangt, kann dieser beim Auffinden des fehlerhaften Objektes im Erfassungssystem hilfreich sein. Als letzte Information folgt die eigentliche Fehlermeldung, z.B.: ``Attribute OffizielleNr requires a value``.
 
 
 Fehlendes zwingendes Attribut
 -----------------------------
-adsfasdf
+
+``Attribute OffizielleNr requires a value``
+
+Für das Attribut ``OffizielleNr`` müssen gemäss Modell zwingend Werte erfasst werden. 
+
+
 
 
 
