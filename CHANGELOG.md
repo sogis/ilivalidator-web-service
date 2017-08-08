@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - ilivalidator configuration file (aka `toml`) support. One configuration file for one INTERLIS model only.
-- Checkbox in the GUI for applying the configuration file.
+- Checkbox in the GUI for applying the configuration file will be hidden at the moment. Configuration file support will work with e.g. `curl`.
 
 ### Changed
 
