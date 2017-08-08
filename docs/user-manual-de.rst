@@ -70,7 +70,7 @@ Falscher Wert eines Aufzähltyps
 
 ``value AA is not a member of the enumeration``
 
-Bei Aufzähltyp-Attributen dürfen nur bestimmte Werte eingetragen werden. Wurde ein falscher Wert eingetragen (in diesem Fall `AA`), erscheint eine Fehlermeldung.
+Bei Aufzähltyp-Attributen dürfen nur bestimmte Werte eingetragen werden. Wurde ein falscher Wert eingetragen (in diesem Fall ``AA``), erscheint eine Fehlermeldung.
 
 Falsches Datum
 --------------
@@ -95,7 +95,7 @@ Falscher Wertebereich
 
 ``value 10.40 is out of range``
 
-In Wertebereichs-Attribute können nur Werte innerhalb eines bestimmten Bereichs gespeichert werden, z.B. ``Nutzungsziffer : 0.00 .. 9.00;``. Wurde ein zu hoher (`10.40`) oder zu tiefer Wert abgespeichert, wird der Fehler erkannt.
+In Wertebereichs-Attribute können nur Werte innerhalb eines bestimmten Bereichs gespeichert werden, z.B. ``Nutzungsziffer : 0.00 .. 9.00;``. Wurde ein zu hoher (``10.40``) oder zu tiefer Wert abgespeichert, wird der Fehler erkannt.
 
 
 Mehrfach verwendeter Objektidentifikator
