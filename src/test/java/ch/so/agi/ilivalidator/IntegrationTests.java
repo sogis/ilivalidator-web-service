@@ -51,7 +51,7 @@ public class IntegrationTests {
         	body("html.head.title", equalTo("ilivalidator web service"));
 	}
 
-	//@Test
+	@Test
 	public void successfulValidationTest() {
 		File file = new File("src/test/data/ch_254900.itf");
 		
@@ -64,7 +64,7 @@ public class IntegrationTests {
 			body(containsString("...validation done"));
 	}
 	
-	//@Test
+	@Test
 	public void unsuccessfulValidationTest() {
 		File file = new File("src/test/data/ch_254900_error.itf");
 		
@@ -77,7 +77,7 @@ public class IntegrationTests {
 			body(containsString("...validation failed"));
 	}
 	
-	//@Test
+	@Test
 	/*
 	 * INTERLIS transfer file contains some errors but are ignored
 	 * or reduced to warnings by config file. Hence the validation
