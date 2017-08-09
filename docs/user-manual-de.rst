@@ -102,7 +102,7 @@ Falscher Typ für den Transferidentifikator
 ------------------------------------------
 ``tid ich_bin_keine_uuid: TID <ich_bin_keine_uuid> is not a valid UUID```
 
-In einigen Klassen muss der Transferidentifikator nichtr nur eindeutig sein, sondern auch einen bestimmten Typ aufweisen (``OID AS INTERLIS.UUIDOID;``). Entspricht der Transferidentifikator nicht diesem Typ, wird ein Fehler protokolliert.
+In einigen Klassen muss der Transferidentifikator nicht nur eindeutig sein, sondern auch einen bestimmten Typ aufweisen (``OID AS INTERLIS.UUIDOID;``). Entspricht der Transferidentifikator nicht diesem Typ, wird ein Fehler protokolliert.
 
 
 Mehrfach verwendeter Objektidentifikator
