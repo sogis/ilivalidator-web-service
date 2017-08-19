@@ -50,7 +50,8 @@ public class IlivalidatorService {
 	 * @throws IoxException if an error occurred when trying to figure out model name. 
 	 * @throws IOException if config file cannot be read or copied to file system. 
 	 * @return String Returns the log file of the validation.
-	 */	public synchronized String validate(String doConfigFile, String fileName) throws IoxException, IOException {	
+	 */	
+	public synchronized String validate(String doConfigFile, String fileName) throws IoxException, IOException {	
 		String baseFileName = FilenameUtils.getFullPath(fileName) 
 				+ FilenameUtils.getBaseName(fileName);
 				
