@@ -7,14 +7,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,9 +50,9 @@ public class MainController {
 	public ResponseEntity<?> uploadFile(
 			@RequestParam(name="configFile", required=false) String configFile,
 			@RequestParam(name="disableAreaValidation", required=false) String disableAreaValidation,
-			@RequestParam("file") MultipartFile uploadFile
+			@RequestParam(name="file", required=true) MultipartFile uploadFile
 			) {
-		
+				
 		try {
 			// Get the filename and build the local file path.
 			String filename = uploadFile.getOriginalFilename();
