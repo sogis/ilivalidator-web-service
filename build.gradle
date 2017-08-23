@@ -44,13 +44,14 @@ repositories {
 }
 
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-    compile "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
-    compile "commons-io:commons-io:2.5"
-    compile "org.interlis2:ilivalidator:1.3.0"
-    compile "org.webjars:materializecss:0.97.7"
-    compile "org.webjars:jquery:2.2.4"
-	compile "io.rest-assured:rest-assured:3.0.3"
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
+    compile("commons-io:commons-io:2.5")
+    compile("org.interlis2:ilivalidator:1.3.0")
+    compile("org.webjars:materializecss:0.100.1")
+    compile("org.webjars:jquery:2.2.4")
+	compile("io.rest-assured:rest-assured:3.0.3")
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
 		exclude(module: 'commons-logging')
     }
@@ -62,6 +63,7 @@ test {
 	}
 }
 
+// TODO: set group name here?
 // Build
 task buildDocker(type: Docker) {
 	tagVersion = 'latest'

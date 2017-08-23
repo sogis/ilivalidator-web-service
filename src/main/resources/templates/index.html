@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     <title>ilivalidator web service</title>
 
-	<link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
-	<link type="text/css" rel="stylesheet" href="webjars/materializecss/0.97.7/css/materialize.min.css" media="screen,projection" />
+	<link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons"/>
+	<link rel="stylesheet" th:href="@{/webjars/materializecss/0.100.1/css/materialize.min.css}"/>
 
 	<style>
 		html, body, .upload-box {
@@ -38,11 +38,11 @@
 					<div class="row">
 						<div class="file-field input-field">
 							<div class="btn red darken-4">
-								<span class="white-text">Durchsuchen</span> <input type="file" name="file">
+								<span class="white-text" th:text="#{browse}"></span> <input type="file" name="file"/>
 							</div>
 							<div class="file-path-wrapper">
 								<input class="file-path validate" type="text"
-									placeholder="INTERLIS-Transferdatei">
+									th:placeholder="#{placeholder}"/>
 							</div>
 						</div>
 					</div>
@@ -57,28 +57,17 @@
 						</p>
 					</div>
 				</div>
-				-->
-				<!--
-				<div class="card-content">
-					<div class="row">
-						<p>
-							<input type="checkbox" name="disableAreaValidation"
-								class="filled-in checkbox-blue" id="disableAreaValidation" /> <label
-								for="disableAreaValidation">AREA-Validierung ausschalten </label>
-						</p>
-					</div>
-				</div>
-				-->
+				-->				
 				<div class="card-action right-align">
-					<button id="submit-btn" class="btn red darken-4 white-text waves-effect waves-light" type="submit" name="action">Hochladen
-    					<i class="material-icons right">send</i>
+					<button id="submit-btn" class="btn red darken-4 white-text waves-effect waves-light" type="submit" name="action" >
+    					<span class="white-text" th:text="#{upload}"></span><i class="material-icons right">send</i>
   					</button>
 				</div>
 			</form>
 		</div>
 	</div>
-    <script type="text/javascript" src="webjars/jquery/2.2.4/jquery.min.js"></script>
-    <script type="text/javascript" src="webjars/materializecss/0.97.7/js/materialize.min.js"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/2.2.4/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/materializecss/0.100.1/js/materialize.min.js}"></script>
     <script>
     	$(document).ready(function() {
 			$('#submit-btn').on('click', function() {
