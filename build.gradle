@@ -21,8 +21,8 @@ apply plugin: 'net.nemerosa.versioning'
 
 //group = 'ch.so.agi.ilivalidator-web-service'
 group = 'sogis'
-version = '0.0.8'
-//version = '0.0.8-'+versioning.info.build
+//version = '0.0.8'
+version = '0.0.8-'+versioning.info.build
 
 description = """ilivalidator web service"""
 
