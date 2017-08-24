@@ -51,16 +51,13 @@ public class IlivalidatorService {
 	 * @throws IOException if config file cannot be read or copied to file system. 
 	 * @return String Returns the log file of the validation.
 	 */	
-	public synchronized String validate(String doConfigFile, String fileName) throws IoxException, IOException {	
-		String baseFileName = FilenameUtils.getFullPath(fileName) 
-				+ FilenameUtils.getBaseName(fileName);
-				
+	public synchronized boolean validate(String doConfigFile, String inputFileName, String logFileName) throws IoxException, IOException {	
 		Settings settings = new Settings();
 		settings.setValue(Validator.SETTING_ILIDIRS, Validator.SETTING_DEFAULT_ILIDIRS);
-		settings.setValue(Validator.SETTING_LOGFILE, baseFileName + ".log");
+		settings.setValue(Validator.SETTING_LOGFILE, logFileName);
 		
 		if (doConfigFile != null) {
-			String modelName = getModelNameFromTransferFile(fileName);
+			String modelName = getModelNameFromTransferFile(inputFileName);
 			log.info("model name: " + modelName);
 			
 			// This is the java pure way to load resources in a jar.
@@ -71,7 +68,7 @@ public class IlivalidatorService {
 				Resource resource = resourceLoader.getResource("classpath:toml/"+modelName.toLowerCase()+".toml");
 				InputStream is = resource.getInputStream();
 							
-				File configFile = new File(FilenameUtils.getFullPath(fileName), modelName.toLowerCase()+".toml");
+				File configFile = new File(FilenameUtils.getFullPath(inputFileName), modelName.toLowerCase()+".toml");
 				Files.copy(is, configFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 				IOUtils.closeQuietly(is);
 
@@ -82,9 +79,9 @@ public class IlivalidatorService {
 			}
 		}
 		
-		boolean res = Validator.runValidation(fileName, settings);
+		boolean valid = Validator.runValidation(inputFileName, settings);
 		
-		return baseFileName + ".log";
+		return valid;
 	}
 	
 	/**

@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,12 @@ public class MainController {
 			Files.write(uploadFilePath, bytes);
 			
 			// Validate transfer file with ilivalidator library.
-			String logFileName = ilivalidator.validate(configFile, uploadFilePath.toString());
+			String inputFileName = uploadFilePath.toString();
+			String baseFileName = FilenameUtils.getFullPath(inputFileName) 
+					+ FilenameUtils.getBaseName(inputFileName);
+			String logFileName = baseFileName + ".log";
+						
+			boolean valid = ilivalidator.validate(configFile, inputFileName, logFileName);
 
 			// Send log file back to client.
 			File logFile = new File(logFileName);
