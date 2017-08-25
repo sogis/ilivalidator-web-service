@@ -69,7 +69,7 @@ test {
 // Build
 task buildDocker(type: Docker) {
 	//tagVersion = 'latest'
-	tagVersion = '0.0.8-blue'
+	tagVersion = '0.0.8-green'
 	baseImage = 'frolvlad/alpine-oraclejdk8:slim'
 	push = project.hasProperty('push') // <-> "./gradlew buildDocker -Ppush"
 	applicationName = jar.baseName
