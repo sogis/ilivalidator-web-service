@@ -41,7 +41,7 @@ public class IntegrationTests {
     	RestAssured.port = randomServerPort;
     }
 	
-	//@Test
+	@Test
 	public void indexPageTest() {				
 		given().
 		when().
