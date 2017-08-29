@@ -1,11 +1,11 @@
 version: 0.2
 
+env:
+  variables:
+    JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
 
 install:
   commands:
-    - apt-get update -y
-    - apt-get install -y software-properties-common
-    - add-apt-repository ppa:openjdk-r/ppa
     - apt-get update -y
     - apt-get install -y openjdk-8-jdk
                 
@@ -13,6 +13,7 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Docker Hub...
+      - echo ls /var/lib/
       - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
   build:
     commands:
