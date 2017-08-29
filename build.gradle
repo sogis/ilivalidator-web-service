@@ -68,9 +68,9 @@ test {
 // TODO: set group name here?
 // Build
 task buildDocker(type: Docker) {
-	//tagVersion = 'latest'
+	tagVersion = 'latest'
 	//tagVersion = '0.0.8-green'
-	tagVersion = '0.0.8'
+	//tagVersion = '0.0.8'
 	baseImage = 'frolvlad/alpine-oraclejdk8:slim'
 	push = project.hasProperty('push') // <-> "./gradlew buildDocker -Ppush"
 	applicationName = jar.baseName

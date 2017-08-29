@@ -1,0 +1,18 @@
+version: 0.2
+            
+phases:
+  install:
+  pre_build:
+    commands:
+      - echo This is pre_build.
+  build:
+    commands:
+      - echo Starting build `date`
+      - ./gradlew build -x test
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - build/libs/ilivalidator-web-service-0.0.8.jar
+  discard-paths: yes
