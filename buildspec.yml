@@ -3,15 +3,13 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo This is pre_build.
+      - echo Logging in to Docker Hub...
+      - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
   build:
     commands:
       - echo Starting build `date`
       - ./gradlew clean build -x test
+      - docker build -t sogis/ilivalidator-web-service:0.0.1
   post_build:
     commands:
       - echo Build completed on `date`
-artifacts:
-  files:
-    - build/libs/ilivalidator-web-service-0.0.8.jar
-  discard-paths: yes
