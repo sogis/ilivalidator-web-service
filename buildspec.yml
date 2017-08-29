@@ -20,7 +20,9 @@ phases:
     commands:
       - echo Starting build `date`
       - ./gradlew clean build -x test
-      - docker build -t sogis/ilivalidator-web-service:0.0.1
+      - docker build -t sogis/ilivalidator-web-service:0.0.1 .
   post_build:
     commands:
       - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push sogis/ilivalidator-web-service:0.0.1
