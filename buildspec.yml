@@ -3,6 +3,14 @@ version: 0.2
 env:
   variables:
     JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+
+install:
+  commands:
+    - apt-get update -y
+    - apt-get install -y software-properties-common
+    - add-apt-repository ppa:openjdk-r/ppa
+    - apt-get update -y
+    - apt-get install -y openjdk-8-jdk
                 
 phases:
   pre_build:
