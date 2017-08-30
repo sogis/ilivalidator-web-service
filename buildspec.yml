@@ -27,6 +27,8 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push sogis/ilivalidator-web-service:0.0.1
+      - echo Deleting Dockerfile
+      - rm Dockerfile
 artifacts:
   files:
     - '**/*'
