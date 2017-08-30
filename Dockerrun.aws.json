@@ -1,0 +1,13 @@
+{
+ "AWSEBDockerrunVersion": "1",
+ "Image": {
+    "Name": "sogis/ilivalidator-web-service:0.0.1",
+    "Update": "true"
+  },
+ "Ports": [
+   {
+     "ContainerPort": "8888"
+   }
+ ],
+ "Logging": "/var/log"
+}
