@@ -29,7 +29,6 @@ springBoot {
 }
 
 versioning {
-	dirtyFailOnReleases = false
 	noWarningOnDirty = true
 }
 
