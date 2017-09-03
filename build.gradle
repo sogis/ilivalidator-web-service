@@ -20,16 +20,17 @@ apply plugin: 'docker'
 apply plugin: 'net.nemerosa.versioning'
 
 group = 'ch.so.agi.ilivalidator'
-//group = 'sogis'
-//version = '0.0.8'
 version = '0.0.8-'+versioning.info.build
-// aws codebuild provides some env variables for gradle build command
-
 
 description = """ilivalidator web service"""
 
 springBoot {
     executable = true
+}
+
+versioning {
+	dirtyFailOnReleases = false
+	noWarningOnDirty = true
 }
 
 sourceCompatibility = 1.8
