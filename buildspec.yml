@@ -29,6 +29,7 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push sogis/ilivalidator-web-service:$GIT_SHA
+      - docker push sogis/ilivalidator-web-service:latest
       - echo Deleting Dockerfile
       - rm Dockerfile
       - sed -i -e "s/IMAGE_TAG/$GIT_SHA/" Dockerrun.aws.json
