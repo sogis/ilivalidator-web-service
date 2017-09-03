@@ -21,12 +21,14 @@ phases:
       - echo Starting build `date`
       - chmod +rx -R *
       - ./gradlew clean build -x test
-      - docker build -t sogis/ilivalidator-web-service:0.0.1 .
+      - GIT_SHA=`./gradlew -q getVersion`
+      - sed -i -e "s/IMAGE_TAG/$GIT_SHA/g" buildspec.yml
+      - docker build -t sogis/ilivalidator-web-service:IMAGE_TAG .
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push sogis/ilivalidator-web-service:0.0.1
+      - docker push sogis/ilivalidator-web-service:IMAGE_TAG
       - echo Deleting Dockerfile
       - rm Dockerfile
 artifacts:
