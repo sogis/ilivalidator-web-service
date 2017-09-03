@@ -23,7 +23,7 @@ phases:
       - ./gradlew clean build -x test
       - git reset --hard
       - GIT_SHA=`./gradlew -q getVersion`
-      - docker build -t sogis/ilivalidator-web-service:$GIT_SHA .
+      - docker build -t sogis/ilivalidator-web-service:$GIT_SHA -t sogis/ilivalidator-web-service:latest .
   post_build:
     commands:
       - echo Build completed on `date`
