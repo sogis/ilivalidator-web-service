@@ -19,10 +19,10 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'docker'
 apply plugin: 'net.nemerosa.versioning'
 
-//group = 'ch.so.agi.ilivalidator-web-service'
-group = 'sogis'
-version = '0.0.8'
-//version = '0.0.8-'+versioning.info.build
+group = 'ch.so.agi.ilivalidator'
+//group = 'sogis'
+//version = '0.0.8'
+version = '0.0.8-'+versioning.info.build
 // aws codebuild provides some env variables for gradle build command
 
 
@@ -65,9 +65,9 @@ test {
 	}
 }
 
-// TODO: set group name here?
 // Build
 task buildDocker(type: Docker) {
+	//tag = "${project.group}/${applicationName}:${tagVersion}"
 	tagVersion = 'latest'
 	//tagVersion = '0.0.8-green'
 	//tagVersion = '0.0.8'
