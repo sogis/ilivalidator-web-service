@@ -1,7 +1,7 @@
 {
  "AWSEBDockerrunVersion": "1",
  "Image": {
-    "Name": "sogis/ilivalidator-web-service:0.0.1",
+    "Name": "sogis/ilivalidator-web-service:IMAGE_TAG",
     "Update": "true"
   },
  "Ports": [

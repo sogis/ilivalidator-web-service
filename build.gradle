@@ -81,7 +81,10 @@ task buildDocker(type: Docker) {
   	entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom', '-jar', '/app.jar'])
 }
 
-// Needed for Jenkins pipeline and Docker images tagging.
+// Needed for Jenkins and AWS pipeline and Docker images tagging.
+// I do have problems with some addition output in the console
+// from versioning plugin: "noWarningOnDirty = true" does not 
+// seem to work. -> Some workarounds in buildspec.yml.
 task getVersion {
 	println project.version
 }
