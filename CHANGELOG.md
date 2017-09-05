@@ -3,13 +3,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-- Checkbox in the GUI for applying the configuration file will be hidden at the moment. Configuration file support will work with e.g. `curl`. Not visible at the moment but the code is there.
+- Checkbox in the GUI for applying the configuration file is hidden at the moment in the gui but is exposed in the api. 
 
 ## [0.0.9] - 2017-09-XX
 
 ### Added
 
-- ilivalidator configuration file (aka `toml`) support. One configuration file for one INTERLIS model only.
+- ilivalidator configuration file (aka `toml`) support. One configuration file for one INTERLIS model only (baked into resources directory). It will be used by default if one is present. It looks for a *.toml file with the same name as the data model name. Config file name must be lower-case.
 - Added and adjusted some scripts for AWS Codepipeline with deployment on EBS.
 
 ### Changed
