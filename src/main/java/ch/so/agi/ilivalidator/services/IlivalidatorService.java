@@ -74,8 +74,8 @@ public class IlivalidatorService {
 
 				settings.setValue(Validator.SETTING_CONFIGFILE, configFile.getAbsolutePath());
 			} catch (FileNotFoundException e) {
-				log.warn(e.getMessage());
-				log.warn("Config/toml file not found. Continue validation w/o config/toml file.");
+				log.info(e.getMessage());
+				log.info("Configuration file "+modelName.toLowerCase()+".toml not available. Continue validation without configuration file.");
 			}
 		}
 		

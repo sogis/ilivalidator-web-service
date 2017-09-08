@@ -2,11 +2,13 @@ package ch.so.agi.ilivalidator.controllers;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FilenameUtils;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -38,6 +41,9 @@ public class MainController {
 	@Autowired
 	private Environment env;
 
+    @Autowired
+    private ServletContext servletContext;
+
 	@Autowired 
 	IlivalidatorService ilivalidator;
 
@@ -54,9 +60,23 @@ public class MainController {
 			@RequestParam(name="file", required=true) MultipartFile uploadFile
 			) {
 				
-		try {
-			// Get the filename and build the local file path.
+		try {			
+			// Get the filename.
 			String filename = uploadFile.getOriginalFilename();
+			
+			// If the upload button was pushed w/o choosing a file,
+			// we just redirect to the starting page.
+			if (uploadFile.getSize() == 0 
+					|| filename.trim().equalsIgnoreCase("")
+					|| filename == null) {
+				log.warn("No file was uploaded. Redirecting to starting page.");
+				
+				HttpHeaders headers = new HttpHeaders();
+				headers.add("Location", servletContext.getContextPath());    
+				return new ResponseEntity<String>(headers, HttpStatus.FOUND);			
+			}
+			
+			// Build the local file path.
 			String directory = env.getProperty("ch.so.agi.ilivalidator.uploadedFiles"); 
 
 			if (directory == null) {
@@ -75,7 +95,12 @@ public class MainController {
 			String baseFileName = FilenameUtils.getFullPath(inputFileName) 
 					+ FilenameUtils.getBaseName(inputFileName);
 			String logFileName = baseFileName + ".log";
-						
+
+			// The checkbox is not exposed in the gui at the moment.
+			// But we want to use the configuration file if one is present.
+			configFile = "on";
+			
+			// Run validation.
 			boolean valid = ilivalidator.validate(configFile, inputFileName, logFileName);
 
 			// Send log file back to client.

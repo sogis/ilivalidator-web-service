@@ -20,7 +20,7 @@ phases:
     commands:
       - echo Starting build `date`
       - chmod +rx -R *
-      - ./gradlew clean build -x test
+      - ./gradlew clean build
       - git reset --hard
       - GIT_SHA=`./gradlew -q getVersion`
       - docker build -t sogis/ilivalidator-web-service:$GIT_SHA -t sogis/ilivalidator-web-service:latest .
