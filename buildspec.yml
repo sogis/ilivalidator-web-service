@@ -21,9 +21,9 @@ phases:
       - echo Starting build `date`
       - chmod +rx -R *
       - ./gradlew clean build
-      # .git directory is not present in the source package CodePipeline sends to CodeBuild
-      # But we need to 'git reset --hard' because of the bug (?) in the gradle versioning
-      # plugin.
+      # I still think that the gradle versioning plugin
+      # has a bug: the warnings in stdout cannot
+      # be turned off. 
       - GIT_SHA=$(./gradlew -q getVersion | tail -1)
       - docker build -t sogis/ilivalidator-web-service:$GIT_SHA -t sogis/ilivalidator-web-service:latest .
   post_build:
