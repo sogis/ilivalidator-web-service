@@ -92,5 +92,5 @@ task buildDocker(type: Docker) {
 // get the git sha. We use the date for the versioning of
 // the docker image for now :-(
 task getVersion {
-	println project.version + "-" + new Date().format('yyyyMMddHms')
+	println project.version + "-" + new Date().format('yyyyMMddHHmmss')
 }
