@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -59,7 +61,7 @@ public class MainController {
 			@RequestParam(name="disableAreaValidation", required=false) String disableAreaValidation,
 			@RequestParam(name="file", required=true) MultipartFile uploadFile
 			) {
-				
+						
 		try {			
 			// Get the filename.
 			String filename = uploadFile.getOriginalFilename();
@@ -121,7 +123,5 @@ public class MainController {
 					.contentType(MediaType.parseMediaType("text/plain"))
 					.body(e.getMessage());
 		}
-
 	} 
-
 }
