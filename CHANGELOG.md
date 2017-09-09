@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 - ilivalidator configuration file (aka `toml`) support. One configuration file for one INTERLIS model only (baked into resources directory). It will be used by default if one is present. It looks for a *.toml file with the same name as the data model name. The configuration file name must be lower-case.
 - Added and adjusted some scripts for AWS Codepipeline with deployment on EBS.
+- Add Spring Boot Actuators with a custom endpoint for showing the application's classpath.
 
 ### Changed
 
