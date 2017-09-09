@@ -23,8 +23,9 @@ phases:
       - ./gradlew clean build
       # git metadata is not available when using 
       # codepipeline. Instead of git sha we use
-      # CODEBUILD_BUILD_ID as identifier.
-      - APP_VERSION=$(./gradlew -q getVersion | tail -1)-$CODEBUILD_SOURCE_VERSION
+      # the last 12 characters of CODEBUILD_BUILD_ID 
+      # as identifier.
+      - APP_VERSION=$(./gradlew -q getVersion | tail -1)-${CODEBUILD_BUILD_ID: -12}
       - docker build -t sogis/ilivalidator-web-service:$APP_VERSION -t sogis/ilivalidator-web-service:latest .
   post_build:
     commands:
