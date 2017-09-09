@@ -87,5 +87,5 @@ task buildDocker(type: Docker) {
 // from versioning plugin: "noWarningOnDirty = true" does not 
 // seem to work. -> Some workarounds in buildspec.yml.
 task getVersion {
-	println project.version
+	println project.version + "-" + new Date().format('yyyyMMddHms')
 }

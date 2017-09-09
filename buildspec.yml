@@ -21,11 +21,10 @@ phases:
       - echo Starting build `date`
       - chmod +rx -R *
       - ./gradlew clean build
-      # git metadata is not available when using 
-      # codepipeline. Instead of git sha we use
-      # the last 12 characters of CODEBUILD_BUILD_ID 
-      # as identifier.
-      - APP_VERSION=$(./gradlew -q getVersion | tail -1)-1234
+      # git metadata is not available yet when using 
+      # codepipeline. At the moment we just use a 
+      # date string.
+      - APP_VERSION=$(./gradlew -q getVersion | tail -1)
       - docker build -t sogis/ilivalidator-web-service:$APP_VERSION -t sogis/ilivalidator-web-service:latest .
   post_build:
     commands:
