@@ -86,6 +86,10 @@ task buildDocker(type: Docker) {
 // I do have problems with some addition output in the console
 // from versioning plugin: "noWarningOnDirty = true" does not 
 // seem to work. -> Some workarounds in buildspec.yml.
+// Some more notes: At the moment aws codepipeline does not
+// copy the git meta stuff to codebuild hence we cannot
+// get the git sha. We use the date for the versioning of
+// the docker image for now :-(
 task getVersion {
 	println project.version + "-" + new Date().format('yyyyMMddHms')
 }
