@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Service;
 
 import ch.ehi.basics.settings.Settings;
@@ -45,7 +47,7 @@ public class IlivalidatorService {
 	/**
 	 * This method validates an INTERLIS transfer file with 
 	 * <a href="https://github.com/claeis/ilivalidator">ilivalidator library</a>.
-	 * @param doConfigFile Use ilivalidator config file for tailoring the validation.
+	 * @param doConfigFile Use ilivalidator configuration file for tailoring the validation.
 	 * @param fileName Name of INTERLIS transfer file.
 	 * @throws IoxException if an error occurred when trying to figure out model name. 
 	 * @throws IOException if config file cannot be read or copied to file system. 
@@ -56,6 +58,29 @@ public class IlivalidatorService {
 		settings.setValue(Validator.SETTING_ILIDIRS, Validator.SETTING_DEFAULT_ILIDIRS);
 		settings.setValue(Validator.SETTING_LOGFILE, logFileName);
 		
+		// Not sure about this one:
+		// If we really need some INTERLIS models that are not available in
+		// repositories, we can place them in src/main/resources/ili.
+		// Especially e.g. validation models or for testing new models.
+		// These models are copied into the folder where we also
+		// stored the transfer file that we want to validate.
+		try {
+			ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+	        Resource[] resources = resolver.getResources("classpath:ili/*.ili");
+	        log.info("Found " + String.valueOf(resources.length) + " local models.");
+	        for (Resource resource: resources){
+	            InputStream is = resource.getInputStream();
+				File iliFile = new File(FilenameUtils.getFullPath(inputFileName), resource.getFilename());
+				Files.copy(is, iliFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				IOUtils.closeQuietly(is);
+	        }
+		} catch (FileNotFoundException e) {
+			log.error(e.getMessage());
+			log.error("Error while copying the local INTERLIS model files. Continue with validation process.");
+		}
+		
+		// Copy the configuration file that belongs to the INTERLIS model
+		// file into the the transfer file folder.
 		if (doConfigFile != null) {
 			String modelName = getModelNameFromTransferFile(inputFileName);
 			log.info("model name: " + modelName);
@@ -72,7 +97,7 @@ public class IlivalidatorService {
 				Files.copy(is, configFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 				IOUtils.closeQuietly(is);
 
-				settings.setValue(Validator.SETTING_CONFIGFILE, configFile.getAbsolutePath());
+				settings.setValue(Validator.SETTING_CONFIGFILE, configFile.getAbsolutePath());				
 			} catch (FileNotFoundException e) {
 				log.info(e.getMessage());
 				log.info("Configuration file "+modelName.toLowerCase()+".toml not available. Continue validation without configuration file.");

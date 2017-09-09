@@ -1,9 +1,11 @@
 package ch.so.agi.ilivalidator.controllers;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -108,11 +110,12 @@ public class MainController {
 			// Send log file back to client.
 			File logFile = new File(logFileName);
 			InputStream is = new FileInputStream(logFile);
-
+			
 			return ResponseEntity
 					.ok()
+					.header("Content-Type", "text/plain; charset=utf-8")
 					.contentLength(logFile.length())
-					.contentType(MediaType.parseMediaType("text/plain"))
+					//.contentType(MediaType.parseMediaType("text/plain"))
 					.body(new InputStreamResource(is));	      
 		}
 		catch (Exception e) {
