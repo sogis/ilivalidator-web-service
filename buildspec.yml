@@ -24,10 +24,7 @@ phases:
       # .git directory is not present in the source package CodePipeline sends to CodeBuild
       # But we need to 'git reset --hard' because of the bug (?) in the gradle versioning
       # plugin.
-      - rm -rf .git
-      - git init
-      - git reset --hard
-      - GIT_SHA=`./gradlew -q getVersion`
+      - GIT_SHA=$(./gradlew -q getVersion | tail -1)
       - docker build -t sogis/ilivalidator-web-service:$GIT_SHA -t sogis/ilivalidator-web-service:latest .
   post_build:
     commands:
