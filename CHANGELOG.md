@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 - Checkbox in the GUI for applying the configuration file is hidden at the moment in the gui but is exposed in the api. 
 
-## [0.0.9] - 2017-09-XX
+## [0.1.0] - 2017-09-XX
 
 ### Added
 
