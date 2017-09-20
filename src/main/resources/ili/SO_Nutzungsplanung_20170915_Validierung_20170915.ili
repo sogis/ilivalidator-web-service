@@ -219,13 +219,13 @@ VERSION "2017-09-05"  =
       (
         (Typ_Kt == #N189_weitere_Verkehrszonen) 
         AND 
-        ((Code_kommunal == "1891") OR (Code_kommunal == "1892") OR (Code_kommunal == "1893") OR (Code_kommunal == "1894") OR (Code_kommunal == "1895") OR (Code_kommunal == "1896") OR (Code_kommunal == "1877") OR (Code_kommunal == "1898") OR (Code_kommunal == "1899"))  
+        ((Code_kommunal == "1891") OR (Code_kommunal == "1892") OR (Code_kommunal == "1893") OR (Code_kommunal == "1894") OR (Code_kommunal == "1895") OR (Code_kommunal == "1896") OR (Code_kommunal == "1897") OR (Code_kommunal == "1898") OR (Code_kommunal == "1899"))  
       )
       OR
       (
         (Typ_Kt == #N190_Spezialzone) 
         AND 
-        ((Code_kommunal == "1901") OR (Code_kommunal == "1902") OR (Code_kommunal == "1903") OR (Code_kommunal == "1904") OR (Code_kommunal == "1905") OR (Code_kommunal == "1906") OR (Code_kommunal == "1907") OR (Code_kommunal == "1908") OR (Code_kommunal == "1909"))  
+        ((Code_kommunal == "1901") OR (Code_kommunal == "1902") OR (Code_kommunal == "1903") OR (Code_kommunal == "1904") OR (Code_kommunal == "1905") OR (Code_kommunal == "1906") OR (Code_kommunal == "1907") OR (Code_kommunal == "1908") OR (Code_kommunal == "1909") OR (Code_kommunal == "1910") OR (Code_kommunal == "1911") OR (Code_kommunal == "1912") OR (Code_kommunal == "1913") OR (Code_kommunal == "1914") OR (Code_kommunal == "1915") OR (Code_kommunal == "1916") OR (Code_kommunal == "1917") OR (Code_kommunal == "1919") OR (Code_kommunal == "1919"))  
       )
       OR
       (
@@ -1172,7 +1172,7 @@ VERSION "2017-09-05"  =
       (
         (Typ_Kt == #N699_weitere_flaechenbezogene_Festlegungen_NP) 
         AND 
-        ((Code_kommunal == "6991") OR (Code_kommunal == "6992") OR (Code_kommunal == "6993") OR (Code_kommunal == "6994") OR (Code_kommunal == "6995") OR (Code_kommunal == "6916") OR (Code_kommunal == "6997") OR (Code_kommunal == "6998") OR (Code_kommunal == "6999")) 
+        ((Code_kommunal == "6991") OR (Code_kommunal == "6992") OR (Code_kommunal == "6993") OR (Code_kommunal == "6994") OR (Code_kommunal == "6995") OR (Code_kommunal == "6996") OR (Code_kommunal == "6997") OR (Code_kommunal == "6998") OR (Code_kommunal == "6999")) 
       )  
       OR
       (

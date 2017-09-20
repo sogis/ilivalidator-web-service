@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 
 - Checkbox in the GUI for applying the configuration file is hidden at the moment in the gui but is exposed in the api. 
 
+## [0.1.1] - 2017-09-20
+
+### Changed
+
+- Fixed some typos in `SO_Nutzungsplanung_20170915_Validierung_20170915.ili`.
+
 ## [0.1.0] - 2017-09-16
 
 ### Added
