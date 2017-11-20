@@ -21,7 +21,7 @@ apply plugin: 'net.nemerosa.versioning'
 
 group = 'ch.so.agi.ilivalidator'
 //version = '0.0.8-'+versioning.info.build
-version = '0.1.1'
+version = '0.1.2'
 
 description = """ilivalidator web service"""
 
@@ -52,7 +52,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
     compile("commons-io:commons-io:2.5")
-    compile("org.interlis2:ilivalidator:1.4.0")
+    compile("org.interlis2:ilivalidator:1.5.0")
     compile("org.webjars:materializecss:0.100.1")
     compile("org.webjars:jquery:2.2.4")
 	compile("io.rest-assured:rest-assured:3.0.3")
