@@ -42,7 +42,8 @@ tasks.withType(JavaCompile) {
 
 repositories {
     mavenCentral()
-    maven { url "http://sogeo.services:8081/artifactory/libs-release" }
+    //maven { url "http://sogeo.services:8081/artifactory/libs-release" }
+    maven { url "http://jars.interlis.ch/" }
     maven { url "http://repo.maven.apache.org/maven2" }
 }
 
@@ -52,7 +53,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
     compile("commons-io:commons-io:2.5")
-    compile("org.interlis2:ilivalidator:1.5.0")
+    compile("ch.interlis:ilivalidator:1.5.0")
     compile("org.webjars:materializecss:0.100.1")
     compile("org.webjars:jquery:2.2.4")
 	compile("io.rest-assured:rest-assured:3.0.3")
