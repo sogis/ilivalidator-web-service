@@ -124,37 +124,6 @@ VERSION "2017-11-18"  =
       Hinweis -- {0..*} Dokument;
     END HinweisWeitereDokumente;
 
-    CLASS Plandokument =
-      /** leer lassen
-       */
-      PlandokumentID : TEXT*16;
-      /** Dokumentart z.B. Erschliessungsplan oder Gestaltungsplan
-       */
-      Titel : MANDATORY TEXT*80;
-      /** Vollständiger Titel des Dokuments
-       */
-      OffiziellerTitel : TEXT*240;
-      /** OffizielleNr gemäss Planregister
-       */
-      OffizielleNr : MANDATORY TEXT*20;
-      /** Abkürzung Kanton
-       */
-      Kanton : CHAdminCodes_V1.CHCantonCode;
-      /** Gemeindenummer vom schweizerischen Bundesamt für Statistik (BFS-Nr.)
-       */
-      Gemeinde : CHAdminCodes_V1.CHMunicipalityCode;
-      /** Datum des Regierungsratsbeschlusses
-       */
-      publiziertAb : MANDATORY INTERLIS.XMLDate;
-      Rechtsstatus : MANDATORY SO_Nutzungsplanung_20171118.Rechtsstatus;
-      /** Relative Internetadresse des Dokuments auf Planregister. D.h. ohne "https://geoweb.so.ch/zonenplaene/Zonenplaene_pdf/"
-       */
-      PlanImWeb : URI;
-      /** Erläuternder Text oder Bemerkungen zum Plandokument
-       */
-      Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
-    END Plandokument;
-
   END Rechtsvorschriften;
 
   TOPIC Nutzungsplanung =
