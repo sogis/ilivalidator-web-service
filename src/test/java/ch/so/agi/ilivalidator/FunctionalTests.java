@@ -3,6 +3,7 @@ package ch.so.agi.ilivalidator;
 import static io.restassured.RestAssured.given;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,18 +35,16 @@ import java.io.IOException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class IntegrationTests {
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+public class FunctionalTests {
 	@Rule
 	public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @LocalServerPort
     int randomServerPort;
     
-    @Before
+    @BeforeClass
     public void setPort() {
-    	RestAssured.port = randomServerPort;
+    		RestAssured.port = randomServerPort;
     }
 	
 	@Test
