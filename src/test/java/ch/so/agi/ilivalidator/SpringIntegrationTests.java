@@ -10,9 +10,6 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -42,7 +39,7 @@ public class SpringIntegrationTests {
     @LocalServerPort
     int randomServerPort;
     
-    @BeforeClass
+    @Before
     public void setPort() {
     		RestAssured.port = randomServerPort;
     }
@@ -57,7 +54,6 @@ public class SpringIntegrationTests {
         	body("html.head.title", equalTo("ilivalidator web service"));
 	}
 
-	@Test
 	/*
 	 * We push the upload button but without sending a file
 	 * to validate. It should redirect to the starting page.
@@ -66,6 +62,7 @@ public class SpringIntegrationTests {
 	 * in the relevant if-clause. Testing the body seems
 	 * not work though...
 	 */
+	@Test
 	public void noFileUploadTest() throws IOException {
 		File file = tempFolder.newFile("tempFile.txt");
 

@@ -2,20 +2,26 @@ package ch.so.agi.ilivalidator;
 
 import static io.restassured.RestAssured.given;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import io.restassured.RestAssured;
 
 public class DockerIntegrationTests {
-    @BeforeClass
+	@Rule
+	public TemporaryFolder tempFolder = new TemporaryFolder();
+
+    @Before
     public void setup() {
-    		String port = System.getProperty("server.port");
-    		if (port == null) {
-    			RestAssured.port = Integer.valueOf(8888);
-    		} else {
-    			RestAssured.port = Integer.valueOf(port);
-    		}
+//    		String port = System.getProperty("server.port");
+//    		if (port == null) {
+//    			RestAssured.port = Integer.valueOf(8888);
+//    		} else {
+//    			RestAssured.port = Integer.valueOf(port);
+//    		}
 
 //    		String basePath = System.getProperty("server.base");
 //    		if(basePath == null) {
@@ -23,11 +29,11 @@ public class DockerIntegrationTests {
 //    		}
 //    		RestAssured.basePath = basePath;
 
-    		String baseHost = System.getProperty("server.host");
-    		if(baseHost == null) {
-    			baseHost = "http://localhost";
-    		}
-    		RestAssured.baseURI = baseHost;
+//    		String baseHost = System.getProperty("server.host");
+//    		if(baseHost == null) {
+//    			baseHost = "http://localhost";
+//    		}
+//    		RestAssured.baseURI = baseHost;
 
     }
 
