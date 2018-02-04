@@ -35,7 +35,7 @@ import java.io.IOException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class FunctionalTests {
+public class SpringIntegrationTests {
 	@Rule
 	public TemporaryFolder tempFolder = new TemporaryFolder();
 

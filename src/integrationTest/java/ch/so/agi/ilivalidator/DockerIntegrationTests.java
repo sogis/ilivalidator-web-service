@@ -7,9 +7,9 @@ import org.junit.Test;
 
 import io.restassured.RestAssured;
 
-public class IntegrationTests {
+public class DockerIntegrationTests {
     @BeforeClass
-    public static void setup() {
+    public void setup() {
     		String port = System.getProperty("server.port");
     		if (port == null) {
     			RestAssured.port = Integer.valueOf(8888);
