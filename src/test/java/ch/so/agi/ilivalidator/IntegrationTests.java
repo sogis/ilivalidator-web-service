@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -79,11 +79,11 @@ public class IntegrationTests {
 	    	//body("html.head.title", equalTo("ilivalidator web service")).log().all();
 	}	
 	
-	@Test
 	/*
 	 * Upload a text file with nonsense content and
 	 * provoke a iox exception.
 	 */
+	@Test
 	public void uploadNonsenseFileTest() throws IOException {
 		File file = new File("src/test/data/nonsense.txt");
 
@@ -122,12 +122,12 @@ public class IntegrationTests {
 			//body(containsString("...validation failed"));
 	}
 	
-	@Test
 	/*
 	 * INTERLIS transfer file contains some errors but these are ignored
 	 * or reduced to warnings by configuration file. Hence the validation
 	 * must be successful.
 	 */
+	@Test
 	public void successfulValidationTestWithConfigFile() {
 		File file = new File("src/test/data/roh_20170717A_errors.xtf");
 		
@@ -143,13 +143,13 @@ public class IntegrationTests {
 			body(containsString("Info: configFile"));
 	}
 
-	@Test
 	/*
 	 * There is no according configuration file to the INTERLIS
 	 * transfer/model file. Nonetheless the validation is done.
 	 * "Info: configFile" should not be in the output even
 	 * with 'configFile' = 'on'.
 	 */
+	@Test
 	public void successfulValidationTestWithoutConfigFile() {
 		File file = new File("src/test/data/agglo_20170529.xtf");
 				
@@ -171,14 +171,15 @@ public class IntegrationTests {
         assertThat(response.asString().indexOf("Info: configFile"), is(-1));		
 	}
 	
-	// !!!!! Does it test anything?
-	@Ignore("Validation INTERLIS model file not yet available.")
-	@Test
+
 	/*
 	 * The additional constraints are defined in a separate 
 	 * model file. There must be also a configuration file that
 	 * makes ilivalidator aware of the additional model.
 	 */
+	// !!!!! Does it test anything?
+	@Ignore("Validation INTERLIS model file not yet available.")
+	@Test	
 	public void additionalConstraintsValidationTest() {
 		File file = new File("src/test/data/roh_20170717A_errors.xtf");
 		

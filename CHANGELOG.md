@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 
 - Checkbox in the GUI for applying the configuration file is hidden at the moment in the gui but is exposed in the api. 
 
+## [0.1.3] - 2017-02-06
+
+### Changed
+
+- Spring Boot 2.0.0.RC1
+
+### Removed
+
+- Disable and/or removed any actuator stuff.
+- Removed ili/toml files of temporary models (Nutzungsplanung).
+
+## [0.1.2] - 2017-11-21
+
+- ??
+
 ## [0.1.1] - 2017-09-20
 
 ### Changed

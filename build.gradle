@@ -1,36 +1,32 @@
 buildscript {
 	ext {
-		springBootVersion = '1.5.6.RELEASE'
+		springBootVersion = '2.0.0.RC1'
 	}
 	repositories {
-		jcenter()
 		mavenCentral()
+		maven { url "https://repo.spring.io/snapshot" }
+		maven { url "https://repo.spring.io/milestone" }
+		maven { url "https://plugins.gradle.org/m2/" }			
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath("se.transmode.gradle:gradle-docker:1.2")
-		classpath("net.nemerosa:versioning:2.6.0")
 	}
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'eclipse'
 apply plugin: 'docker'
-apply plugin: 'net.nemerosa.versioning'
 
 group = 'ch.so.agi.ilivalidator'
-//version = '0.0.8-'+versioning.info.build
-version = '0.1.2'
+version '0.1.3'+System.getProperty('release','-'+new Date().format('yyyyMMdd-HHmmss-SSSS'))
 
 description = """ilivalidator web service"""
 
-springBoot {
-    executable = true
-}
-
-versioning {
-	noWarningOnDirty = true
+bootJar {
+    launchScript()
 }
 
 sourceCompatibility = 1.8
@@ -41,8 +37,10 @@ tasks.withType(JavaCompile) {
 }
 
 repositories {
-    mavenCentral()
-    //maven { url "http://sogeo.services:8081/artifactory/libs-release" }
+	mavenCentral()
+	mavenCentral()
+	maven { url "https://repo.spring.io/snapshot" }
+	maven { url "https://repo.spring.io/milestone" }
     maven { url "http://jars.interlis.ch/" }
     maven { url "http://repo.maven.apache.org/maven2" }
 }
@@ -51,7 +49,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
-    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
     compile("commons-io:commons-io:2.5")
     compile("ch.interlis:ilivalidator:1.5.0")
     compile("org.webjars:materializecss:0.100.1")
@@ -69,6 +66,7 @@ test {
 }
 
 // Build
+/*
 task buildDocker(type: Docker) {
 	//tag = "${project.group}/${applicationName}:${tagVersion}"
 	tagVersion = 'latest'
@@ -83,6 +81,19 @@ task buildDocker(type: Docker) {
 	}
   	entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom', '-jar', '/app.jar'])
 }
+*/
+task buildDocker(type: Docker) {
+	push = project.hasProperty('push') // <-> "./gradlew buildDocker -Ppush"
+	tagVersion = version
+	tag = "sogis/ilivalidator-web-service"
+	dockerfile = file('Dockerfile')
+	doFirst {
+		copy {
+			from jar
+			into stageDir
+		}
+	}	
+}
 
 // Needed for Jenkins and AWS pipeline and Docker images tagging.
 // I do have problems with some addition output in the console
@@ -93,5 +104,5 @@ task buildDocker(type: Docker) {
 // get the git sha. We use the date for the versioning of
 // the docker image for now :-(
 task getVersion {
-	println project.version + "-" + new Date().format('yyyyMMddHHmmss')
+	println project.version
 }
