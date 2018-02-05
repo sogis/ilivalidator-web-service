@@ -100,10 +100,8 @@ import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer.ExposedP
 
 docker {
     registryCredentials {
-        //username = System.env.dockerRegistryUser
-        //password = System.env.dockerRegistryPass
-        username = "edigonzales"
-        password = "tightrope66"
+        username = System.env.dockerRegistryUser
+        password = System.env.dockerRegistryPass
     }
 }
 
