@@ -7,6 +7,10 @@ All notable changes to this project will be documented in this file.
 
 ## [0.1.3] - 2017-02-06
 
+### Added
+
+- Integration/functional tests against docker image.
+
 ### Changed
 
 - Spring Boot 2.0.0.RC1
