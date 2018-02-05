@@ -39,7 +39,14 @@ tasks.withType(JavaCompile) {
 }
 
 testSets {
-    integrationTest
+    dockerTest
+}
+
+sourceSets {
+    dockerTestRuntime {
+
+        runtimeClasspath += sourceSets.test.runtimeClasspath
+    }
 }
 
 repositories {
@@ -65,7 +72,11 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
 		exclude(module: 'commons-logging')
     }
-    integrationTestCompile("io.rest-assured:rest-assured:3.0.6")
+    dockerTestCompile("io.rest-assured:rest-assured:3.0.6")
+    //dockerTestCompile sourceSets.main.output
+    //dockerTestCompile configurations.testCompile
+    dockerTestCompile sourceSets.test.output    
+    //dockerTestRuntime configurations.testRuntime
     // Bug in docker plugin: https://github.com/bmuschko/gradle-docker-plugin/issues/467
     dockerJava 'com.github.docker-java:docker-java:3.1.0-SNAPSHOT'
     dockerJava 'org.slf4j:slf4j-simple:1.7.5'
@@ -80,42 +91,72 @@ test {
 
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+import com.bmuschko.gradle.docker.tasks.image.DockerPushImage
 import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerStartContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerLogsContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerStopContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer.ExposedPort
 
+docker {
+    registryCredentials {
+        //username = System.env.dockerRegistryUser
+        //password = System.env.dockerRegistryPass
+        username = "edigonzales"
+        password = "tightrope66"
+    }
+}
+
 task buildDockerImage(type: DockerBuildImage) {
+	description = "Build docker image."
     inputDir = project.rootDir
     tag = "sogis/ilivalidator-web-service:${version}"
 }
 
 task createDockerContainer(dependsOn: 'buildDockerImage', type: DockerCreateContainer) {
+	description = "Create docker container."
     targetImageId { buildDockerImage.getImageId() }
     portBindings = ['8888:8888']
     exposedPorts = [new ExposedPort("tcp", [8888])]
     
 }
 
-task startDockerContainer(dependsOn: 'createDockerContainer', type: DockerStartContainer) {
+task startDockerContainer(dependsOn: 'createDockerContainer', type: DockerStartContainer) {	
+	description = "Start docker container."
     targetContainerId { createDockerContainer.getContainerId() }
 
     // Starting container != web service is ready.
-    /*
     doLast { 
         sleep(10*1000)
     }
-    */
 }
 
 task logDockerContainer(type: DockerLogsContainer) {
+	description = "Show docker container logs on standard out."
     targetContainerId { startDockerContainer.getContainerId() }
     follow = true
     tailAll = true
 }
 
-startDockerContainer.finalizedBy('logDockerContainer')
+task stopDockerContainer(type: DockerStopContainer) {
+	description = "Stop running docker container."
+    targetContainerId { createDockerContainer.getContainerId() }
+}
+
+task pushDockerImage(type: DockerPushImage) {
+	description = "Push docker image to hub.docker.com (only if docker tests were successful)."
+    onlyIf {
+        dockerTest.state.failure == null
+    }
+    imageName = buildDockerImage.tag
+}
+
+// TODO: How to show docker log. Seems to stall b/c of finalizedBy?
+// At least standard out is in gradle docker test reports.
+//startDockerContainer.finalizedBy('logDockerContainer')
+
+dockerTest.dependsOn('startDockerContainer')
+dockerTest.finalizedBy('stopDockerContainer', 'pushDockerImage')
 
 // Needed for Jenkins and AWS pipeline and Docker images tagging.
 // I do have problems with some addition output in the console
