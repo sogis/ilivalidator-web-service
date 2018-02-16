@@ -1,18 +1,18 @@
 buildscript {
-	ext {
-		springBootVersion = '2.0.0.RC1'
-	}
-	repositories {
-		mavenCentral()
-		maven { url "https://repo.spring.io/snapshot" }
-		maven { url "https://repo.spring.io/milestone" }
-		maven { url "https://plugins.gradle.org/m2/" }			
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath("com.bmuschko:gradle-docker-plugin:3.2.3")			
-		classpath("gradle.plugin.org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.4.2")		
-	}
+    ext {
+        springBootVersion = '2.0.0.RC1'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://plugins.gradle.org/m2/" }			
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("com.bmuschko:gradle-docker-plugin:3.2.3")			
+        classpath("gradle.plugin.org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.4.2")		
+    }
 }
 
 apply plugin: 'java'
@@ -35,7 +35,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 tasks.withType(JavaCompile) {
-	options.encoding = 'UTF-8'
+    options.encoding = 'UTF-8'
 }
 
 testSets {
@@ -50,27 +50,27 @@ sourceSets {
 }
 
 repositories {
-	mavenCentral()
-	mavenCentral()
-	maven { url "https://repo.spring.io/snapshot" }
-	maven { url "https://repo.spring.io/milestone" }
+    mavenCentral()
+    mavenCentral()
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://repo.spring.io/milestone" }
     maven { url "http://jars.interlis.ch/" }
     maven { url "http://repo.maven.apache.org/maven2" }
     // Bug in docker plugin: https://github.com/bmuschko/gradle-docker-plugin/issues/467
-   	maven { url 'https://oss.sonatype.org/content/groups/public' }
+       maven { url 'https://oss.sonatype.org/content/groups/public' }
 }
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
-	compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
     compile("commons-io:commons-io:2.5")
     compile("ch.interlis:ilivalidator:1.5.0")
     compile("org.webjars:materializecss:0.100.1")
     compile("org.webjars:jquery:2.2.4")
-	testCompile("io.rest-assured:rest-assured:3.0.6")
+    testCompile("io.rest-assured:rest-assured:3.0.6")
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
-		exclude(module: 'commons-logging')
+        exclude(module: 'commons-logging')
     }
     dockerTestCompile("io.rest-assured:rest-assured:3.0.6")
     //dockerTestCompile sourceSets.main.output
@@ -84,9 +84,9 @@ dependencies {
 }
 
 test {
-	testLogging {
-		showStandardStreams = true
-	}
+    testLogging {
+        showStandardStreams = true
+    }
 }
 
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
@@ -106,13 +106,13 @@ docker {
 }
 
 task buildDockerImage(type: DockerBuildImage) {
-	description = "Build docker image."
+    description = "Build docker image."
     inputDir = project.rootDir
     tag = "sogis/ilivalidator-web-service:${version}"
 }
 
 task createDockerContainer(dependsOn: 'buildDockerImage', type: DockerCreateContainer) {
-	description = "Create docker container."
+    description = "Create docker container."
     targetImageId { buildDockerImage.getImageId() }
     portBindings = ['8888:8888']
     exposedPorts = [new ExposedPort("tcp", [8888])]
@@ -120,7 +120,7 @@ task createDockerContainer(dependsOn: 'buildDockerImage', type: DockerCreateCont
 }
 
 task startDockerContainer(dependsOn: 'createDockerContainer', type: DockerStartContainer) {	
-	description = "Start docker container."
+    description = "Start docker container."
     targetContainerId { createDockerContainer.getContainerId() }
 
     // Starting container != web service is ready.
@@ -130,19 +130,19 @@ task startDockerContainer(dependsOn: 'createDockerContainer', type: DockerStartC
 }
 
 task logDockerContainer(type: DockerLogsContainer) {
-	description = "Show docker container logs on standard out."
+    description = "Show docker container logs on standard out."
     targetContainerId { startDockerContainer.getContainerId() }
     follow = true
     tailAll = true
 }
 
 task stopDockerContainer(type: DockerStopContainer) {
-	description = "Stop running docker container."
+    description = "Stop running docker container."
     targetContainerId { createDockerContainer.getContainerId() }
 }
 
 task pushDockerImage(type: DockerPushImage) {
-	description = "Push docker image to hub.docker.com (only if docker tests were successful)."
+    description = "Push docker image to hub.docker.com (only if docker tests were successful)."
     onlyIf {
         dockerTest.state.failure == null
     }
@@ -165,5 +165,5 @@ dockerTest.finalizedBy('stopDockerContainer', 'pushDockerImage')
 // get the git sha. We use the date for the versioning of
 // the docker image for now :-(
 task getVersion {
-	println project.version
+    println project.version
 }
