@@ -11,7 +11,8 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("com.bmuschko:gradle-docker-plugin:3.2.3")			
-        classpath("gradle.plugin.org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.4.2")		
+        classpath("gradle.plugin.org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.4.2")
+        classpath "gradle.plugin.com.palantir.gradle.gitversion:gradle-git-version:0.10.1"		
     }
 }
 
@@ -21,9 +22,17 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'eclipse'
 apply plugin: 'com.bmuschko.docker-remote-api'
 apply plugin: 'org.unbroken-dome.test-sets'
+apply plugin: 'com.palantir.git-version'
 
 group = 'ch.so.agi.ilivalidator'
-version '0.1.3'+System.getProperty('release','-'+new Date().format('yyyyMMdd-HHmmss-SSSS'))
+version '0.2'
+
+if (System.env.TRAVIS_BUILD_NUMBER) {
+    project.version += "."+System.env.TRAVIS_BUILD_NUMBER
+} else {
+    def details = versionDetails()
+    project.version += "."+details.gitHash
+}
 
 description = """ilivalidator web service"""
 
@@ -44,7 +53,6 @@ testSets {
 
 sourceSets {
     dockerTestRuntime {
-
         runtimeClasspath += sourceSets.test.runtimeClasspath
     }
 }
@@ -57,7 +65,7 @@ repositories {
     maven { url "http://jars.interlis.ch/" }
     maven { url "http://repo.maven.apache.org/maven2" }
     // Bug in docker plugin: https://github.com/bmuschko/gradle-docker-plugin/issues/467
-       maven { url 'https://oss.sonatype.org/content/groups/public' }
+    maven { url 'https://oss.sonatype.org/content/groups/public' }
 }
 
 dependencies {
@@ -156,6 +164,7 @@ task pushDockerImage(type: DockerPushImage) {
 dockerTest.dependsOn('startDockerContainer')
 dockerTest.finalizedBy('stopDockerContainer', 'pushDockerImage')
 
+// NOT WORKING AS EXPECTED AT THE MOMENT!!!
 // Needed for Jenkins and AWS pipeline and Docker images tagging.
 // I do have problems with some addition output in the console
 // from versioning plugin: "noWarningOnDirty = true" does not 
@@ -165,5 +174,6 @@ dockerTest.finalizedBy('stopDockerContainer', 'pushDockerImage')
 // get the git sha. We use the date for the versioning of
 // the docker image for now :-(
 task getVersion {
+    //+System.getProperty('release','-'+new Date().format('yyyyMMdd-HHmmss-SSSS'))
     println project.version
 }
