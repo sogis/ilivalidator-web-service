@@ -116,7 +116,8 @@ docker {
 task buildDockerImage(type: DockerBuildImage) {
     description = "Build docker image."
     inputDir = project.rootDir
-    tag = "sogis/ilivalidator-web-service:${version}"
+    //tag = "sogis/ilivalidator-web-service:${version}"
+    tags = ["sogis/ilivalidator-web-service:"+version, "sogis/ilivalidator-web-service:latest"]
 }
 
 task createDockerContainer(dependsOn: 'buildDockerImage', type: DockerCreateContainer) {
@@ -149,12 +150,20 @@ task stopDockerContainer(type: DockerStopContainer) {
     targetContainerId { createDockerContainer.getContainerId() }
 }
 
-task pushDockerImage(type: DockerPushImage) {
+task pushDockerImage_One(type: DockerPushImage) {
     description = "Push docker image to hub.docker.com (only if docker tests were successful)."
     onlyIf {
         dockerTest.state.failure == null
     }
-    imageName = buildDockerImage.tag
+    imageName = buildDockerImage.tags[0]
+}
+
+task pushDockerImage_Two(type: DockerPushImage) {
+    description = "Push docker image to hub.docker.com (only if docker tests were successful)."
+    onlyIf {
+        dockerTest.state.failure == null
+    }
+    imageName = buildDockerImage.tags[1]
 }
 
 // TODO: How to show docker log. Seems to stall b/c of finalizedBy?
