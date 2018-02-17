@@ -171,7 +171,7 @@ task pushDockerImage_Two(type: DockerPushImage) {
 //startDockerContainer.finalizedBy('logDockerContainer')
 
 dockerTest.dependsOn('startDockerContainer')
-dockerTest.finalizedBy('stopDockerContainer', 'pushDockerImage')
+dockerTest.finalizedBy('stopDockerContainer', 'pushDockerImage_One', 'pushDockerImage_Two')
 
 // NOT WORKING AS EXPECTED AT THE MOMENT!!!
 // Needed for Jenkins and AWS pipeline and Docker images tagging.
