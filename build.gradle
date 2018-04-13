@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.0.RC1'
+        springBootVersion = '2.0.1.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -73,7 +73,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
     compile("commons-io:commons-io:2.5")
-    compile("ch.interlis:ilivalidator:1.5.0")
+    compile("ch.interlis:ilivalidator:1.8.1")
     compile("org.webjars:materializecss:0.100.1")
     compile("org.webjars:jquery:2.2.4")
     testCompile("io.rest-assured:rest-assured:3.0.6")

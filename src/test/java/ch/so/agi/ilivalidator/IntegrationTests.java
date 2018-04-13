@@ -110,7 +110,7 @@ public abstract class IntegrationTests {
 	 */
 	@Test
 	public void successfulValidationTestWithConfigFile() {
-		File file = new File("src/test/data/roh_20170717A_errors.xtf");
+		File file = new File("src/test/data/Obuc_Mutation_948_2014_07_17_errors.xml");
 		
 		given().
 			param("configFile", "on").
