@@ -30,94 +30,83 @@ import ch.so.agi.ilivalidator.services.IlivalidatorService;
 
 @Controller
 public class MainController {
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	// Folder prefix
+    // Folder prefix
     private static String FOLDER_PREFIX = "ilivalidator_";
-    
-	@Autowired
-	private Environment env;
+
+    @Autowired
+    private Environment env;
 
     @Autowired
     private ServletContext servletContext;
 
-	@Autowired 
-	IlivalidatorService ilivalidator;
+    @Autowired
+    IlivalidatorService ilivalidator;
 
-	@RequestMapping(value="/", method=RequestMethod.GET)
-	public String index() {
-		return "index";
-	}
-	    
-	@RequestMapping(value = "/", method = RequestMethod.POST)
-	@ResponseBody
-	public ResponseEntity<?> uploadFile(
-			@RequestParam(name="configFile", required=false) String configFile,
-			@RequestParam(name="disableAreaValidation", required=false) String disableAreaValidation,
-			@RequestParam(name="file", required=true) MultipartFile uploadFile
-			) {
-						
-		try {			
-			// Get the filename.
-			String filename = uploadFile.getOriginalFilename();
-			
-			// If the upload button was pushed w/o choosing a file,
-			// we just redirect to the starting page.
-			if (uploadFile.getSize() == 0 
-					|| filename.trim().equalsIgnoreCase("")
-					|| filename == null) {
-				log.warn("No file was uploaded. Redirecting to starting page.");
-				
-				HttpHeaders headers = new HttpHeaders();
-				headers.add("Location", servletContext.getContextPath());    
-				return new ResponseEntity<String>(headers, HttpStatus.FOUND);			
-			}
-			
-			// Build the local file path.
-			String directory = env.getProperty("ch.so.agi.ilivalidator.uploadedFiles"); 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String index() {
+        return "index";
+    }
 
-			if (directory == null) {
-				directory = System.getProperty("java.io.tmpdir");
-			}
-			
-			Path tmpDirectory = Files.createTempDirectory(Paths.get(directory), FOLDER_PREFIX);
-			Path uploadFilePath = Paths.get(tmpDirectory.toString(), filename);
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<?> uploadFile(@RequestParam(name = "configFile", required = false) String configFile,
+            @RequestParam(name = "disableAreaValidation", required = false) String disableAreaValidation,
+            @RequestParam(name = "file", required = true) MultipartFile uploadFile) {
 
-			// Save the file locally.			
-			byte[] bytes = uploadFile.getBytes();
-			Files.write(uploadFilePath, bytes);
-			
-			// Validate transfer file with ilivalidator library.
-			String inputFileName = uploadFilePath.toString();
-			String baseFileName = FilenameUtils.getFullPath(inputFileName) 
-					+ FilenameUtils.getBaseName(inputFileName);
-			String logFileName = baseFileName + ".log";
+        try {
+            // Get the filename.
+            String filename = uploadFile.getOriginalFilename();
 
-			// The checkbox is not exposed in the gui at the moment.
-			// But we want to use the configuration file if one is present.
-			configFile = "on";
-			
-			// Run validation.
-			boolean valid = ilivalidator.validate(configFile, inputFileName, logFileName);
+            // If the upload button was pushed w/o choosing a file,
+            // we just redirect to the starting page.
+            if (uploadFile.getSize() == 0 || filename.trim().equalsIgnoreCase("") || filename == null) {
+                log.warn("No file was uploaded. Redirecting to starting page.");
 
-			// Send log file back to client.
-			File logFile = new File(logFileName);
-			InputStream is = new FileInputStream(logFile);
-			
-			return ResponseEntity
-					.ok()
-					.header("Content-Type", "text/plain; charset=utf-8")
-					.contentLength(logFile.length())
-					//.contentType(MediaType.parseMediaType("text/plain"))
-					.body(new InputStreamResource(is));	      
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			log.error(e.getMessage());
-			return ResponseEntity
-					.badRequest()
-					.contentType(MediaType.parseMediaType("text/plain"))
-					.body(e.getMessage());
-		}
-	} 
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("Location", servletContext.getContextPath());
+                return new ResponseEntity<String>(headers, HttpStatus.FOUND);
+            }
+
+            // Build the local file path.
+            String directory = env.getProperty("ch.so.agi.ilivalidator.uploadedFiles");
+
+            if (directory == null) {
+                directory = System.getProperty("java.io.tmpdir");
+            }
+
+            Path tmpDirectory = Files.createTempDirectory(Paths.get(directory), FOLDER_PREFIX);
+            Path uploadFilePath = Paths.get(tmpDirectory.toString(), filename);
+
+            // Save the file locally.
+            byte[] bytes = uploadFile.getBytes();
+            Files.write(uploadFilePath, bytes);
+
+            // Validate transfer file with ilivalidator library.
+            String inputFileName = uploadFilePath.toString();
+            String baseFileName = FilenameUtils.getFullPath(inputFileName) + FilenameUtils.getBaseName(inputFileName);
+            String logFileName = baseFileName + ".log";
+
+            // The checkbox is not exposed in the gui at the moment.
+            // But we want to use the configuration file if one is present.
+            configFile = "on";
+
+            // Run validation.
+            boolean valid = ilivalidator.validate(configFile, inputFileName, logFileName);
+
+            // Send log file back to client.
+            File logFile = new File(logFileName);
+            InputStream is = new FileInputStream(logFile);
+
+            return ResponseEntity.ok().header("Content-Type", "text/plain; charset=utf-8")
+                    .contentLength(logFile.length())
+                    // .contentType(MediaType.parseMediaType("text/plain"))
+                    .body(new InputStreamResource(is));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().contentType(MediaType.parseMediaType("text/plain")).body(e.getMessage());
+        }
+    }
 }

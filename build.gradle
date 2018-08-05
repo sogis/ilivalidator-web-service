@@ -1,38 +1,48 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.1.RELEASE'
+        springBootVersion = '2.0.4.RELEASE'
     }
     repositories {
+        jcenter()
         mavenCentral()
-        maven { url "https://repo.spring.io/snapshot" }
-        maven { url "https://repo.spring.io/milestone" }
-        maven { url "https://plugins.gradle.org/m2/" }			
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("com.bmuschko:gradle-docker-plugin:3.2.3")			
-        classpath("gradle.plugin.org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.4.2")
-        classpath "gradle.plugin.com.palantir.gradle.gitversion:gradle-git-version:0.10.1"		
+        classpath("com.bmuschko:gradle-docker-plugin:3.5.0")			
+        classpath("gradle.plugin.org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.5.1")
+        classpath("gradle.plugin.com.palantir.gradle.gitversion:gradle-git-version:0.10.1")
+        classpath("org.ajoberstar.grgit:grgit-gradle:3.0.0-beta.1")
+        classpath("org.ajoberstar.reckon:reckon-gradle:0.8.0-rc.1")
     }
 }
-
+ 
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'eclipse'
-apply plugin: 'com.bmuschko.docker-remote-api'
 apply plugin: 'org.unbroken-dome.test-sets'
 apply plugin: 'com.palantir.git-version'
+apply plugin: com.bmuschko.gradle.docker.DockerRemoteApiPlugin
+apply plugin: 'org.ajoberstar.grgit'
+apply plugin: 'org.ajoberstar.reckon'
 
 group = 'ch.so.agi.ilivalidator'
 version '0.2'
 
+reckon {
+    scopeFromProp()
+    stageFromProp('beta', 'rc', 'final')
+}
+  
+/*
 if (System.env.TRAVIS_BUILD_NUMBER) {
     project.version += "."+System.env.TRAVIS_BUILD_NUMBER
 } else {
     def details = versionDetails()
     project.version += "."+details.gitHash
 }
+*/
 
 description = """ilivalidator web service"""
 
@@ -58,14 +68,9 @@ sourceSets {
 }
 
 repositories {
-    mavenCentral()
-    mavenCentral()
-    maven { url "https://repo.spring.io/snapshot" }
-    maven { url "https://repo.spring.io/milestone" }
+    jcenter()
     maven { url "http://jars.interlis.ch/" }
     maven { url "http://repo.maven.apache.org/maven2" }
-    // Bug in docker plugin: https://github.com/bmuschko/gradle-docker-plugin/issues/467
-    maven { url 'https://oss.sonatype.org/content/groups/public' }
 }
 
 dependencies {
@@ -81,14 +86,7 @@ dependencies {
         exclude(module: 'commons-logging')
     }
     dockerTestCompile("io.rest-assured:rest-assured:3.0.6")
-    //dockerTestCompile sourceSets.main.output
-    //dockerTestCompile configurations.testCompile
-    dockerTestCompile sourceSets.test.output    
-    //dockerTestRuntime configurations.testRuntime
-    // Bug in docker plugin: https://github.com/bmuschko/gradle-docker-plugin/issues/467
-    dockerJava 'com.github.docker-java:docker-java:3.1.0-SNAPSHOT'
-    dockerJava 'org.slf4j:slf4j-simple:1.7.5'
-    dockerJava 'cglib:cglib:3.2.0'    
+    dockerTestCompile sourceSets.test.output      
 }
 
 test {
@@ -172,17 +170,3 @@ task pushDockerImage_Two(type: DockerPushImage) {
 
 dockerTest.dependsOn('startDockerContainer')
 dockerTest.finalizedBy('stopDockerContainer', 'pushDockerImage_One', 'pushDockerImage_Two')
-
-// NOT WORKING AS EXPECTED AT THE MOMENT!!!
-// Needed for Jenkins and AWS pipeline and Docker images tagging.
-// I do have problems with some addition output in the console
-// from versioning plugin: "noWarningOnDirty = true" does not 
-// seem to work. -> Some workarounds in buildspec.yml.
-// Some more notes: At the moment aws codepipeline does not
-// copy the git meta stuff to codebuild hence we cannot
-// get the git sha. We use the date for the versioning of
-// the docker image for now :-(
-task getVersion {
-    //+System.getProperty('release','-'+new Date().format('yyyyMMdd-HHmmss-SSSS'))
-    println project.version
-}

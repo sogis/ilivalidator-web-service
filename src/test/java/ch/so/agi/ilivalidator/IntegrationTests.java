@@ -158,11 +158,9 @@ public abstract class IntegrationTests {
 	 * model file. There must be also a configuration file that
 	 * makes ilivalidator aware of the additional model.
 	 */
-	// !!!!! Does it test anything (im materiellen Sinne)?
-	@Ignore("Validation INTERLIS model file not yet available.")
 	@Test	
 	public void additionalConstraintsValidationTest() {
-		File file = new File("src/test/data/roh_20170717A_errors.xtf");
+		File file = new File("src/test/data/exp1_nplwis_20171213A_error.xtf");
 		
 		given().
 			param("configFile", "on").
@@ -171,7 +169,9 @@ public abstract class IntegrationTests {
 			post("/ilivalidator/").
 		then().
 			statusCode(200).
-			body(containsString("Info: configFile")).			
+			body(containsString("Info: configFile")).
+            body(containsString("additional model SO_Nutzungsplanung_20171118_Validierung_20171120")).
+            body(containsString("Attributwert Bezeichnung ist nicht identisch zum Objektkatalog")).
 			body(containsString("...validation failed"));
 	}
 
