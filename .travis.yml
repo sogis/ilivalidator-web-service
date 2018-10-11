@@ -22,5 +22,9 @@ jobs:
  #     script: ./gradlew build -s
     - stage: release_snapshot
       script: ./gradlew build dockerTest dockerPush reckonTagPush -Preckon.scope=patch -Preckon.stage=snapshot
+      on:
+        tags: false
     - stage: release_final
       script: ./gradlew build dockerTest dockerPush reckonTagPush -Preckon.scope=patch -Preckon.stage=final
+      on:
+        tags: true
