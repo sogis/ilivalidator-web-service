@@ -14,9 +14,7 @@ install: true
 
 stages:
   - name: release_snapshot
-    if: tag=false
   - name: release_final
-    if: tag=true 
 
 jobs:
   include:
