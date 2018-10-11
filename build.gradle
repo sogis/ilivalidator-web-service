@@ -16,7 +16,7 @@ buildscript {
 plugins {
     id "org.ajoberstar.reckon" version "0.8.0"
     id "org.ajoberstar.grgit" version "2.3.0"
-    id "com.bmuschko.docker-remote-api" version "3.5.0"
+    id "com.bmuschko.docker-remote-api" version "3.6.1"
 }
  
 apply plugin: 'java'
@@ -171,4 +171,4 @@ task pushDockerImage_Two(type: DockerPushImage) {
 //startDockerContainer.finalizedBy('logDockerContainer')
 
 dockerTest.dependsOn('startDockerContainer')
-dockerTest.finalizedBy('stopDockerContainer', 'pushDockerImage_One', 'pushDockerImage_Two')
+dockerTest.finalizedBy('stopDockerContainer')//, 'pushDockerImage_One', 'pushDockerImage_Two')
