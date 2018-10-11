@@ -40,6 +40,13 @@ Since ilivalidator is heavily tested in its own project, there are only function
 
 `./gradlew clean build` will create an executable JAR.
 
+### Release management
+
+It uses the [https://plugins.gradle.org/plugin/org.ajoberstar.reckon](https://plugins.gradle.org/plugin/org.ajoberstar.reckon) plugin:
+
+
+
+
 ## Running
 
 See also the ["Installing Spring Boot application" section](https://docs.spring.io/spring-boot/docs/current/reference/html/deployment-install.html) of the official documentation.
