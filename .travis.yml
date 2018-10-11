@@ -12,6 +12,11 @@ branches:
 
 install: true
 
+stages:
+ - build
+ - release_snapshot
+ - release_final
+
 jobs:
 include:
   - stage: build
