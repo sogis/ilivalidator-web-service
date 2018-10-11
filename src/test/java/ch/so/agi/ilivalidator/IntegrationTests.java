@@ -155,8 +155,8 @@ public abstract class IntegrationTests {
 
 	/*
 	 * The additional constraints are defined in a separate 
-	 * model file. There must be also a configuration file that 
-	 * makes ilivalidator aware of the additional model. 
+	 * model file. There must be also a configuration file that
+	 * makes ilivalidator aware of the additional model.
 	 */
 	@Test	
 	public void additionalConstraintsValidationTestSuccess() {

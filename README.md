@@ -44,14 +44,20 @@ Since ilivalidator is heavily tested in its own project, there are only function
 
 It uses the [https://plugins.gradle.org/plugin/org.ajoberstar.reckon](https://plugins.gradle.org/plugin/org.ajoberstar.reckon) plugin:
 
+1. Develop and test and build on your local machine.
+2. Commit your changes locally: `git commit -a -m 'some fix'`
+3. If you want to release a new SNAPSHOT version: `./gradlew build reckonTagPush -Preckon.scope=patch -Preckon.stage=snapshot`. You can use `patch`, `minor` or `major` for the reckon scope (SemVer alike). No git tag is created. But this step is needed to get proper docker image tags/versions. Then push to repo: `git push`.
+4. If you want to create a final release: `./gradlew build reckonTagPush -Preckon.scope=patch -Preckon.stage=final`. A git tag is created and it asks you for the github credentials to push the commmit to the repo automatically.
+5. The docker image will be created (and pushed to hub.docker.com) on Travis.
 
+## Running as Docker Image (SO!GIS)
+* To be done... 
 
-
-## Running
+## Running on Ubuntu (Deprecated)
 
 See also the ["Installing Spring Boot application" section](https://docs.spring.io/spring-boot/docs/current/reference/html/deployment-install.html) of the official documentation.
 
-### Installation on Ubuntu
+### Installation 
 
 * Copy the executable JAR to an appropriate directory, e.g. `/opt/apps/ilivalidator/ilivalidator.jar`.
 * `sudo ln -s /opt/apps/ilivalidator/ilivalidator.jar /etc/init.d/ilivalidator`
@@ -92,5 +98,3 @@ The ilivalidator configurations files (aka `toml` files) are part of the distrib
 
 These configuration files can be found in the resource directory of the source tree.
 
-## Docker
-* To be done... 
