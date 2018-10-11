@@ -21,12 +21,11 @@ jobs:
  #   - stage: build
  #     script: ./gradlew build -s
     - stage: release_snapshot
-      script: skip
       deploy:
         provider: script
         script: ./gradlew build dockerTest pushDockerImages reckonTagPush -Preckon.scope=patch -Preckon.stage=snapshot
         on:
-          tags: true
+          tags: false
     - stage: release_final
       script: ./gradlew build dockerTest pushDockerImages reckonTagPush -Preckon.scope=patch -Preckon.stage=final
       on:
