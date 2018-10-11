@@ -20,14 +20,14 @@ include:
     script: skip
     deploy:
       provider: script
-      script: ./gradlew build reckonTagPush -Preckon.scope=patch -Preckon.stage=snapshot
+      script: ./gradlew build dockerPush reckonTagPush -Preckon.scope=patch -Preckon.stage=snapshot
       on:
         tags: false
   - stage: release-final
     script: skip
     deploy:
       provider: script
-      script: ./gradlew build reckonTagPush -Preckon.scope=patch -Preckon.stage=final
+      script: ./gradlew build dockerPush reckonTagPush -Preckon.scope=patch -Preckon.stage=final
       on:
         tags: true
 

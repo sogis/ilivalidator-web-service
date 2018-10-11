@@ -166,6 +166,17 @@ task pushDockerImage_Two(type: DockerPushImage) {
     imageName = buildDockerImage.tags[1]
 }
 
+task pushDockerImages() {
+    doFirst{
+        println "Push Docker Images"
+    }
+}
+
+pushDockerImages.dependsOn {
+    tasks.findAll { task -> task.name.startsWith('pushDockerImage_') }
+}
+
+
 // TODO: How to show docker log. Seems to stall b/c of finalizedBy?
 // At least standard out is in gradle docker test reports.
 //startDockerContainer.finalizedBy('logDockerContainer')
