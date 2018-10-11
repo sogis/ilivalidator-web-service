@@ -123,7 +123,7 @@ public abstract class IntegrationTests {
 			body(containsString("...validation done")).
 			body(containsString("Info: configFile"));
 	}
-
+	
 	/*
 	 * There is no according configuration file to the INTERLIS
 	 * transfer/model file. Nonetheless the validation is done.
@@ -159,7 +159,28 @@ public abstract class IntegrationTests {
 	 * makes ilivalidator aware of the additional model.
 	 */
 	@Test	
-	public void additionalConstraintsValidationTest() {
+	public void additionalConstraintsValidationTestSuccess() {
+		File file = new File("src/test/data/2502_2017-12-13.xtf");
+		
+		given().
+			param("configFile", "on").
+			multiPart("file", file).
+		when().
+			post("/ilivalidator/").
+		then().
+			statusCode(200).
+			body(containsString("Info: configFile")).
+            body(containsString("additional model SO_Nutzungsplanung_20171118_Validierung_20171120")).
+			body(containsString("...validation done"));
+	}
+	
+	/*
+	 * The additional constraints are defined in a separate 
+	 * model file. There must be also a configuration file that
+	 * makes ilivalidator aware of the additional model.
+	 */
+	@Test	
+	public void additionalConstraintsValidationTestFail() {
 		File file = new File("src/test/data/exp1_nplwis_20171213A_error.xtf");
 		
 		given().
