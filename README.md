@@ -44,6 +44,8 @@ Since ilivalidator is heavily tested in its own project, there are only function
 
 It uses the [https://plugins.gradle.org/plugin/org.ajoberstar.reckon](https://plugins.gradle.org/plugin/org.ajoberstar.reckon) plugin:
 
+**TODO:** The plugin does not tag when using snaphots. Without any parameters it will show the next minor snapshot version (e.g. in travis) which is not what I want.
+
 1. Develop and test and build on your local machine: `XXXX` (not sure if it's better to use the reckon params and options here too)
 2. Commit your changes locally: `git commit -a -m 'some fix'`
 3. If you want to release a new SNAPSHOT version: `./gradlew build reckonTagPush -Preckon.scope=patch -Preckon.stage=snapshot`. You can use `patch`, `minor` or `major` for the reckon scope (SemVer alike). No git tag is created. But this step is needed to get proper docker image tags/versions. Then push to repo: `git push`.
