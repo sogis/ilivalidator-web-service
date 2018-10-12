@@ -42,15 +42,14 @@ Since ilivalidator is heavily tested in its own project, there are only function
 
 ### Release management
 
-It uses the [https://plugins.gradle.org/plugin/org.ajoberstar.reckon](https://plugins.gradle.org/plugin/org.ajoberstar.reckon) plugin:
+It uses the [https://plugins.gradle.org/plugin/pl.allegro.tech.build.axion-release](https://plugins.gradle.org/plugin/pl.allegro.tech.build.axion-release) plugin:
 
-**TODO:** The plugin does not tag when using snaphots. Without any parameters it will show the next minor snapshot version (e.g. in travis) which is not what I want.
+**Condition:** Releases (= Tag on Github, = non-SNAPSHOT version) are made locally.
 
-1. Develop and test and build on your local machine: `XXXX` (not sure if it's better to use the reckon params and options here too)
-2. Commit your changes locally: `git commit -a -m 'some fix'`
-3. If you want to release a new SNAPSHOT version: `./gradlew build reckonTagPush -Preckon.scope=patch -Preckon.stage=snapshot`. You can use `patch`, `minor` or `major` for the reckon scope (SemVer alike). No git tag is created. But this step is needed to get proper docker image tags/versions. Then push to repo: `git push`.
-4. If you want to create a final release: `./gradlew build reckonTagPush -Preckon.scope=patch -Preckon.stage=final`. A git tag is created and it asks you for the github credentials to push the commmit to the repo automatically.
-5. The docker image will be created (and pushed to hub.docker.com) on Travis.
+1. Develop and test and build on your local machine: `./gradlew clean build dockerTest` 
+2. Commit your changes locally: `git commit -a -m 'some fix'`. You cannot make a release without `git push`. Before a release `./gradlew currentVersion` shows `x.y.z-SNAPSHOT`.
+3. `./gradlew clean build dockerTest pushDockerImages` is run on Travis and will push a SNAPSHOT and a latest image on hub.docker.com.
+4. If you want a final release (non-SNAPSHOT version), this has to be done locally (commit and push first): `./gradlew release -Prelease.customUsername=edigonzales -Prelease.customPassword=77S.pellegrino clean build dockerTest pushDockerImages`. Be carefull: if you push the changes to Github, Travis will be slower than your pushes to docker. In this case the latest docker image will be overwritten.
 
 ## Running as Docker Image (SO!GIS)
 * To be done... 
