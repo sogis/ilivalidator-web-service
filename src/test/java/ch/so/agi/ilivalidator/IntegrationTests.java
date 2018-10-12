@@ -148,7 +148,7 @@ public abstract class IntegrationTests {
 					extract()
 				.response();
 		
-		// assertThat: http://www.vogella.com/tutorials/Hamcrest/article.html
+		// assertThat: http://www.vogella.com/tutorials/Hamcrest/article.html 
         assertThat(response.asString().indexOf("Info: configFile"), is(-1));		
 	}
 	
