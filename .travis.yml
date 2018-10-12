@@ -13,4 +13,4 @@ branches:
 install: true
 
 script:
-  - ./gradlew cV
+  - ./gradlew clean build dockerTest dockerPushImages
