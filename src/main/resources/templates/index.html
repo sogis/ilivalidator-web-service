@@ -22,7 +22,7 @@
 			border-bottom: 1px solid #b71c1c !important;
 			box-shadow: 0 1px 0 0 #b71c1c !important;
 		}		
-		.checkbox-blue[type="checkbox"].filled-in:checked + label:after {
+		.checkbox-red[type="checkbox"].filled-in:checked + label:after {
      		border: 2px solid #b71c1c;
      		background-color: #b71c1c;
 		}
@@ -47,17 +47,15 @@
 						</div>
 					</div>
 				</div>
-				<!--
 				<div class="card-content">
 					<div class="row">
 						<p>
-							<input type="checkbox" name="configFile"
-								class="filled-in checkbox-blue" id="configFile" /> <label
-								for="configFile">Konfigurationsdatei verwenden </label>
+							<input type="checkbox" name="allObjectsAccessible"
+								class="filled-in checkbox-red" id="configFile" /> <label
+								for="configFile">Externe Objekte prüfen </label>
 						</p>
 					</div>
 				</div>
-				-->				
 				<div class="card-action right-align">
 					<button id="submit-btn" class="btn red darken-4 white-text waves-effect waves-light" type="submit" name="action" >
     					<span class="white-text" th:text="#{upload}"></span><i class="material-icons right">send</i>
