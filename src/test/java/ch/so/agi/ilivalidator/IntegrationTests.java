@@ -195,5 +195,28 @@ public abstract class IntegrationTests {
             body(containsString("Attributwert Bezeichnung ist nicht identisch zum Objektkatalog")).
 			body(containsString("...validation failed"));
 	}
+	
+	/*
+	 * When "Externe Objekte prüfen" is set, some errors must be found since the
+	 * objects are missing in the file.
+	 */
+	@Test
+	public void allObjectsAccessibleTestFail() {
+	    File file = new File("src/test/data/npl_niederbuchsiten_vor_OP_external_object_error.xtf");
+
+       given().
+           param("allObjectsAccessible", "on").
+           multiPart("file", file).
+       when().
+           post("/ilivalidator/").
+       then().
+           statusCode(200).
+           body(containsString("No object found with OID A89F574F-CB0B-4968-BED0-5811440ACEC9")).
+           body(containsString("...validation failed"));
+
+	}
+	
+	
+	
 
 }

@@ -29,7 +29,13 @@ Die Prüfung kann - je nach Grösse der Datei resp. des Dateiinhaltes - ein paar
 
 Der Output des Webservices scheint auf den ersten Blick unübersichtlich. Er wird detailliert im nächsten Kapitel erläutert. Befindet sich am Ende ``Info: ...validation done``, hat der Webservice keine Fehler gefunden.
 
+Je nach Datenmodell können Assoziationen so modelliert sein, dass zwei Objekte in Verbindung gebracht werden, die nicht zwingend in einer Transferdatei vorhanden sein müssen. Z.B. im kantonalen Nutzungsplanungsmodell die Beziehungen zwischen den Typen und den Dokumenten. Will man diese Assoziation dennoch geprüft haben, muss dies der Prüfsoftware explizit mitgeteilt werden (Checkbox: "Externe Objekte prüfen"). 
+
+.. image:: images/ilivalidator06.png
+
 Mit dem Back-Button des Browsers kann eine neue Validierung gestartet werden.
+
+
 
 Interpretation der Resultate
 ============================

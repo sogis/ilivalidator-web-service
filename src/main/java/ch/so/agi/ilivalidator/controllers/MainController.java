@@ -51,7 +51,9 @@ public class MainController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> uploadFile(@RequestParam(name = "configFile", required = false) String configFile,
+    public ResponseEntity<?> uploadFile(
+            @RequestParam(name = "allObjectsAccessible", required = false) String allObjectsAccessible,
+            @RequestParam(name = "configFile", required = false) String configFile,
             @RequestParam(name = "disableAreaValidation", required = false) String disableAreaValidation,
             @RequestParam(name = "file", required = true) MultipartFile uploadFile) {
 
@@ -93,7 +95,7 @@ public class MainController {
             configFile = "on";
 
             // Run validation.
-            boolean valid = ilivalidator.validate(configFile, inputFileName, logFileName);
+            boolean valid = ilivalidator.validate(allObjectsAccessible, configFile, inputFileName, logFileName);
 
             // Send log file back to client.
             File logFile = new File(logFileName);

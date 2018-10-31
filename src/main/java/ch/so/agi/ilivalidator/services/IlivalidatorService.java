@@ -56,12 +56,18 @@ public class IlivalidatorService {
      *             if config file cannot be read or copied to file system.
      * @return String Returns the log file of the validation.
      */
-    public synchronized boolean validate(String doConfigFile, String inputFileName, String logFileName)
+    public synchronized boolean validate(String allObjectsAccessible, String doConfigFile, String inputFileName, String logFileName)
             throws IoxException, IOException {
         Settings settings = new Settings();
         settings.setValue(Validator.SETTING_ILIDIRS, Validator.SETTING_DEFAULT_ILIDIRS);
         settings.setValue(Validator.SETTING_LOGFILE, logFileName);
+        
+        if (allObjectsAccessible != null) {
+            log.info("FUUUUUUBAR");
+            settings.setValue(Validator.SETTING_ALL_OBJECTS_ACCESSIBLE, Validator.TRUE);
+        }
 
+        // TODO: throws error!! (only b/c it is empty?)
         // Not sure about this one:
         // If we really need some INTERLIS models that are not available in
         // repositories, we can place them in src/main/resources/ili.
