@@ -15,8 +15,6 @@ buildscript {
 
 plugins {
     id 'pl.allegro.tech.build.axion-release' version '1.9.3'
-    //id "org.ajoberstar.reckon" version "0.8.0"
-    //id "org.ajoberstar.grgit" version "3.0.0-rc.2"
     id "com.bmuschko.docker-remote-api" version "3.6.1"
 }
 
@@ -28,28 +26,8 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'eclipse'
 apply plugin: 'org.unbroken-dome.test-sets'
 apply plugin: "com.bmuschko.docker-remote-api"
-//apply plugin: 'org.ajoberstar.grgit'
-//apply plugin: 'org.ajoberstar.reckon'
 
 group = 'ch.so.agi.ilivalidator'
-
-/*
-reckon {
-    scopeFromProp()
-    snapshotFromProp()
-}
-
-reckonTagCreate.dependsOn check
-*/
-  
-/*
-if (System.env.TRAVIS_BUILD_NUMBER) {
-    project.version += "."+System.env.TRAVIS_BUILD_NUMBER
-} else {
-    def details = versionDetails()
-    project.version += "."+details.gitHash
-}
-*/
 
 description = """ilivalidator web service"""
 
