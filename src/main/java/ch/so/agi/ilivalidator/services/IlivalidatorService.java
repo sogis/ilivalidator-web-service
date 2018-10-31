@@ -63,7 +63,6 @@ public class IlivalidatorService {
         settings.setValue(Validator.SETTING_LOGFILE, logFileName);
         
         if (allObjectsAccessible != null) {
-            log.info("FUUUUUUBAR");
             settings.setValue(Validator.SETTING_ALL_OBJECTS_ACCESSIBLE, Validator.TRUE);
         }
 
