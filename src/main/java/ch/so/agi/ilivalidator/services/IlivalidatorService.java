@@ -80,6 +80,7 @@ public class IlivalidatorService {
             for (Resource resource : resources) {
                 InputStream is = resource.getInputStream();
                 File iliFile = new File(FilenameUtils.getFullPath(inputFileName), resource.getFilename());
+                log.info(iliFile.getAbsolutePath());
                 Files.copy(is, iliFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 IOUtils.closeQuietly(is);
             }
