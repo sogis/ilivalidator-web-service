@@ -103,5 +103,6 @@ objects:
       application: ilivalidator-web-service
     ports:
     - protocol: TCP
+      name: "80"
       port: 80
       targetPort: 8888
