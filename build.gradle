@@ -104,7 +104,8 @@ copyToLibsExt.dependsOn(deleteFilesLibsExt)
 build.dependsOn(copyToLibsExt)
 
 task deleteFilesJarDir(type: Delete) {
-    delete file("${buildDir}/dependency/").listFiles()
+    delete fileTree("${buildDir}/dependency/")//.listFiles()
+    delete file("${buildDir}/dependency/")
 }
 
 task unzipJar(type: Copy) {
