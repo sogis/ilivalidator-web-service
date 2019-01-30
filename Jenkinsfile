@@ -34,7 +34,7 @@ pipeline {
         stage('Publish') {
             steps {
                 sh './gradlew --no-daemon bootJar'  
-                //archiveArtifacts artifacts: "build/libs/ilivalidator-web-service-*.jar", onlyIfSuccessful: true, fingerprint: true                              
+                archiveArtifacts artifacts: "build/libs/ilivalidator-web-service-*.jar", onlyIfSuccessful: true, fingerprint: true                              
             }
         }               
     }
