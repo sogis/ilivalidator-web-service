@@ -4,6 +4,7 @@ target/
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
+src/main/resources/libs-ext/*.jar
 
 ### STS ###
 .apt_generated

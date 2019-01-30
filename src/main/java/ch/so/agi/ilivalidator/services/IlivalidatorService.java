@@ -65,14 +65,28 @@ public class IlivalidatorService {
         if (allObjectsAccessible != null) {
             settings.setValue(Validator.SETTING_ALL_OBJECTS_ACCESSIBLE, Validator.TRUE);
         }
+        
+        // Copy the ilivalidator custom functions jar files into temporary directory.
+        try {
+            ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+            Resource[] resources = resolver.getResources("classpath:libs-ext/*.jar");
+            log.info("Found " + String.valueOf(resources.length) + " custom function jar files.");
+            for (Resource resource : resources) {
+                InputStream is = resource.getInputStream();
+                File jarFile = new File(FilenameUtils.getFullPath(inputFileName), resource.getFilename());
+                log.info(jarFile.getAbsolutePath());
+                Files.copy(is, jarFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                IOUtils.closeQuietly(is);
+            }
+            
+            settings.setValue(Validator.SETTING_PLUGINFOLDER, new File(FilenameUtils.getFullPath(inputFileName)).getAbsolutePath());
+            log.info("Plugin folder: " + settings.getValue(Validator.SETTING_PLUGINFOLDER));
+        } catch (FileNotFoundException e) {
+            log.error(e.getMessage());
+            log.error("Error while copying the ilivalidator custom functions jar files.");
+        } 
 
-        // TODO: throws error!! (only b/c it is empty?)
-        // Not sure about this one:
-        // If we really need some INTERLIS models that are not available in
-        // repositories, we can place them in src/main/resources/ili.
-        // Especially e.g. validation models or for testing new models.
-        // These models are copied into the folder where we also
-        // stored the transfer file that we want to validate.
+        // Additional models, e.g. validation models (when they are not available elsewhere).
         try {
             ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
             Resource[] resources = resolver.getResources("classpath:ili/*.ili");

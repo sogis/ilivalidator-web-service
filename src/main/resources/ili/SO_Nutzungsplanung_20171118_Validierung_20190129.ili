@@ -24,8 +24,8 @@ INTERLIS 2.3;
 CONTRACTED MODEL SO_Nutzungsplanung_20171118_Validierung_20190129 (de)
 AT "http://www.geo.so.ch"
 VERSION "2019-01-29"  =
-  IMPORTS SO_Nutzungsplanung_20171118;
-
+  IMPORTS SO_Nutzungsplanung_20171118,SO_FunctionsExt;
+  
   VIEW TOPIC Rechtsvorschriften_Validierung = 
   DEPENDS ON SO_Nutzungsplanung_20171118.Rechtsvorschriften;
   
@@ -38,7 +38,10 @@ VERSION "2019-01-29"  =
         !!@ ilivalid.msg = "Attribut 'Kanton' muss definiert sein."
         MANDATORY CONSTRAINT DEFINED(Kanton);
         !!@ ilivalid.msg = "Attribut 'Gemeinde' muss definiert sein."
-        MANDATORY CONSTRAINT DEFINED(Gemeinde);	
+        MANDATORY CONSTRAINT DEFINED(Gemeinde);
+        !!@ name = checkDocumentURL
+        !!@ ilivalid.msg = "Dokument 'https://geo.so.ch/docs/ch.so.arp.zonenplaene/Zonenplaene_pdf/{TextImWeb}' wurde nicht gefunden."
+        MANDATORY CONSTRAINT SO_FunctionsExt.checkHttpRessource(TextImWeb, "https://geo.so.ch/docs/ch.so.arp.zonenplaene/Zonenplaene_pdf/");
     END v_Dokument;
     
   END Rechtsvorschriften_Validierung;

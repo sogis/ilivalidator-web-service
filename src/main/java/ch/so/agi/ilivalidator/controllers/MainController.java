@@ -93,7 +93,7 @@ public class MainController {
             // The checkbox is not exposed in the gui at the moment.
             // But we want to use the configuration file if one is present.
             configFile = "on";
-
+            
             // Run validation.
             boolean valid = ilivalidator.validate(allObjectsAccessible, configFile, inputFileName, logFileName);
 
