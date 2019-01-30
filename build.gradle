@@ -29,9 +29,14 @@ group = 'ch.so.agi.ilivalidator'
 
 description = """ilivalidator web service"""
 
+// A launch script will be added. Therefor it is
+// not a jar anymore but zip file and jar xf *.jar
+// will not work.
+/*
 bootJar {
     launchScript()
 }
+*/
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -97,6 +102,18 @@ task copyToLibsExt(type: Copy) {
 }
 copyToLibsExt.dependsOn(deleteFilesLibsExt)
 build.dependsOn(copyToLibsExt)
+
+
+task deleteFilesJarDir(type: Delete) {
+    delete file("${buildDir}/dependency/").listFiles()
+}
+
+task unzipJar(type: Copy) {
+    from zipTree(file("${buildDir}/libs/ilivalidator-web-service-"+version+".jar"))
+    into file("${buildDir}/dependency/")
+}
+unzipJar.dependsOn(deleteFilesJarDir)
+bootJar.finalizedBy(unzipJar)
 
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage

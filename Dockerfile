@@ -7,11 +7,10 @@ ENV APP_HOME /home/$USER_NAME/app
 RUN useradd -ms /bin/bash $USER_NAME
 RUN mkdir $APP_HOME
 
-ADD build/libs/ilivalidator-web-service-*.jar $APP_HOME/app.jar
-RUN chown $USER_NAME $APP_HOME/app.jar
-
+ARG DEPENDENCY=build/dependency
+COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY ${DEPENDENCY}/META-INF /app/META-INF
+COPY ${DEPENDENCY}/BOOT-INF/classes /app
+RUN chown -R $USER_NAME /app
 USER $USER_NAME
-WORKDIR $APP_HOME
-RUN bash -c 'touch app.jar'
-
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]
+ENTRYPOINT ["java","-cp","app:app/lib/*","ch.so.agi.ilivalidator.IlivalidatorApplication"]

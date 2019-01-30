@@ -46,14 +46,14 @@ Since ilivalidator is heavily tested in its own project, there are only function
 
 ### Building
 
-`./gradlew clean build` will create an executable JAR.
+`./gradlew clean build` will create an executable JAR. Ilivalidator custom functions will not work. Not sure why but must be something with how the plugin loader works. Therefor the Docker image will not use the the unzipped/unpacked jar (see [Dockerfile](Dockerfile)).
 
 ### Release management / versioning
 
 It uses a simple release management and versioning mechanism: Local builds are tagged as `1.0.LOCALBUILD`. Builds on Travis or Jenkins will append the build number, e.g. `1.0.48`. Major version will be increased after "major" changes. From every commit to the repository a docker image will be build and pushed to `hub.docker.com`. It will be tagged as `latest` and with the build number (`1.0.48`).
 
 ## Running as Docker Image (SO!GIS)
-* To be done... 
+See [openshift/README.md](openshift/README.md)
 
 ## Running on Ubuntu (Deprecated)
 
