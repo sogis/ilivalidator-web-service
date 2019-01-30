@@ -102,6 +102,7 @@ task copyToLibsExt(type: Copy) {
 }
 copyToLibsExt.dependsOn(deleteFilesLibsExt)
 build.dependsOn(copyToLibsExt)
+classes.dependsOn(copyToLibsExt)
 
 task deleteFilesJarDir(type: Delete) {
     delete fileTree("${buildDir}/dependency/")//.listFiles()
