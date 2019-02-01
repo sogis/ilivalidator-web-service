@@ -14,6 +14,13 @@ metadata:
 labels:
   application: Ilivalidator
   createdBy: ilivalidator-template
+parameters:
+  - description: Name for Environment
+    name: env
+    value: test
+  - description: Version of Image
+    name: version
+    value:
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -51,7 +58,7 @@ objects:
           deploymentconfig: ilivalidator-web-service
       spec:
         containers:
-        - image: sogis/ilivalidator-web-service:1.0.48
+        - image: sogis/ilivalidator-web-service
           imagePullPolicy: IfNotPresent
           name: ilivalidator-web-service
           ports:
@@ -80,8 +87,8 @@ objects:
         - ilivalidator-web-service
         from:
           kind: ImageStreamTag
-          name: ilivalidator-web-service:1.0.48
-          namespace: agi-ilivalidator-web-service-integration
+          name: ilivalidator-web-service:${version}
+          namespace: agi-ilivalidator-web-service-${env}
       type: ImageChange
   status:
     availableReplicas: 0
@@ -106,3 +113,34 @@ objects:
       name: "80"
       port: 80
       targetPort: 8888
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: ilivalidator-web-service
+  spec:
+    tags:
+    - from:
+        kind: DockerImage
+        name: sogis/ilivalidator-web-service:${version}
+      name: ${version}
+      importPolicy:
+        scheduled: true
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      haproxy.router.openshift.io/timeout: 120s
+    labels:
+      application: Ilivalidator
+      createdBy: ilivalidator-template
+    name: ilivalidator-${env}
+    namespace: agi-ilivalidator-web-service-${env}
+  spec:
+    host: ilivalidator-${env}.dev.so.ch
+    port:
+      targetPort: "80"
+    to:
+      kind: Service
+      name: ilivalidator-service
+      weight: 100
+    wildcardPolicy: None
