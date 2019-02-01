@@ -30,6 +30,14 @@ ilivalidator web service is build as a Spring Boot Application.
 
 Use your favorite IDE (e.g. [Spring Tool Suite](https://spring.io/tools/sts/all)) for coding.
 
+### Additional models
+
+Ilivalidator needs a toml file if you want to apply an additional model for your additional checks. The toml file must be all lower case, placed in the `toml` folder and named like the base model itself, e.g. `SO_Nutzungsplanung_20171118` -> `so_nutzungsplanung_20171118.toml`. The additional model can be placed in the `ili` folder or in any model repository that ilivalidator finds out-of-the-box.
+
+### Ilivalidator custom functions
+
+Your very own (Java) custom functions need be registered to ilivalidator during runtime. For this it is not enough to put the jar file containing the custom function classes available into the classpath (Guess it's because of knowing the qualified INTERLIS function name). The Gradle task `copyToLibsExt` will copy the Jar file from a defined maven repository into the `libs-text` folder before the `build` task. Use `--refresh-dependencies` if you need to update the custom function jar.
+
 ### Testing
 
 Since ilivalidator is heavily tested in its own project, there are only functional tests of the web service implemented.
@@ -38,21 +46,14 @@ Since ilivalidator is heavily tested in its own project, there are only function
 
 ### Building
 
-`./gradlew clean build` will create an executable JAR.
+`./gradlew clean build` will create an executable JAR. Ilivalidator custom functions will not work. Not sure why but must be something with how the plugin loader works. Therefor the Docker image will not use the the unzipped/unpacked jar (see [Dockerfile](Dockerfile)).
 
-### Release management
+### Release management / versioning
 
-It uses the [https://plugins.gradle.org/plugin/pl.allegro.tech.build.axion-release](https://plugins.gradle.org/plugin/pl.allegro.tech.build.axion-release) plugin:
-
-**Condition:** Releases (= Tag on Github, = non-SNAPSHOT version) are made locally.
-
-1. Develop and test and build on your local machine: `./gradlew clean build dockerTest` 
-2. Commit your changes locally: `git commit -a -m 'some fix'`. You cannot make a release without `git push`. Before a release `./gradlew currentVersion` shows `x.y.z-SNAPSHOT`.
-3. `./gradlew clean build dockerTest pushDockerImages` is run on Travis and will push a SNAPSHOT and a latest image on hub.docker.com.
-4. If you want a final release (non-SNAPSHOT version), this has to be done locally (commit and push first): `./gradlew release -Prelease.customUsername=edigonzales -Prelease.customPassword=$*fubarXX! clean build dockerTest pushDockerImages`. Be carefull: if you push the changes to Github, Travis will be slower with testing and pushing the image than your pushes from your local machine to docker. In this case the latest docker image will be overwritten. By default version patch (least significant) number is incremented. This can be changed in `build.gradle` or as command line argument [https://axion-release-plugin.readthedocs.io/en/latest/configuration/version/#incrementing](https://axion-release-plugin.readthedocs.io/en/latest/configuration/version/#incrementing)
+It uses a simple release management and versioning mechanism: Local builds are tagged as `1.0.LOCALBUILD`. Builds on Travis or Jenkins will append the build number, e.g. `1.0.48`. Major version will be increased after "major" changes. After every commit to the repository a docker image will be build and pushed to `hub.docker.com`. It will be tagged as `latest` and with the build number (`1.0.48`).
 
 ## Running as Docker Image (SO!GIS)
-* To be done... 
+See [openshift/README.md](openshift/README.md)
 
 ## Running on Ubuntu (Deprecated)
 

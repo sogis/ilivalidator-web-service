@@ -29,9 +29,14 @@ group = 'ch.so.agi.ilivalidator'
 
 description = """ilivalidator web service"""
 
+// A launch script will be added. Therefor it is
+// not a jar anymore but zip file and jar xf *.jar
+// will not work.
+/*
 bootJar {
     launchScript()
 }
+*/
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -54,6 +59,12 @@ repositories {
     jcenter()
     maven { url "http://jars.interlis.ch/" }
     maven { url "http://repo.maven.apache.org/maven2" }
+    maven { url "https://artifactory.sogeo.services/artifactory/libs-release/" }
+}
+
+configurations {
+    customFunctionsDeps
+    customFunctionsDeps.transitive = false
 }
 
 dependencies {
@@ -64,6 +75,7 @@ dependencies {
     compile("ch.interlis:ilivalidator:1.8.1")
     compile("org.webjars:materializecss:0.100.1")
     compile("org.webjars:jquery:2.2.4")
+    customFunctionsDeps("ch.so.agi.ilivalidator:ilivalidator-extension-functions:1.0.+")
     testCompile("io.rest-assured:rest-assured:3.0.6")
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
         exclude(module: 'commons-logging')
@@ -77,6 +89,32 @@ test {
         showStandardStreams = true
     }
 }
+
+task deleteFilesLibsExt(type: Delete) {
+    delete fileTree('src/main/resources/libs-ext/') {
+        include '**.jar'
+    }
+}
+
+task copyToLibsExt(type: Copy) {
+    from configurations.customFunctionsDeps
+    into "src/main/resources/libs-ext/"
+}
+copyToLibsExt.dependsOn(deleteFilesLibsExt)
+build.dependsOn(copyToLibsExt)
+classes.dependsOn(copyToLibsExt)
+
+task deleteFilesJarDir(type: Delete) {
+    delete fileTree("${buildDir}/dependency/")//.listFiles()
+    delete file("${buildDir}/dependency/")
+}
+
+task unzipJar(type: Copy) {
+    from zipTree(file("${buildDir}/libs/ilivalidator-web-service-"+version+".jar"))
+    into file("${buildDir}/dependency/")
+}
+unzipJar.dependsOn(deleteFilesJarDir)
+bootJar.finalizedBy(unzipJar)
 
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage

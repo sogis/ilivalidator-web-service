@@ -170,7 +170,7 @@ public abstract class IntegrationTests {
 		then().
 			statusCode(200).
 			body(containsString("Info: configFile")).
-            body(containsString("additional model SO_Nutzungsplanung_20171118_Validierung_20171120")).
+            body(containsString("additional model SO_Nutzungsplanung_20171118_Validierung_20190129")).
 			body(containsString("...validation done"));
 	}
 	
@@ -191,8 +191,12 @@ public abstract class IntegrationTests {
 		then().
 			statusCode(200).
 			body(containsString("Info: configFile")).
-            body(containsString("additional model SO_Nutzungsplanung_20171118_Validierung_20171120")).
+            body(containsString("additional model SO_Nutzungsplanung_20171118_Validierung_20190129")).
             body(containsString("Attributwert Bezeichnung ist nicht identisch zum Objektkatalog")).
+            body(containsString("Attribut 'Gemeinde' muss definiert sein.")).
+            body(containsString("Attribut 'Kanton' muss definiert sein.")).
+            body(containsString("Attribut 'Rechtsvorschrift' muss definiert sein.")).
+            body(containsString("Dokument 'https://geo.so.ch/docs/ch.so.arp.zonenplaene/Zonenplaene_pdf/109-Wisen/Reglemente/109_ZR-NOT-FOUND.pdf' wurde nicht gefunden")).
 			body(containsString("...validation failed"));
 	}
 	

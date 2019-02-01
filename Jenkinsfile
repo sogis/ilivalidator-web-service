@@ -22,7 +22,7 @@ pipeline {
                 sh './gradlew --no-daemon test'
                 publishHTML target: [
                     reportName : 'Gradle Tests',
-                    reportDir:   'build/reports/tests/test', // copies all subfolder in this folder
+                    reportDir:   'build/reports/tests/test', 
                     reportFiles: 'index.html',
                     keepAll: true,
                     alwaysLinkToLastBuild: true,
