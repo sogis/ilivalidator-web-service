@@ -51,7 +51,7 @@ objects:
           deploymentconfig: ilivalidator-web-service
       spec:
         containers:
-        - image: sogis/ilivalidator-web-service@sha256:082dad579a445df2628f62741874b7678aff17845703615c0addd9e512f1d98e
+        - image: sogis/ilivalidator-web-service:1.0.48
           imagePullPolicy: IfNotPresent
           name: ilivalidator-web-service
           ports:
@@ -80,7 +80,7 @@ objects:
         - ilivalidator-web-service
         from:
           kind: ImageStreamTag
-          name: ilivalidator-web-service:0.1.6
+          name: ilivalidator-web-service:1.0.48
           namespace: agi-ilivalidator-web-service-integration
       type: ImageChange
   status:
