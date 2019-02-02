@@ -49,6 +49,11 @@ public class MainController {
         return "index";
     }
 
+    @RequestMapping(value = "/version.txt", method = RequestMethod.GET)
+    public String version() {
+        return "version.txt";
+    }
+    
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> uploadFile(
