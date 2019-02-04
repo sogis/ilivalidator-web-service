@@ -35,10 +35,24 @@ public abstract class IntegrationTests {
 		when().
         	get("/ilivalidator/").
         then().
-        	statusCode(200).
-        	body("html.head.title", equalTo("ilivalidator web service"));
+            statusCode(200).
+            body("html.head.title", equalTo("ilivalidator web service"));
 	}
 	
+    /*
+     * Test if version.txt is available.
+     */
+    @Test
+    public void versionPageTest() {               
+        given().
+        when().
+            get("/ilivalidator/version.txt").
+        then().
+            statusCode(200).
+            body(containsString("Revision")).
+            body(containsString("Application-name"));
+    }
+
 	/*
 	 * We push the upload button but without sending a file
 	 * to validate. It should redirect to the starting page.
