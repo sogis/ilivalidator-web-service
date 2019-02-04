@@ -1,5 +1,0 @@
-
-Version: 1.0.LOCALBUILD
-Revision: a02b058fa4a3684b777795cd64d4c6d237b9e6c5
-Buildtime: 04-02-2019 10:49:57
-Application-name: ilivalidator-web-service

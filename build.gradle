@@ -207,8 +207,6 @@ dockerTest.finalizedBy('stopDockerContainer')//, 'pushDockerImage_One', 'pushDoc
 import java.text.SimpleDateFormat
 import org.ajoberstar.grgit.Grgit
 
-// Strange: does only work if version file is present in destination
-// folder.
 task versionTxt()  {
     outputs.upToDateWhen { false }
     doLast {
@@ -220,5 +218,10 @@ Application-name: ilivalidator-web-service
 """
     }
 }
-build.dependsOn(versionTxt)
-classes.dependsOn(versionTxt)
+task copyVersionTxt(type: Copy) {
+    from "version.txt"
+    into "src/main/resources/templates/"
+}
+copyVersionTxt.dependsOn(versionTxt)
+build.dependsOn(copyVersionTxt)
+classes.dependsOn(copyVersionTxt)
