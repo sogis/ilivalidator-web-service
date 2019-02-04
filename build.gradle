@@ -207,7 +207,10 @@ dockerTest.finalizedBy('stopDockerContainer')//, 'pushDockerImage_One', 'pushDoc
 import java.text.SimpleDateFormat
 import org.ajoberstar.grgit.Grgit
 
+// Strange: does only work if version file is present in destination
+// folder.
 task versionTxt()  {
+    outputs.upToDateWhen { false }
     doLast {
         new File("src/main/resources/templates/version.txt").text = """
 Version: $version
