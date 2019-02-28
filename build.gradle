@@ -60,7 +60,6 @@ repositories {
     jcenter()
     maven { url "http://jars.interlis.ch/" }
     maven { url "http://repo.maven.apache.org/maven2" }
-    maven { url "https://artifactory.sogeo.services/artifactory/libs-release/" }
 }
 
 configurations {
