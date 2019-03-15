@@ -137,6 +137,9 @@ task buildDockerImage(type: DockerBuildImage) {
     inputDir = project.rootDir
     //tag = "sogis/ilivalidator-web-service:${version}"
     tags = ["sogis/ilivalidator-web-service:"+version, "sogis/ilivalidator-web-service:latest"]
+    labels = ["ilivalidator-web-service.created": new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), 
+            "ilivalidator-web-service.git_commit": Grgit.open(dir: '.').head().id, 
+            "ilivalidator-web-service.travis_build": version]
 }
 
 task createDockerContainer(dependsOn: 'buildDockerImage', type: DockerCreateContainer) {
