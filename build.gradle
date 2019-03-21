@@ -15,7 +15,6 @@ buildscript {
 plugins {
     id "com.bmuschko.docker-remote-api" version "3.6.1"
     id "org.unbroken-dome.test-sets" version "2.1.1"
-    id "org.ajoberstar.grgit" version "3.0.0"
 }
  
 apply plugin: 'java'
@@ -138,7 +137,7 @@ task buildDockerImage(type: DockerBuildImage) {
     //tag = "sogis/ilivalidator-web-service:${version}"
     tags = ["sogis/ilivalidator-web-service:"+version, "sogis/ilivalidator-web-service:latest"]
     labels = ["ilivalidator-web-service.created": new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), 
-            "ilivalidator-web-service.git_commit": Grgit.open(dir: '.').head().id, 
+            "ilivalidator-web-service.git_commit": getCheckedOutGitCommitHash(), 
             "ilivalidator-web-service.travis_build": version]
 }
 
@@ -207,14 +206,17 @@ dockerTest.dependsOn('startDockerContainer')
 dockerTest.finalizedBy('stopDockerContainer')//, 'pushDockerImage_One', 'pushDockerImage_Two')
 
 import java.text.SimpleDateFormat
-import org.ajoberstar.grgit.Grgit
+
+def getCheckedOutGitCommitHash() {
+    'git log -1 --pretty=%H'.execute().text.trim()
+}
 
 task versionTxt()  {
     outputs.upToDateWhen { false }
     doLast {
         new File("version.txt").text = """
 Version: $version
-Revision: ${Grgit.open(dir: '.').head().id}
+Revision: getCheckedOutGitCommitHash()}
 Buildtime: ${new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date())}
 Application-name: ilivalidator-web-service
 """
