@@ -216,7 +216,7 @@ task versionTxt()  {
     doLast {
         new File("version.txt").text = """
 Version: $version
-Revision: getCheckedOutGitCommitHash()}
+Revision: ${getCheckedOutGitCommitHash()}
 Buildtime: ${new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date())}
 Application-name: ilivalidator-web-service
 """
