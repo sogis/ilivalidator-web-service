@@ -210,6 +210,7 @@ public abstract class IntegrationTests {
             body(containsString("Attribut 'Gemeinde' muss definiert sein.")).
             body(containsString("Attribut 'Kanton' muss definiert sein.")).
             body(containsString("Attribut 'Rechtsvorschrift' muss definiert sein.")).
+            body(containsString("Attribut 'OffiziellerTitel' muss definiert sein.")).
             body(containsString("Dokument 'https://geo.so.ch/docs/ch.so.arp.zonenplaene/Zonenplaene_pdf/109-Wisen/Reglemente/109_ZR-NOT-FOUND.pdf' wurde nicht gefunden")).
 			body(containsString("...validation failed"));
 	}
