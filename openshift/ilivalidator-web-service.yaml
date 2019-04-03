@@ -129,7 +129,7 @@ objects:
   kind: Route
   metadata:
     annotations:
-      haproxy.router.openshift.io/timeout: 120s
+      haproxy.router.openshift.io/timeout: 1200s
     labels:
       application: Ilivalidator
       createdBy: ilivalidator-template
