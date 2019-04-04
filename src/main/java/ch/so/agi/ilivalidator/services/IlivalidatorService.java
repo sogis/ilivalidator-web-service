@@ -58,6 +58,11 @@ public class IlivalidatorService {
      */
     public synchronized boolean validate(String allObjectsAccessible, String doConfigFile, String inputFileName, String logFileName)
             throws IoxException, IOException {
+        // Set some timeouts for fetching models. Some repos have problems and/or some
+        // urls make problems with our waf.
+        System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
+        System.setProperty("sun.net.client.defaultReadTimeout", "10000");
+
         Settings settings = new Settings();
         settings.setValue(Validator.SETTING_ILIDIRS, Validator.SETTING_DEFAULT_ILIDIRS);
         settings.setValue(Validator.SETTING_LOGFILE, logFileName);
