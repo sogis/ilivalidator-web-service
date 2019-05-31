@@ -1,16 +1,17 @@
-FROM java:8
-VOLUME /tmp
+#FROM adoptopenjdk/openjdk11:latest
+FROM adoptopenjdk/openjdk8:latest
 
-ENV USER_NAME ilivalidator
-ENV APP_HOME /home/$USER_NAME/app
+EXPOSE 8080
 
-RUN useradd -ms /bin/bash $USER_NAME
-RUN mkdir $APP_HOME
+WORKDIR /home/ilivalidator
 
 ARG DEPENDENCY=build/dependency
-COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY ${DEPENDENCY}/META-INF /app/META-INF
-COPY ${DEPENDENCY}/BOOT-INF/classes /app
-RUN chown -R $USER_NAME /app
-USER $USER_NAME
+COPY ${DEPENDENCY}/BOOT-INF/lib /home/ilivalidator/app/lib
+COPY ${DEPENDENCY}/META-INF /home/ilivalidator/app/META-INF
+COPY ${DEPENDENCY}/BOOT-INF/classes /home/ilivalidator/app
+RUN chown -R 1001:0 /home/ilivalidator && \
+    chmod -R g=u /home/ilivalidator
+
+USER 1001
+
 ENTRYPOINT ["java","-cp","app:app/lib/*","ch.so.agi.ilivalidator.IlivalidatorApplication"]
