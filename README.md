@@ -34,9 +34,13 @@ Use your favorite IDE (e.g. [Spring Tool Suite](https://spring.io/tools/sts/all)
 
 Ilivalidator needs a toml file if you want to apply an additional model for your additional checks. The toml file must be all lower case, placed in the `toml` folder and named like the base model itself, e.g. `SO_Nutzungsplanung_20171118` -> `so_nutzungsplanung_20171118.toml`. The additional model can be placed in the `ili` folder or in any model repository that ilivalidator finds out-of-the-box.
 
+**TODO:** Find out a smart way to deploy the extension functions models.
+
 ### Ilivalidator custom functions
 
 Your very own (Java) custom functions need be registered to ilivalidator during runtime. For this it is not enough to put the jar file containing the custom function classes available into the classpath (Guess it's because of knowing the qualified INTERLIS function name). The Gradle task `copyToLibsExt` will copy the Jar file from a defined maven repository into the `libs-text` folder before the `build` task. Use `--refresh-dependencies` if you need to update the custom function jar.
+
+**SO_Nutzungsplanung_20171118:** I end up putting this model also in the `ili` folder because I want to use an additional constraint in `ASSOCIATION` which is not possible at the moment if the association is in a topic view: https://github.com/claeis/ili2c/issues/6. 
 
 ### Testing
 
