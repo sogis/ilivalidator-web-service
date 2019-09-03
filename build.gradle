@@ -74,7 +74,10 @@ dependencies {
     compile("ch.interlis:ilivalidator:1.8.1")
     compile("org.webjars:materializecss:0.100.1")
     compile("org.webjars:jquery:2.2.4")
-    customFunctionsDeps("ch.so.agi.ilivalidator:ilivalidator-extension-functions:1.0.+")
+    compile("org.jgrapht:jgrapht-core:1.3.0") // only needed for the custom functions
+    //customFunctionsDeps("ch.so.agi.ilivalidator:ilivalidator-extension-functions:1.0.+")
+    //customFunctionsDeps("ch.so.agi.ilivalidator:ilivalidator-extension-functions:1.0.15")
+    customFunctionsDeps("ch.so.agi.ilivalidator:ilivalidator-extension-functions:1.0.28")
     testCompile("io.rest-assured:rest-assured:3.0.6")
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
         exclude(module: 'commons-logging')

@@ -232,10 +232,24 @@ public abstract class IntegrationTests {
            statusCode(200).
            body(containsString("No object found with OID A89F574F-CB0B-4968-BED0-5811440ACEC9")).
            body(containsString("...validation failed"));
-
 	}
 	
-	
-	
-
+	/*
+	 * Document cycle check aka "HinweisWeitereDokumente".
+	 */
+	@Test
+	public void documentCycleCheckTestFail() {
+        File file = new File("src/test/data/2408_2019-05-02_formatiert_cylce.xtf");
+        
+        given().
+            param("allObjectsAccessible", "on").
+            multiPart("file", file).
+       when().
+            post("/ilivalidator/").
+       then().
+            statusCode(200).
+            body(containsString("object 38 (DE8010C7-7255-4CDB-B361-417460CF9136 <-> 070D7074-336E-4AA4-96CC-9029D6F6E6CA) is part of a cycle: CB25AE37-3DA0-4DED-B051-A524B9A1F33D,DE8010C7-7255-4CDB-B361-417460CF9136,070D7074-336E-4AA4-96CC-9029D6F6E6CA")).
+            body(containsString("duplicate edge found: 42")).
+            body(containsString("...validation failed"));
+	}
 }
