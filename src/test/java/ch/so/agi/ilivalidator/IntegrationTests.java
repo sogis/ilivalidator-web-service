@@ -237,6 +237,7 @@ public abstract class IntegrationTests {
 	/*
 	 * Document cycle check aka "HinweisWeitereDokumente".
 	 */
+	@Ignore
 	@Test
 	public void documentCycleCheckTestFail() {
         File file = new File("src/test/data/2408_2019-05-02_formatiert_cylce.xtf");

@@ -12,22 +12,22 @@ INTERLIS 2.3;
 !!  Erfassungsmodell;
 !!  Compiler-Version = "4.7.3-20170524"; 
 !!------------------------------------------------------------------------------
-!! Version    | wer | Änderung 
+!! Version    | wer | ï¿½nderung 
 !!------------------------------------------------------------------------------
-!! 2015-05-13 | SK  | Modell (v26) für Pilot durch Stefan Keller (SK) erstellt 
-!! 2016-11-11 | SK  | Überarbeitung auf Version 32 (dm_npl_ktso_v32_LV95_ili2.ili)
+!! 2015-05-13 | SK  | Modell (v26) fï¿½r Pilot durch Stefan Keller (SK) erstellt 
+!! 2016-11-11 | SK  | ï¿½berarbeitung auf Version 32 (dm_npl_ktso_v32_LV95_ili2.ili)
 !! 2016-11-29 | OJ  | Tech. Review und Finalisierung durch Oliver Jeker (AGI)
 !! 2017-01-05 | OJ  | Korrektur Beziehungsrollennamen = Klassennamen
 !! 2017-09-01 | al  | - Lockerung der Beziehung Dokument <-> Geometrie
-!!            |     | - NP_Typ_Kanton_Grundnutzung mit N134 ergänzt
+!!            |     | - NP_Typ_Kanton_Grundnutzung mit N134 ergï¿½nzt
 !!            |     | - NP_Typ_Kanton_Ueberlagernd_Flaeche mit N812,N813 und
-!!            |     |   N820-823 ergänzt
+!!            |     |   N820-823 ergï¿½nzt
 !!            |     | - Rechtschreibung bei Ueberbauungsziffer
-!!            |     | - Modell mit Beschreibung ergänzt
-!! 2017-09-15 | al  | OID AS INTERLIS.UUIDOID wieder eingefügt
-!! 2017-11-18 | sz  | - OID AS INTERLIS.UUIDOID für sämtliche Klassen
-!!            |     | - Zusätzliche Assoziation Geometrie <-> Dokument gelöscht
-!!            |     | - Klasse Plandokument gelöscht
+!!            |     | - Modell mit Beschreibung ergï¿½nzt
+!! 2017-09-15 | al  | OID AS INTERLIS.UUIDOID wieder eingefï¿½gt
+!! 2017-11-18 | sz  | - OID AS INTERLIS.UUIDOID fï¿½r sï¿½mtliche Klassen
+!!            |     | - Zusï¿½tzliche Assoziation Geometrie <-> Dokument gelï¿½scht
+!!            |     | - Klasse Plandokument gelï¿½scht
 !! 2018-08-21 | al  | Bemerkungen an Arbeitshilfe angepasst.
 !!==============================================================================
 
@@ -48,22 +48,22 @@ VERSION "2017-11-18"  =
       /** Ist in Kraft
        */
       inKraft,
-      /** Noch nicht in Kraft, eine Änderung ist in Vorbereitung.
+      /** Noch nicht in Kraft, eine ï¿½nderung ist in Vorbereitung.
        */
       laufendeAenderung
     );
 
     Verbindlichkeit = (
-      /** Eigentümerverbindlich, im Verfahren der Nutzungsplanung festgelegt.
+      /** Eigentï¿½merverbindlich, im Verfahren der Nutzungsplanung festgelegt.
        */
       Nutzungsplanfestlegung,
-      /** Eigentümerverbindlich, in einem anderen Verfahren festgelegt.
+      /** Eigentï¿½merverbindlich, in einem anderen Verfahren festgelegt.
        */
       orientierend,
-      /** Nicht eigentümerverbindlich, Informationsinhalte.
+      /** Nicht eigentï¿½merverbindlich, Informationsinhalte.
        */
       hinweisend,
-      /** Nicht eigentümerverbindlich, sie umfassen Qualitäten, Standards und dergleichen, die zu berücksichtigen sind.
+      /** Nicht eigentï¿½merverbindlich, sie umfassen Qualitï¿½ten, Standards und dergleichen, die zu berï¿½cksichtigen sind.
        */
       wegleitend
     );
@@ -90,23 +90,23 @@ VERSION "2017-11-18"  =
       /** Dokumentart z.B. Regierungsratsbeschluss, Zonenreglement, Sonderbauvorschriften, Erschliessungsplan, Gestaltungsplan.
        */
       Titel : MANDATORY TEXT*80;
-      /** Vollständiger Titel des Dokuments, wenn der OffiziellerTitel gleich lautet wie der Titel, so ist die Planbezeichnung aus der Planliste zu übernehmen.
+      /** Vollstï¿½ndiger Titel des Dokuments, wenn der OffiziellerTitel gleich lautet wie der Titel, so ist die Planbezeichnung aus der Planliste zu ï¿½bernehmen.
        */
       OffiziellerTitel : TEXT*240;
-      /** Abkürzung der Dokumentart RRB, ZR, SBV
+      /** Abkï¿½rzung der Dokumentart RRB, ZR, SBV
        */
       Abkuerzung : TEXT*10;
-      /** Eindeutiger Identifikator gemäss Planregister. Die ID setzt sich folgendermassen zusammen:
-       * Sonderbauvorschriften: Gemeindennummer “-” Plannummer nach Planregister “-” S (für Sonderbauvorschriften)z.B. 109-31-S
-       * Reglemente: Gemeindenummer “-” und Kürzel Reglementart (ZR Zonenereglement, BR Baureglement und BZR Bau- und Zonenreglement z.B. 109-BR
-       * Gestaltungsplan: Gemeindennummer “-” Plannummer nach Planregister “-” P (für Plan) z.B. 109-31-P
-       * Bei RRB ist die RRB Nr. aufzuführen (YYYY/RRB Nr.) z.B. 2001/1585
+      /** Eindeutiger Identifikator gemï¿½ss Planregister. Die ID setzt sich folgendermassen zusammen:
+       * Sonderbauvorschriften: Gemeindennummer ï¿½-ï¿½ Plannummer nach Planregister ï¿½-ï¿½ S (fï¿½r Sonderbauvorschriften)z.B. 109-31-S
+       * Reglemente: Gemeindenummer ï¿½-ï¿½ und Kï¿½rzel Reglementart (ZR Zonenereglement, BR Baureglement und BZR Bau- und Zonenreglement z.B. 109-BR
+       * Gestaltungsplan: Gemeindennummer ï¿½-ï¿½ Plannummer nach Planregister ï¿½-ï¿½ P (fï¿½r Plan) z.B. 109-31-P
+       * Bei RRB ist die RRB Nr. aufzufï¿½hren (YYYY/RRB Nr.) z.B. 2001/1585
        */
       OffizielleNr : MANDATORY TEXT*20;
-      /** Abkürzung Kanton
+      /** Abkï¿½rzung Kanton
        */
       Kanton : CHAdminCodes_V1.CHCantonCode;
-      /** Gemeindenummer vom schweizerischen Bundesamt für Statistik (BFS-Nr.)
+      /** Gemeindenummer vom schweizerischen Bundesamt fï¿½r Statistik (BFS-Nr.)
        */
       Gemeinde : CHAdminCodes_V1.CHMunicipalityCode;
       /** Datum des Regierungsratsbeschlusses
@@ -118,20 +118,20 @@ VERSION "2017-11-18"  =
       /** Relative Internetadresse des Dokuments auf Planregister. D.h. stabiler Teil, ohne https://geoweb.so.ch/zonenplaene/Zonenplaene_pdf/ z.B. 109-Wissen/Entscheide/109-31-E.pdf
        */
       TextImWeb : URI;
-      /** Erläuternder Text oder Bemerkungen zum Dokument.
+      /** Erlï¿½uternder Text oder Bemerkungen zum Dokument.
        */
       Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
       Rechtsvorschrift : BOOLEAN;
     END Dokument;
 
-    /** Eine Hierarchie der Dokumente kann erfasst werden. Als primäres Dokument (Ursprung) gilt immer die Rechtsvorschrift (Baureglement, Zonenreglement, Sonderbauvorschrift, Gestaltungsplan etc.), dort wo die eigentumsbeschränkten Informationen festgehalten sind. Die RRBs (Hinweis) werden diesen Rechtsvorschriften zugewiesen. Ist keine Rechtsvorschrift vorhanden, so wird der Typ_Grundnutzung direkt mit dem RRB verknüpft
+    /** Eine Hierarchie der Dokumente kann erfasst werden. Als primï¿½res Dokument (Ursprung) gilt immer die Rechtsvorschrift (Baureglement, Zonenreglement, Sonderbauvorschrift, Gestaltungsplan etc.), dort wo die eigentumsbeschrï¿½nkten Informationen festgehalten sind. Die RRBs (Hinweis) werden diesen Rechtsvorschriften zugewiesen. Ist keine Rechtsvorschrift vorhanden, so wird der Typ_Grundnutzung direkt mit dem RRB verknï¿½pft
      */
     ASSOCIATION HinweisWeitereDokumente =
       Ursprung -- {0..*} Dokument;
       Hinweis -- {0..*} Dokument;
       !!@ name = DocumentsCycleCheck
-      !! !!@ ilivalid.msg = "Es sind falsche Verknüpfungen vorhanden {Ursprung} <-> {Hinweis}."      
-      SET CONSTRAINT SO_OEREB_FunctionsExt.documentsCycleCheck(ALL);      
+      !! !!@ ilivalid.msg = "Es sind falsche Verknï¿½pfungen vorhanden {Ursprung} <-> {Hinweis}."      
+      !!SET CONSTRAINT SO_OEREB_FunctionsExt.documentsCycleCheck(ALL);      
     END HinweisWeitereDokumente;
 
   END Rechtsvorschriften;
@@ -269,7 +269,7 @@ VERSION "2017-11-18"  =
     /** Orientierung der Beschriftung in Gon. 0 gon = Horizontal
      */
     CLASS Pos (ABSTRACT) =
-      /** Position für die Beschriftung
+      /** Position fï¿½r die Beschriftung
        */
       Pos : MANDATORY GeometryCHLV95_V1.Coord2;
       /** Orientierung der Beschriftung in Gon. 0 gon = Horizontal
@@ -279,23 +279,23 @@ VERSION "2017-11-18"  =
        * Textmitte liegt.
        */
       HAli : HALIGNMENT;
-      /** Das vertikale Alignment legt die Position in Richtung der Texthöhe fest.
+      /** Das vertikale Alignment legt die Position in Richtung der Texthï¿½he fest.
        */
       VAli : VALIGNMENT;
-      /** Grösse der Beschriftung
+      /** Grï¿½sse der Beschriftung
        */
       Groesse : MANDATORY SO_Nutzungsplanung_20171118.Schriftgroesse;
     END Pos;
 
     CLASS Typ (ABSTRACT) =
-      /** Name der Grundnutzung, überlagernden Objekts oder Erschliessung. Wird von der Gemeinde definiert.
+      /** Name der Grundnutzung, ï¿½berlagernden Objekts oder Erschliessung. Wird von der Gemeinde definiert.
        */
       Bezeichnung : MANDATORY TEXT*80;
-      /** Abkürzung der Bezeichung. Kann von der Gemeinde vergeben werden. Falls keine Abkürzung vorhanden ist bleit das Feld leer.
+      /** Abkï¿½rzung der Bezeichung. Kann von der Gemeinde vergeben werden. Falls keine Abkï¿½rzung vorhanden ist bleit das Feld leer.
        */
       Abkuerzung : TEXT*12;
       Verbindlichkeit : MANDATORY SO_Nutzungsplanung_20171118.Verbindlichkeit;
-      /** Erläuternder Text zum Typ
+      /** Erlï¿½uternder Text zum Typ
        */
       Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
     END Typ;
@@ -310,20 +310,20 @@ VERSION "2017-11-18"  =
        */
       Nutzungsziffer : 0.00 .. 9.00;
       Nutzungsziffer_Art : (
-        /** Bauvolumen über massgebendem Terrain / anrechenbare Grundstücksfläche (§37ter PBG)
+        /** Bauvolumen ï¿½ber massgebendem Terrain / anrechenbare Grundstï¿½cksflï¿½che (ï¿½37ter PBG)
          */
         Baumassenziffer,
-        /** Summe aller Geschossflächen / anrechenbare Grundstücksfläche (§37bis PBG)
+        /** Summe aller Geschossflï¿½chen / anrechenbare Grundstï¿½cksflï¿½che (ï¿½37bis PBG)
          */
         Geschossflaechen,
-        /** Anrechenbare Gebäudefläche / anrechenbare Grundstücksfläche (§35 PBG)
+        /** Anrechenbare Gebï¿½udeflï¿½che / anrechenbare Grundstï¿½cksflï¿½che (ï¿½35 PBG)
          */
         Ueberbauungsziffer,
-        /** Anrechenbare Bruttogeschossfläche / anrechenbare Grundstücksfläche ((§37 PBG, wurde gestrichen)
+        /** Anrechenbare Bruttogeschossflï¿½che / anrechenbare Grundstï¿½cksflï¿½che ((ï¿½37 PBG, wurde gestrichen)
          */
         Ausnuetzungsziffer
       );
-      /** Maximal zulässige Anzahl Geschosse
+      /** Maximal zulï¿½ssige Anzahl Geschosse
        */
       Geschosszahl : 0 .. 50;
     END Typ_Grundnutzung;
@@ -381,8 +381,8 @@ VERSION "2017-11-18"  =
     END Typ_Ueberlagernd_Punkt_Dokument;
 
     CLASS Grundnutzung =
-      /** Geometrie als Gebietseinteilung. Überlappungen bei Radien mit einer
-       * Pfeilhöhe <1 mm werden toleriert.
+      /** Geometrie als Gebietseinteilung. ï¿½berlappungen bei Radien mit einer
+       * Pfeilhï¿½he <1 mm werden toleriert.
        */
       Geometrie : MANDATORY SO_Nutzungsplanung_20171118.Gebietseinteilung;
       /** Leer lassen
@@ -404,7 +404,7 @@ VERSION "2017-11-18"  =
     END Grundnutzung;
 
     CLASS Ueberlagernd_Flaeche =
-      /** Fläche, welche die Grundnutzung überlagert.
+      /** Flï¿½che, welche die Grundnutzung ï¿½berlagert.
        */
       Geometrie : MANDATORY SO_Nutzungsplanung_20171118.Einzelflaeche;
       /** leer lassen
@@ -414,7 +414,7 @@ VERSION "2017-11-18"  =
       /** Datum des Regierungsratsbeschlusses
        */
       publiziertAb : MANDATORY INTERLIS.XMLDate;
-      /** Bemerkung zu der einzelnen überlagernden Objekte.
+      /** Bemerkung zu der einzelnen ï¿½berlagernden Objekte.
        */
       Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
       /** Name der Firma die die Daten erfasst hat.
@@ -426,7 +426,7 @@ VERSION "2017-11-18"  =
     END Ueberlagernd_Flaeche;
 
     CLASS Ueberlagernd_Linie =
-      /** Linie, welche die Grundnutzung überlagert.
+      /** Linie, welche die Grundnutzung ï¿½berlagert.
        */
       Geometrie : MANDATORY GeometryCHLV95_V1.Line;
       /** leer lassen
@@ -436,7 +436,7 @@ VERSION "2017-11-18"  =
       /** Datum des Regierungsratsbeschlusses
        */
       publiziertAb : MANDATORY INTERLIS.XMLDate;
-      /** Bemerkung zu der einzelnen überlagernden Objekte.
+      /** Bemerkung zu der einzelnen ï¿½berlagernden Objekte.
        */
       Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
       /** Name der Firma die die Daten erfasst hat.
@@ -448,7 +448,7 @@ VERSION "2017-11-18"  =
     END Ueberlagernd_Linie;
 
     CLASS Ueberlagernd_Punkt =
-      /** Punkt, welche die Grundnutzung überlagert.
+      /** Punkt, welche die Grundnutzung ï¿½berlagert.
        */
       Geometrie : MANDATORY GeometryCHLV95_V1.Coord2;
       /** leer lassen
@@ -458,7 +458,7 @@ VERSION "2017-11-18"  =
       /** Datum des Regierungsratsbeschlusses
        */
       publiziertAb : MANDATORY INTERLIS.XMLDate;
-      /** Bemerkung zu der einzelnen überlagernden Objekte.
+      /** Bemerkung zu der einzelnen ï¿½berlagernden Objekte.
        */
       Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
       /** Name der Firma die die Daten erfasst hat.
@@ -476,21 +476,21 @@ VERSION "2017-11-18"  =
       Grundnutzung -- {0..*} Grundnutzung;
     END Typ_Grundnutzung_Grundnutzung;
 
-    /** Ein Typ_Ueberlagernd_Flaeche kann mehrere überlagernde Geometrien haben.
+    /** Ein Typ_Ueberlagernd_Flaeche kann mehrere ï¿½berlagernde Geometrien haben.
      */
     ASSOCIATION Typ_Ueberlagernd_Flaeche_Flaeche =
       Typ_Ueberlagernd_Flaeche -<> {1} Typ_Ueberlagernd_Flaeche;
       Ueberlagernd_Flaeche -- {0..*} Ueberlagernd_Flaeche;
     END Typ_Ueberlagernd_Flaeche_Flaeche;
 
-    /** Ein Typ_Ueberlagernd_Linie kann mehrere überlagernde Geometrien haben.
+    /** Ein Typ_Ueberlagernd_Linie kann mehrere ï¿½berlagernde Geometrien haben.
      */
     ASSOCIATION Typ_Ueberlagernd_Linie_Linie =
       Typ_Ueberlagernd_Linie -<> {1} Typ_Ueberlagernd_Linie;
       Ueberlagernd_Linie -- {0..*} Ueberlagernd_Linie;
     END Typ_Ueberlagernd_Linie_Linie;
 
-    /** Ein Typ_Ueberlagernd_Punkt kann mehrere überlagernde Geometrien haben.
+    /** Ein Typ_Ueberlagernd_Punkt kann mehrere ï¿½berlagernde Geometrien haben.
      */
     ASSOCIATION Typ_Ueberlagernd_Punkt_Punkt =
       Typ_Ueberlagernd_Punkt -<> {1} Typ_Ueberlagernd_Punkt;
@@ -513,28 +513,28 @@ VERSION "2017-11-18"  =
     EXTENDS Pos =
     END Ueberlagernd_Punkt_Pos;
 
-    /** Beschriftet wir die Abkürzung welche in der Klasse Typ_Grundnutzung erfasst wird.
+    /** Beschriftet wir die Abkï¿½rzung welche in der Klasse Typ_Grundnutzung erfasst wird.
      */
     ASSOCIATION Grundnutzung_Grundnutzung_Pos =
       Grundnutzung -<> {1} Grundnutzung;
       Grundnutzung_Pos -- {0..*} Grundnutzung_Pos;
     END Grundnutzung_Grundnutzung_Pos;
 
-    /** Beschriftet wir die Abkürzung welche in der Klasse Typ_Ueberlagernd_Flaeche erfasst wird.
+    /** Beschriftet wir die Abkï¿½rzung welche in der Klasse Typ_Ueberlagernd_Flaeche erfasst wird.
      */
     ASSOCIATION Ueberlagernd_Flaeche_Flaeche_Pos =
       Ueberlagernd_Flaeche -<> {1} Ueberlagernd_Flaeche;
       Ueberlagernd_Flaeche_Pos -- {0..*} Ueberlagernd_Flaeche_Pos;
     END Ueberlagernd_Flaeche_Flaeche_Pos;
 
-    /** Beschriftet wir die Abkürzung welche in der Klasse Typ_Ueberlagernd_Linie erfasst wird.
+    /** Beschriftet wir die Abkï¿½rzung welche in der Klasse Typ_Ueberlagernd_Linie erfasst wird.
      */
     ASSOCIATION Ueberlagernd_Linie_Linie_Pos =
       Ueberlagernd_Linie -<> {1} Ueberlagernd_Linie;
       Ueberlagernd_Linie_Pos -- {0..*} Ueberlagernd_Linie_Pos;
     END Ueberlagernd_Linie_Linie_Pos;
 
-    /** Beschriftet wir die Abkürzung welche in der Klasse Typ_Ueberlagernd_Punkt erfasst wird.
+    /** Beschriftet wir die Abkï¿½rzung welche in der Klasse Typ_Ueberlagernd_Punkt erfasst wird.
      */
     ASSOCIATION Ueberlagernd_Punkt_Punkt_Pos =
       Ueberlagernd_Punkt -<> {1} Ueberlagernd_Punkt;
@@ -639,7 +639,7 @@ VERSION "2017-11-18"  =
     EXTENDS SO_Nutzungsplanung_20171118.Nutzungsplanung.Pos =
     END Erschliessung_Flaechenobjekt_Pos;
 
-    /** Beschriftet wir die Abkürzung, welche in der Klasse Typ_Erschliessung_Flaecheobjekt erfasst wird.
+    /** Beschriftet wir die Abkï¿½rzung, welche in der Klasse Typ_Erschliessung_Flaecheobjekt erfasst wird.
      */
     ASSOCIATION Erschliessung_Flaechenobjekt_Flaeche_Pos =
       Erschliessung_Flaechenobjekt -<> {1} Erschliessung_Flaechenobjekt;
@@ -692,7 +692,7 @@ VERSION "2017-11-18"  =
     EXTENDS SO_Nutzungsplanung_20171118.Nutzungsplanung.Pos =
     END Erschliessung_Linienobjekt_Pos;
 
-    /** Beschriftet wir die Abkürzung, welche in der Klasse Typ_Erschliessung_Linienobjekt  erfasst wird.
+    /** Beschriftet wir die Abkï¿½rzung, welche in der Klasse Typ_Erschliessung_Linienobjekt  erfasst wird.
      */
     ASSOCIATION Erschliessung_Linienobjekt_Linie_Pos =
       Erschliessung_Linienobjekt -<> {1} Erschliessung_Linienobjekt;
@@ -745,7 +745,7 @@ VERSION "2017-11-18"  =
     EXTENDS SO_Nutzungsplanung_20171118.Nutzungsplanung.Pos =
     END Erschliessung_Punktobjekt_Pos;
 
-    /** Beschriftet wir die Abkürzung, welche in der Klasse Typ_Erschliessung_Punktobjekt  erfasst wird.
+    /** Beschriftet wir die Abkï¿½rzung, welche in der Klasse Typ_Erschliessung_Punktobjekt  erfasst wird.
      */
     ASSOCIATION Erschliessung_Punktobjekt_Punkt_Pos =
       Erschliessung_Punktobjekt -<> {1} Erschliessung_Punktobjekt;
@@ -775,7 +775,7 @@ VERSION "2017-11-18"  =
       );
 
     CLASS VS_Perimeter_Verfahrensstand =
-      /** Geltungsbereich für die Mutation
+      /** Geltungsbereich fï¿½r die Mutation
        */
       Geometrie : MANDATORY SO_Nutzungsplanung_20171118.Einzelflaeche;
       Planungsart : MANDATORY Planungsart;
@@ -783,7 +783,7 @@ VERSION "2017-11-18"  =
       /** Leer lassen
        */
       Name_Nummer : TEXT*20;
-      /** Erläuternder Text oder Bemerkungen zum Verfahrenstand.
+      /** Erlï¿½uternder Text oder Bemerkungen zum Verfahrenstand.
        */
       Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
       /** Name des der Firma
@@ -825,7 +825,7 @@ VERSION "2017-11-18"  =
       /** Datum der Datenlieferung
        */
       Lieferdatum : INTERLIS.XMLDate;
-      /** Erläuternder Text oder Bemerkungen zum Datenbestand.
+      /** Erlï¿½uternder Text oder Bemerkungen zum Datenbestand.
        */
       Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
     END Datenbestand;

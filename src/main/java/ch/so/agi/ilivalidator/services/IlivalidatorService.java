@@ -7,6 +7,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Service;
 
+import ch.ehi.basics.logging.EhiLogger;
 import ch.ehi.basics.settings.Settings;
 import ch.interlis.iom_j.itf.ItfReader;
 import ch.interlis.iom_j.xtf.XtfReader;
@@ -83,7 +84,7 @@ public class IlivalidatorService {
                 Files.copy(is, jarFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 IOUtils.closeQuietly(is);
             }
-            
+            EhiLogger.getInstance().setTraceFilter(false);
             settings.setValue(Validator.SETTING_PLUGINFOLDER, new File(FilenameUtils.getFullPath(inputFileName)).getAbsolutePath());
             log.info("Plugin folder: " + settings.getValue(Validator.SETTING_PLUGINFOLDER));
         } catch (FileNotFoundException e) {
