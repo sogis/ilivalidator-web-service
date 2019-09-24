@@ -84,7 +84,7 @@ public class IlivalidatorService {
                 Files.copy(is, jarFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 IOUtils.closeQuietly(is);
             }
-            EhiLogger.getInstance().setTraceFilter(false);
+//            EhiLogger.getInstance().setTraceFilter(false);
             settings.setValue(Validator.SETTING_PLUGINFOLDER, new File(FilenameUtils.getFullPath(inputFileName)).getAbsolutePath());
             log.info("Plugin folder: " + settings.getValue(Validator.SETTING_PLUGINFOLDER));
         } catch (FileNotFoundException e) {
