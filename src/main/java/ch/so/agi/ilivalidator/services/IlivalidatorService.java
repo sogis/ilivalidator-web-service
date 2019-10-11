@@ -65,7 +65,7 @@ public class IlivalidatorService {
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 
         Settings settings = new Settings();
-        settings.setValue(Validator.SETTING_ILIDIRS, Validator.SETTING_DEFAULT_ILIDIRS + "http://interlis-repo.dev.so.ch;");
+        settings.setValue(Validator.SETTING_ILIDIRS, Validator.SETTING_DEFAULT_ILIDIRS);
         settings.setValue(Validator.SETTING_LOGFILE, logFileName);
                 
         if (allObjectsAccessible != null) {
