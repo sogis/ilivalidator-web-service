@@ -3,7 +3,7 @@ INTERLIS 2.3;
 !!============================================================================== 
 !!@ File = "SO_Nutzungsplanung_20171118_Validierung_20190129.ili"; 
 !!@ Title = "Nutzungsplanungsvalidierung"; 
-!!@ shortDescription = "Validierungsmodell f¸r Nutzungsplanungsmodell des 
+!!@ shortDescription = "Validierungsmodell f√ºr Nutzungsplanungsmodell des 
 !!@ Kantons Solothurn.";
 !!@ Issuer = "http://arp.so.ch"; 
 !!@ technicalContact = "http://agi.so.ch"; 
@@ -11,14 +11,14 @@ INTERLIS 2.3;
 !!  Validierungsmodell;
 !!  Compiler-Version = "4.7.3-20170524"; 
 !!------------------------------------------------------------------------------ 
-!! Version    | wer | ƒnderung 
+!! Version    | wer | √Ñnderung 
 !!------------------------------------------------------------------------------ 
 !! 2017-09-05 | SZ  | Initialversion 
 !! 2017-11-20 | SZ  | Angepasst an neues Modell 
 !! 2019-01-29 | SZ  | Rechtsvorschrift, Kanton und Gemeinde muss vorhanden sein.
 !!                  | Selfreferenz bei HinweisWeitereDokumente darf nicht 
 !!                  | vorhanden sein. (requires >=1.10.0)
-!!                  | Pr¸fen, ob Dokument (URL) vorhanden.
+!!                  | Pr√ºfen, ob Dokument (URL) vorhanden.
 !! 2019-03-21 | SZ  | Fehler korrigiert bei Verbindlichkeit. OffiziellerTitel
 !!                  | muss vorhanden sein. Version/Name des Modells bleibt 
 !!                  | gleich.
@@ -46,7 +46,7 @@ VERSION "2019-01-29"  =
         MANDATORY CONSTRAINT DEFINED(OffiziellerTitel);
         !!@ name = checkDocumentURL
         !!@ ilivalid.msg = "Dokument 'https://geo.so.ch/docs/ch.so.arp.zonenplaene/Zonenplaene_pdf/{TextImWeb}' wurde nicht gefunden."
-        MANDATORY CONSTRAINT SO_FunctionsExt.checkHttpRessource(TextImWeb, "https://geo.so.ch/docs/ch.so.arp.zonenplaene/Zonenplaene_pdf/");
+        MANDATORY CONSTRAINT SO_FunctionsExt.isHttpResource(TextImWeb, "https://geo.so.ch/docs/ch.so.arp.zonenplaene/Zonenplaene_pdf/");
     END v_Dokument;
     
   END Rechtsvorschriften_Validierung;
@@ -65,7 +65,7 @@ VERSION "2019-01-29"  =
     !!@ ilivalid.msg = "Attributwert Nutzungsziffer fehlt bei Typ '{Code_kommunal}'"
     MANDATORY CONSTRAINT NOT (DEFINED (Nutzungsziffer_Art)) OR (DEFINED (Nutzungsziffer) AND DEFINED (Nutzungsziffer_Art));    
     
-    !!@ ilivalid.msg = "Kommunaler Code ist nicht im Wertebereich gem‰ss Objektkatalog: '{Typ_Kt}' - '{Code_kommunal}'"
+    !!@ ilivalid.msg = "Kommunaler Code ist nicht im Wertebereich gem√§ss Objektkatalog: '{Typ_Kt}' - '{Code_kommunal}'"
     MANDATORY CONSTRAINT 
       (
         (Typ_Kt == #N110_Wohnzone_1_G) 
@@ -568,7 +568,7 @@ VERSION "2019-01-29"  =
       (
         (Typ_Kt == #N320_Gewaesser) 
         AND 
-        (Bezeichnung == "Gew‰sser")
+        (Bezeichnung == "Gew√§sser")
       )
       OR
       (
@@ -582,19 +582,19 @@ VERSION "2019-01-29"  =
       (
         (Typ_Kt == #N420_Verkehrsflaeche_Strasse) 
         AND 
-        (Bezeichnung == "Verkehrsfl‰che Strasse") 
+        (Bezeichnung == "Verkehrsfl√§che Strasse") 
       )
       OR 
       (
         (Typ_Kt == #N421_Verkehrsflaeche_Bahnareal) 
         AND 
-        (Bezeichnung == "Verkehrsfl‰che Bahnareal")  
+        (Bezeichnung == "Verkehrsfl√§che Bahnareal")  
       )
       OR
       (
         (Typ_Kt == #N422_Verkehrsflaeche_Flugplatzareal) 
         AND 
-        (Bezeichnung == "Verkehrsfl‰che Flugplatzareal") 
+        (Bezeichnung == "Verkehrsfl√§che Flugplatzareal") 
       )
       OR 
       (
@@ -982,7 +982,7 @@ VERSION "2019-01-29"  =
     	PROJECTION OF SO_Nutzungsplanung_20171118.Nutzungsplanung.Typ_Ueberlagernd_Flaeche;
     =
       ALL OF Typ_Ueberlagernd_Flaeche;
-    !!@ ilivalid.msg = "Kommunaler Code ist nicht im Wertebereich gem‰ss Objektkatalog: '{Typ_Kt}' - '{Code_kommunal}'"
+    !!@ ilivalid.msg = "Kommunaler Code ist nicht im Wertebereich gem√§ss Objektkatalog: '{Typ_Kt}' - '{Code_kommunal}'"
     MANDATORY CONSTRAINT 
       (
         (Typ_Kt == #N510_ueberlagernde_Ortsbildschutzzone) 
@@ -1273,13 +1273,13 @@ VERSION "2019-01-29"  =
       (
         (Typ_Kt == #N524_Siedlungstrennguertel_von_kommunaler_Bedeutung) 
         AND 
-        (Bezeichnung == "Siedlungstrenng¸rtel von kommunaler Bedeutung")  
+        (Bezeichnung == "Siedlungstrenng√ºrtel von kommunaler Bedeutung")  
       )   
       OR
       (
         (Typ_Kt == #N525_Siedlungstrennguertel_von_kantonaler_Bedeutung) 
         AND 
-        (Bezeichnung == "Siedlungstrenng¸rtel von kantonaler Bedeutung")  
+        (Bezeichnung == "Siedlungstrenng√ºrtel von kantonaler Bedeutung")  
       )      
       OR
       (
@@ -1305,25 +1305,25 @@ VERSION "2019-01-29"  =
       (
         (Typ_Kt == #N530_Naturgefahren_erhebliche_Gefaehrdung) 
         AND 
-        (Bezeichnung == "erhebliche Gef‰hrdung, synoptisch")  
+        (Bezeichnung == "erhebliche Gef√§hrdung, synoptisch")  
       )         
       OR
       (
         (Typ_Kt == #N531_Naturgefahren_mittlere_Gefaehrdung) 
         AND 
-        (Bezeichnung == "mittlere Gef‰hrdung, synoptisch")  
+        (Bezeichnung == "mittlere Gef√§hrdung, synoptisch")  
       )
       OR
       (
         (Typ_Kt == #N532_Naturgefahren_geringe_Gefaehrdung) 
         AND 
-        (Bezeichnung == "geringe Gef‰hrdung, synoptisch")  
+        (Bezeichnung == "geringe Gef√§hrdung, synoptisch")  
       )  
       OR
       (
         (Typ_Kt == #N533_Naturgefahren_Restgefaehrdung) 
         AND 
-        (Bezeichnung == "Restgef‰hrdung, synoptisch")  
+        (Bezeichnung == "Restgef√§hrdung, synoptisch")  
       )  
       OR
       (
@@ -1459,19 +1459,19 @@ VERSION "2019-01-29"  =
       (
         (Typ_Kt == #N820_kantonal_geschuetztes_Kulturobjekt) 
         AND 
-        (Bezeichnung == "kantonal gesch¸tztes Kulturobjekt")  
+        (Bezeichnung == "kantonal gesch√ºtztes Kulturobjekt")  
       )  
       OR
       (
         (Typ_Kt == #N821_kommunal_geschuetztes_Kulturobjekt) 
         AND 
-        (Bezeichnung == "kommunal gesch¸tztes Kulturobjekt")  
+        (Bezeichnung == "kommunal gesch√ºtztes Kulturobjekt")  
       ) 
       OR
       (
         (Typ_Kt == #N822_schuetzenswertes_Kulturobjekt) 
         AND 
-        (Bezeichnung == "sch¸tzenswertes Kulturobjekt")  
+        (Bezeichnung == "sch√ºtzenswertes Kulturobjekt")  
       )
       OR
       (
@@ -1745,7 +1745,7 @@ VERSION "2019-01-29"  =
     	PROJECTION OF SO_Nutzungsplanung_20171118.Nutzungsplanung.Typ_Ueberlagernd_Linie;
     =
       ALL OF Typ_Ueberlagernd_Linie;
-    !!@ ilivalid.msg = "Kommunaler Code ist nicht im Wertebereich gem‰ss Objektkatalog: '{Typ_Kt}' - '{Code_kommunal}'"
+    !!@ ilivalid.msg = "Kommunaler Code ist nicht im Wertebereich gem√§ss Objektkatalog: '{Typ_Kt}' - '{Code_kommunal}'"
     MANDATORY CONSTRAINT 
       (
         (Typ_Kt == #N790_Wanderweg) 
@@ -1844,7 +1844,7 @@ VERSION "2019-01-29"  =
     	PROJECTION OF SO_Nutzungsplanung_20171118.Nutzungsplanung.Typ_Ueberlagernd_Punkt;
     =
       ALL OF Typ_Ueberlagernd_Punkt;
-    !!@ ilivalid.msg = "Kommunaler Code ist nicht im Wertebereich gem‰ss Objektkatalog: '{Typ_Kt}' - '{Code_kommunal}'"
+    !!@ ilivalid.msg = "Kommunaler Code ist nicht im Wertebereich gem√§ss Objektkatalog: '{Typ_Kt}' - '{Code_kommunal}'"
     MANDATORY CONSTRAINT 
       (
         (Typ_Kt == #N810_geschuetzter_Einzelbaum) 
@@ -1905,7 +1905,7 @@ VERSION "2019-01-29"  =
       (
         (Typ_Kt == #N810_geschuetzter_Einzelbaum) 
         AND 
-        (Bezeichnung == "gesch¸tzter Einzelbaum")  
+        (Bezeichnung == "gesch√ºtzter Einzelbaum")  
       )  
       OR    
       (
@@ -1929,19 +1929,19 @@ VERSION "2019-01-29"  =
       (
         (Typ_Kt == #N820_kantonal_geschuetztes_Kulturobjekt) 
         AND 
-        (Bezeichnung == "kantonal gesch¸tztes Kulturobjekt")  
+        (Bezeichnung == "kantonal gesch√ºtztes Kulturobjekt")  
       )  
       OR    
       (
         (Typ_Kt == #N821_kommunal_geschuetztes_Kulturobjekt) 
         AND 
-        (Bezeichnung == "kommunal gesch¸tztes Kulturobjekt")  
+        (Bezeichnung == "kommunal gesch√ºtztes Kulturobjekt")  
       )  
       OR  
       (
         (Typ_Kt == #N822_schuetzenswertes_Kulturobjekt) 
         AND 
-        (Bezeichnung == "sch¸tzenswertes Kulturobjekt")  
+        (Bezeichnung == "sch√ºtzenswertes Kulturobjekt")  
       )  
       OR  
       (
@@ -2020,7 +2020,7 @@ VERSION "2019-01-29"  =
     	PROJECTION OF SO_Nutzungsplanung_20171118.Erschliessungsplanung.Typ_Erschliessung_Flaechenobjekt;
     =
       ALL OF Typ_Erschliessung_Flaechenobjekt;
-    !!@ ilivalid.msg = "Kommunaler Code ist nicht im Wertebereich gem‰ss Objektkatalog: '{Typ_Kt}' - '{Code_kommunal}'"
+    !!@ ilivalid.msg = "Kommunaler Code ist nicht im Wertebereich gem√§ss Objektkatalog: '{Typ_Kt}' - '{Code_kommunal}'"
     MANDATORY CONSTRAINT 
       (
         (Typ_Kt == #E560_Nationalstrasse) 
@@ -2205,7 +2205,7 @@ VERSION "2019-01-29"  =
       (
         (Typ_Kt == #E574_Gruenstreifen_Rabatte) 
         AND 
-        (Bezeichnung == "Gr¸nstreifen, Rabatte")  
+        (Bezeichnung == "Gr√ºnstreifen, Rabatte")  
       )  
       OR       
       (
@@ -2315,7 +2315,7 @@ VERSION "2019-01-29"  =
     	PROJECTION OF SO_Nutzungsplanung_20171118.Erschliessungsplanung.Typ_Erschliessung_Linienobjekt;
     =
       ALL OF Typ_Erschliessung_Linienobjekt;
-    !!@ ilivalid.msg = "Kommunaler Code ist nicht im Wertebereich gem‰ss Objektkatalog: '{Typ_Kt}' - '{Code_kommunal}'"
+    !!@ ilivalid.msg = "Kommunaler Code ist nicht im Wertebereich gem√§ss Objektkatalog: '{Typ_Kt}' - '{Code_kommunal}'"
     MANDATORY CONSTRAINT 
       (
         (Typ_Kt == #E710_nationale_Baulinie) 
@@ -2452,7 +2452,7 @@ VERSION "2019-01-29"  =
       (
         (Typ_Kt == #E714_Rueckwaertige_Baulinie_kantonal) 
         AND 
-        (Bezeichnung == "R¸ckw‰rtige Baulinie kantonal")  
+        (Bezeichnung == "R√ºckw√§rtige Baulinie kantonal")  
       )  
       OR    
       (
@@ -2486,7 +2486,7 @@ VERSION "2019-01-29"  =
       (
         (Typ_Kt == #E723_Rueckwaertige_Baulinie) 
         AND 
-        (Bezeichnung == "R¸ckw‰rtige Baulinie")  
+        (Bezeichnung == "R√ºckw√§rtige Baulinie")  
       )  
       OR  
       (
@@ -2510,7 +2510,7 @@ VERSION "2019-01-29"  =
       (
         (Typ_Kt == #E727_Baulinie_Gewaesser) 
         AND 
-        (Bezeichnung == "Baulinie Gew‰sser")  
+        (Bezeichnung == "Baulinie Gew√§sser")  
       )  
       OR  
       (
@@ -2642,7 +2642,7 @@ VERSION "2019-01-29"  =
     	PROJECTION OF SO_Nutzungsplanung_20171118.Erschliessungsplanung.Typ_Erschliessung_Punktobjekt;
     =
       ALL OF Typ_Erschliessung_Punktobjekt;
-    !!@ ilivalid.msg = "Kommunaler Code ist nicht im Wertebereich gem‰ss Objektkatalog: '{Typ_Kt}' - '{Code_kommunal}'"
+    !!@ ilivalid.msg = "Kommunaler Code ist nicht im Wertebereich gem√§ss Objektkatalog: '{Typ_Kt}' - '{Code_kommunal}'"
     MANDATORY CONSTRAINT 
       (
         (Typ_Kt == #E889_weitere_punktbezogene_Objekte_EP) 

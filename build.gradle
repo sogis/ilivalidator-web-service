@@ -1,28 +1,11 @@
-buildscript {
-    ext {
-        springBootVersion = '2.1.2.RELEASE'
-    }
-    repositories {
-        jcenter()
-        mavenCentral()
-        maven { url "https://plugins.gradle.org/m2/" }
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
+plugins {
+    id 'org.springframework.boot' version '2.1.10.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+    id "com.bmuschko.docker-remote-api" version "4.4.1"
+    id "org.unbroken-dome.test-sets" version "2.1.1"    
 }
 
-plugins {
-    id "com.bmuschko.docker-remote-api" version "3.6.1"
-    id "org.unbroken-dome.test-sets" version "2.1.1"
-}
- 
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'eclipse'
-apply plugin: 'org.unbroken-dome.test-sets'
-apply plugin: "com.bmuschko.docker-remote-api"
 apply from: "$rootDir/gradle/versioning.gradle"
 
 group = 'ch.so.agi.ilivalidator'
@@ -58,6 +41,16 @@ sourceSets {
 repositories {
     jcenter()
     maven { url "http://jars.interlis.ch/" }
+    /* Strange: you need to login to download public artifacts: https://github.community/t5/GitHub-API-Development-and/Download-from-Github-Package-Registry-without-authentication/td-p/35255
+    * This is a read only token.
+    */
+    maven {
+        url "https://maven.pkg.github.com/edigonzales/ilivalidator-custom-functions"
+        credentials {
+            username = 'edigonzales'
+            password = '1316c6beb4a2b8d97747b0f05016921f5c5666eb'
+        }
+    }
     maven { url "http://repo.maven.apache.org/maven2" }
 }
 
@@ -67,23 +60,24 @@ configurations {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
-    compile("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
-    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
-    compile("commons-io:commons-io:2.5")
-    compile("ch.interlis:ilivalidator:1.8.1")
-    compile("org.webjars:materializecss:0.100.1")
-    compile("org.webjars:jquery:2.2.4")
-    compile("org.jgrapht:jgrapht-core:1.3.0") // only needed for the custom functions
-    //customFunctionsDeps("ch.so.agi.ilivalidator:ilivalidator-extension-functions:1.0.+")
-    //customFunctionsDeps("ch.so.agi.ilivalidator:ilivalidator-extension-functions:1.0.15")
-    customFunctionsDeps("ch.so.agi.ilivalidator:ilivalidator-extension-functions:1.0.28")
-    testCompile("io.rest-assured:rest-assured:3.0.6")
-    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile "org.springframework.boot:spring-boot-devtools"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "commons-io:commons-io:2.5"
+    compile group: 'ch.interlis', name: 'ilivalidator', version: '1.11.3-SNAPSHOT'
+    compile "org.webjars:materializecss:0.100.1"
+    compile "org.webjars:jquery:2.2.4"
+    compile "org.jgrapht:jgrapht-core:1.3.1" // for custom functions
+    compile 'ch.interlis:ili2db:4.3.2' // for custom functions
+    
+    customFunctionsDeps "ch.so.agi.ilivalidator:ilivalidator-custom-functions:1.0.13"
+    //customFunctionsDeps "ch.so.agi.ilivalidator:ilivalidator-extension-functions:1.0.28"
+    testCompile "io.rest-assured:rest-assured:3.0.6" 
+    testCompile("org.springframework.boot:spring-boot-starter-test") {
         exclude(module: 'commons-logging')
     }
-    dockerTestCompile("io.rest-assured:rest-assured:3.0.6")
+    dockerTestCompile "io.rest-assured:rest-assured:3.0.6" 
     dockerTestCompile sourceSets.test.output      
 }
 
@@ -142,12 +136,12 @@ task buildDockerImage(type: DockerBuildImage) {
     tags = ["sogis/ilivalidator-web-service:"+version, "sogis/ilivalidator-web-service:latest"]
     labels = ["ilivalidator-web-service.created": new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), 
             "ilivalidator-web-service.git_commit": getCheckedOutGitCommitHash(), 
-            "ilivalidator-web-service.travis_build": version]
+            "ilivalidator-web-service.build": version]
 }
 
 task createDockerContainer(dependsOn: 'buildDockerImage', type: DockerCreateContainer) {
     description = "Create docker container."
-    targetImageId { buildDockerImage.getImageId() }
+    targetImageId buildDockerImage.getImageId() 
     portBindings = ['8888:8888']
     exposedPorts = [new ExposedPort("tcp", [8888])]
     
@@ -155,7 +149,7 @@ task createDockerContainer(dependsOn: 'buildDockerImage', type: DockerCreateCont
 
 task startDockerContainer(dependsOn: 'createDockerContainer', type: DockerStartContainer) {	
     description = "Start docker container."
-    targetContainerId { createDockerContainer.getContainerId() }
+    targetContainerId createDockerContainer.getContainerId() 
 
     // Starting container != web service is ready.
     doLast { 
@@ -165,40 +159,31 @@ task startDockerContainer(dependsOn: 'createDockerContainer', type: DockerStartC
 
 task logDockerContainer(type: DockerLogsContainer) {
     description = "Show docker container logs on standard out."
-    targetContainerId { startDockerContainer.getContainerId() }
+    targetContainerId startDockerContainer.getContainerId()
     follow = true
     tailAll = true
 }
 
 task stopDockerContainer(type: DockerStopContainer) {
     description = "Stop running docker container."
-    targetContainerId { createDockerContainer.getContainerId() }
+    targetContainerId createDockerContainer.getContainerId()
 }
 
-task pushDockerImage_One(type: DockerPushImage) {
-    description = "Push docker image to hub.docker.com (only if docker tests were successful)."
-    onlyIf {
-        dockerTest.state.failure == null
-    }
-    imageName = buildDockerImage.tags[0]
-}
+def tags = ["latest", version]
 
-task pushDockerImage_Two(type: DockerPushImage) {
-    description = "Push docker image to hub.docker.com (only if docker tests were successful)."
-    onlyIf {
-        dockerTest.state.failure == null
+tags.each { tag ->
+    def imageTag = tag.toString()
+    task "pushDockerImage_$imageTag"(type: DockerPushImage) {
+        description = "Push docker image to hub.docker.com: $imageTag"
+        imageName =  "sogis/ilivalidator-web-service:$imageTag"
     }
-    imageName = buildDockerImage.tags[1]
 }
 
 task pushDockerImages() {
-    doFirst{
-        println "Push Docker Images"
-    }
-}
-
-pushDockerImages.dependsOn {
-    tasks.findAll { task -> task.name.startsWith('pushDockerImage_') }
+    description = "Push docker images to hub.docker.com."
+    dependsOn {
+        tasks.findAll { task -> task.name.startsWith('pushDockerImage_') }
+    }    
 }
 
 
