@@ -22,6 +22,10 @@ jobs:
     - name: Build with Gradle
       env:
         PASSWORD: ${{secrets.GITHUB_TOKEN}}
-      run: ./gradlew build publish
-
-
+      run: ./gradlew clean build dockerTest
+    - name: Publish to Registry
+      if: success()
+      env:
+        dockerRegistryUser: ${{secrets.dockerRegistryUser}}
+        dockerRegistryPass: ${{secrets.dockerRegistryPass}}
+      run: ./gradlew pushDockerImages
