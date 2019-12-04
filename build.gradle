@@ -44,6 +44,7 @@ repositories {
     /* Strange: you need to login to download public artifacts: https://github.community/t5/GitHub-API-Development-and/Download-from-Github-Package-Registry-without-authentication/td-p/35255
     * This is a read only token.
     */
+    /*
     maven {
         url "https://maven.pkg.github.com/edigonzales/ilivalidator-custom-functions"
         credentials {
@@ -51,6 +52,16 @@ repositories {
             password = '1316c6beb4a2b8d97747b0f05016921f5c5666eb'
         }
     }
+    */
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/edigonzales/ilivalidator-custom-functions")
+        credentials {
+            username = "edigonzales"
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
+    
     maven { url "http://repo.maven.apache.org/maven2" }
 }
 
