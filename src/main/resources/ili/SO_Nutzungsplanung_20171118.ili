@@ -12,29 +12,29 @@ INTERLIS 2.3;
 !!  Erfassungsmodell;
 !!  Compiler-Version = "4.7.3-20170524"; 
 !!------------------------------------------------------------------------------
-!! Version    | wer | ï¿½nderung 
+!! Version    | wer | Änderung 
 !!------------------------------------------------------------------------------
-!! 2015-05-13 | SK  | Modell (v26) fï¿½r Pilot durch Stefan Keller (SK) erstellt 
-!! 2016-11-11 | SK  | ï¿½berarbeitung auf Version 32 (dm_npl_ktso_v32_LV95_ili2.ili)
+!! 2015-05-13 | SK  | Modell (v26) für Pilot durch Stefan Keller (SK) erstellt 
+!! 2016-11-11 | SK  | Überarbeitung auf Version 32 (dm_npl_ktso_v32_LV95_ili2.ili)
 !! 2016-11-29 | OJ  | Tech. Review und Finalisierung durch Oliver Jeker (AGI)
 !! 2017-01-05 | OJ  | Korrektur Beziehungsrollennamen = Klassennamen
 !! 2017-09-01 | al  | - Lockerung der Beziehung Dokument <-> Geometrie
-!!            |     | - NP_Typ_Kanton_Grundnutzung mit N134 ergï¿½nzt
+!!            |     | - NP_Typ_Kanton_Grundnutzung mit N134 ergänzt
 !!            |     | - NP_Typ_Kanton_Ueberlagernd_Flaeche mit N812,N813 und
-!!            |     |   N820-823 ergï¿½nzt
+!!            |     |   N820-823 ergänzt
 !!            |     | - Rechtschreibung bei Ueberbauungsziffer
-!!            |     | - Modell mit Beschreibung ergï¿½nzt
-!! 2017-09-15 | al  | OID AS INTERLIS.UUIDOID wieder eingefï¿½gt
-!! 2017-11-18 | sz  | - OID AS INTERLIS.UUIDOID fï¿½r sï¿½mtliche Klassen
-!!            |     | - Zusï¿½tzliche Assoziation Geometrie <-> Dokument gelï¿½scht
-!!            |     | - Klasse Plandokument gelï¿½scht
+!!            |     | - Modell mit Beschreibung ergänzt
+!! 2017-09-15 | al  | OID AS INTERLIS.UUIDOID wieder eingefügt
+!! 2017-11-18 | sz  | - OID AS INTERLIS.UUIDOID für sämtliche Klassen
+!!            |     | - Zusätzliche Assoziation Geometrie <-> Dokument gelöscht
+!!            |     | - Klasse Plandokument gelöscht
 !! 2018-08-21 | al  | Bemerkungen an Arbeitshilfe angepasst.
 !!==============================================================================
 
 MODEL SO_Nutzungsplanung_20171118 (de)
 AT "http://www.geo.so.ch"
 VERSION "2017-11-18"  =
-  IMPORTS GeometryCHLV95_V1,CHAdminCodes_V1, SO_OEREB_FunctionsExt; 
+  IMPORTS GeometryCHLV95_V1,CHAdminCodes_V1, SO_FunctionsExt; 
 
   DOMAIN
 
@@ -48,22 +48,22 @@ VERSION "2017-11-18"  =
       /** Ist in Kraft
        */
       inKraft,
-      /** Noch nicht in Kraft, eine ï¿½nderung ist in Vorbereitung.
+      /** Noch nicht in Kraft, eine Änderung ist in Vorbereitung.
        */
       laufendeAenderung
     );
 
     Verbindlichkeit = (
-      /** Eigentï¿½merverbindlich, im Verfahren der Nutzungsplanung festgelegt.
+      /** Eigentümerverbindlich, im Verfahren der Nutzungsplanung festgelegt.
        */
       Nutzungsplanfestlegung,
-      /** Eigentï¿½merverbindlich, in einem anderen Verfahren festgelegt.
+      /** Eigentümerverbindlich, in einem anderen Verfahren festgelegt.
        */
       orientierend,
-      /** Nicht eigentï¿½merverbindlich, Informationsinhalte.
+      /** Nicht eigentümerverbindlich, Informationsinhalte.
        */
       hinweisend,
-      /** Nicht eigentï¿½merverbindlich, sie umfassen Qualitï¿½ten, Standards und dergleichen, die zu berï¿½cksichtigen sind.
+      /** Nicht eigentümerverbindlich, sie umfassen Qualitäten, Standards und dergleichen, die zu berücksichtigen sind.
        */
       wegleitend
     );
@@ -90,23 +90,23 @@ VERSION "2017-11-18"  =
       /** Dokumentart z.B. Regierungsratsbeschluss, Zonenreglement, Sonderbauvorschriften, Erschliessungsplan, Gestaltungsplan.
        */
       Titel : MANDATORY TEXT*80;
-      /** Vollstï¿½ndiger Titel des Dokuments, wenn der OffiziellerTitel gleich lautet wie der Titel, so ist die Planbezeichnung aus der Planliste zu ï¿½bernehmen.
+      /** Vollständiger Titel des Dokuments, wenn der OffiziellerTitel gleich lautet wie der Titel, so ist die Planbezeichnung aus der Planliste zu übernehmen.
        */
       OffiziellerTitel : TEXT*240;
-      /** Abkï¿½rzung der Dokumentart RRB, ZR, SBV
+      /** Abkürzung der Dokumentart RRB, ZR, SBV
        */
       Abkuerzung : TEXT*10;
-      /** Eindeutiger Identifikator gemï¿½ss Planregister. Die ID setzt sich folgendermassen zusammen:
-       * Sonderbauvorschriften: Gemeindennummer ï¿½-ï¿½ Plannummer nach Planregister ï¿½-ï¿½ S (fï¿½r Sonderbauvorschriften)z.B. 109-31-S
-       * Reglemente: Gemeindenummer ï¿½-ï¿½ und Kï¿½rzel Reglementart (ZR Zonenereglement, BR Baureglement und BZR Bau- und Zonenreglement z.B. 109-BR
-       * Gestaltungsplan: Gemeindennummer ï¿½-ï¿½ Plannummer nach Planregister ï¿½-ï¿½ P (fï¿½r Plan) z.B. 109-31-P
-       * Bei RRB ist die RRB Nr. aufzufï¿½hren (YYYY/RRB Nr.) z.B. 2001/1585
+      /** Eindeutiger Identifikator gemäss Planregister. Die ID setzt sich folgendermassen zusammen:
+       * Sonderbauvorschriften: Gemeindennummer “-” Plannummer nach Planregister “-” S (für Sonderbauvorschriften)z.B. 109-31-S
+       * Reglemente: Gemeindenummer “-” und Kürzel Reglementart (ZR Zonenereglement, BR Baureglement und BZR Bau- und Zonenreglement z.B. 109-BR
+       * Gestaltungsplan: Gemeindennummer “-” Plannummer nach Planregister “-” P (für Plan) z.B. 109-31-P
+       * Bei RRB ist die RRB Nr. aufzuführen (YYYY/RRB Nr.) z.B. 2001/1585
        */
       OffizielleNr : MANDATORY TEXT*20;
-      /** Abkï¿½rzung Kanton
+      /** Abkürzung Kanton
        */
       Kanton : CHAdminCodes_V1.CHCantonCode;
-      /** Gemeindenummer vom schweizerischen Bundesamt fï¿½r Statistik (BFS-Nr.)
+      /** Gemeindenummer vom schweizerischen Bundesamt für Statistik (BFS-Nr.)
        */
       Gemeinde : CHAdminCodes_V1.CHMunicipalityCode;
       /** Datum des Regierungsratsbeschlusses
@@ -118,20 +118,20 @@ VERSION "2017-11-18"  =
       /** Relative Internetadresse des Dokuments auf Planregister. D.h. stabiler Teil, ohne https://geoweb.so.ch/zonenplaene/Zonenplaene_pdf/ z.B. 109-Wissen/Entscheide/109-31-E.pdf
        */
       TextImWeb : URI;
-      /** Erlï¿½uternder Text oder Bemerkungen zum Dokument.
+      /** Erläuternder Text oder Bemerkungen zum Dokument.
        */
       Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
       Rechtsvorschrift : BOOLEAN;
     END Dokument;
 
-    /** Eine Hierarchie der Dokumente kann erfasst werden. Als primï¿½res Dokument (Ursprung) gilt immer die Rechtsvorschrift (Baureglement, Zonenreglement, Sonderbauvorschrift, Gestaltungsplan etc.), dort wo die eigentumsbeschrï¿½nkten Informationen festgehalten sind. Die RRBs (Hinweis) werden diesen Rechtsvorschriften zugewiesen. Ist keine Rechtsvorschrift vorhanden, so wird der Typ_Grundnutzung direkt mit dem RRB verknï¿½pft
+    /** Eine Hierarchie der Dokumente kann erfasst werden. Als primäres Dokument (Ursprung) gilt immer die Rechtsvorschrift (Baureglement, Zonenreglement, Sonderbauvorschrift, Gestaltungsplan etc.), dort wo die eigentumsbeschränkten Informationen festgehalten sind. Die RRBs (Hinweis) werden diesen Rechtsvorschriften zugewiesen. Ist keine Rechtsvorschrift vorhanden, so wird der Typ_Grundnutzung direkt mit dem RRB verknüpft
      */
     ASSOCIATION HinweisWeitereDokumente =
       Ursprung -- {0..*} Dokument;
       Hinweis -- {0..*} Dokument;
-      !!@ name = DocumentsCycleCheck
-      !! !!@ ilivalid.msg = "Es sind falsche Verknï¿½pfungen vorhanden {Ursprung} <-> {Hinweis}."      
-      !!SET CONSTRAINT SO_OEREB_FunctionsExt.documentsCycleCheck(ALL);      
+      !!@ name = isValidDocumentsCycle
+      !!@ ilivalid.msg = "Es sind falsche Verknüpfungen vorhanden {Ursprung} <-> {Hinweis}."      
+      SET CONSTRAINT SO_FunctionsExt.isValidDocumentsCycle(ALL);      
     END HinweisWeitereDokumente;
 
   END Rechtsvorschriften;
@@ -269,7 +269,7 @@ VERSION "2017-11-18"  =
     /** Orientierung der Beschriftung in Gon. 0 gon = Horizontal
      */
     CLASS Pos (ABSTRACT) =
-      /** Position fï¿½r die Beschriftung
+      /** Position für die Beschriftung
        */
       Pos : MANDATORY GeometryCHLV95_V1.Coord2;
       /** Orientierung der Beschriftung in Gon. 0 gon = Horizontal
@@ -279,23 +279,23 @@ VERSION "2017-11-18"  =
        * Textmitte liegt.
        */
       HAli : HALIGNMENT;
-      /** Das vertikale Alignment legt die Position in Richtung der Texthï¿½he fest.
+      /** Das vertikale Alignment legt die Position in Richtung der Texthöhe fest.
        */
       VAli : VALIGNMENT;
-      /** Grï¿½sse der Beschriftung
+      /** Grösse der Beschriftung
        */
       Groesse : MANDATORY SO_Nutzungsplanung_20171118.Schriftgroesse;
     END Pos;
 
     CLASS Typ (ABSTRACT) =
-      /** Name der Grundnutzung, ï¿½berlagernden Objekts oder Erschliessung. Wird von der Gemeinde definiert.
+      /** Name der Grundnutzung, überlagernden Objekts oder Erschliessung. Wird von der Gemeinde definiert.
        */
       Bezeichnung : MANDATORY TEXT*80;
-      /** Abkï¿½rzung der Bezeichung. Kann von der Gemeinde vergeben werden. Falls keine Abkï¿½rzung vorhanden ist bleit das Feld leer.
+      /** Abkürzung der Bezeichung. Kann von der Gemeinde vergeben werden. Falls keine Abkürzung vorhanden ist bleit das Feld leer.
        */
       Abkuerzung : TEXT*12;
       Verbindlichkeit : MANDATORY SO_Nutzungsplanung_20171118.Verbindlichkeit;
-      /** Erlï¿½uternder Text zum Typ
+      /** Erläuternder Text zum Typ
        */
       Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
     END Typ;
@@ -310,20 +310,20 @@ VERSION "2017-11-18"  =
        */
       Nutzungsziffer : 0.00 .. 9.00;
       Nutzungsziffer_Art : (
-        /** Bauvolumen ï¿½ber massgebendem Terrain / anrechenbare Grundstï¿½cksflï¿½che (ï¿½37ter PBG)
+        /** Bauvolumen über massgebendem Terrain / anrechenbare Grundstücksfläche (§37ter PBG)
          */
         Baumassenziffer,
-        /** Summe aller Geschossflï¿½chen / anrechenbare Grundstï¿½cksflï¿½che (ï¿½37bis PBG)
+        /** Summe aller Geschossflächen / anrechenbare Grundstücksfläche (§37bis PBG)
          */
         Geschossflaechen,
-        /** Anrechenbare Gebï¿½udeflï¿½che / anrechenbare Grundstï¿½cksflï¿½che (ï¿½35 PBG)
+        /** Anrechenbare Gebäudefläche / anrechenbare Grundstücksfläche (§35 PBG)
          */
         Ueberbauungsziffer,
-        /** Anrechenbare Bruttogeschossflï¿½che / anrechenbare Grundstï¿½cksflï¿½che ((ï¿½37 PBG, wurde gestrichen)
+        /** Anrechenbare Bruttogeschossfläche / anrechenbare Grundstücksfläche ((§37 PBG, wurde gestrichen)
          */
         Ausnuetzungsziffer
       );
-      /** Maximal zulï¿½ssige Anzahl Geschosse
+      /** Maximal zulässige Anzahl Geschosse
        */
       Geschosszahl : 0 .. 50;
     END Typ_Grundnutzung;
@@ -358,6 +358,128 @@ VERSION "2017-11-18"  =
       Typ_Grundnutzung -- {0..*} Typ_Grundnutzung;
       Dokument (EXTERNAL) -- {0..*} SO_Nutzungsplanung_20171118.Rechtsvorschriften.Dokument;
     END Typ_Grundnutzung_Dokument;
+        
+    CONSTRAINTS OF Typ_Grundnutzung = 
+        !!@ ilivalid.msg = "Typ '{Typ_Kt}' (Typ_Grundnutzung) ist mit keinem Dokument verknüpft."
+    	MANDATORY CONSTRAINT 
+    		(
+				INTERLIS.objectCount(Dokument)>=1 
+				AND 
+				(
+					Typ_Kt == #N110_Wohnzone_1_G
+					OR
+					Typ_Kt == #N111_Wohnzone_2_G
+					OR
+					Typ_Kt == #N112_Wohnzone_3_G
+					OR
+					Typ_Kt == #N113_Wohnzone_4_G
+					OR
+					Typ_Kt == #N114_Wohnzone_5_G
+					OR
+					Typ_Kt == #N115_Wohnzone_6_G
+					OR
+					Typ_Kt == #N116_Wohnzone_7_G_und_groesser
+					OR
+					Typ_Kt == #N117_Zone_fuer_Terrassenhaeuser_Terrassensiedlung
+					OR
+					Typ_Kt == #N120_Gewerbezone_ohne_Wohnen
+					OR
+					Typ_Kt == #N121_Industriezone
+					OR
+					Typ_Kt == #N122_Arbeitszone
+					OR
+					Typ_Kt == #N130_Gewerbezone_mit_Wohnen_Mischzone
+					OR
+					Typ_Kt == #N131_Gewerbezone_mit_Wohnen_Mischzone_2_G
+					OR
+					Typ_Kt == #N132_Gewerbezone_mit_Wohnen_Mischzone_3_G
+					OR
+					Typ_Kt == #N133_Gewerbezone_mit_Wohnen_Mischzone_4_G_und_groesser
+					OR
+					Typ_Kt == #N134_Zone_fuer_publikumsintensive_Anlagen
+					OR
+					Typ_Kt == #N140_Kernzone
+					OR
+					Typ_Kt == #N141_Zentrumszone
+					OR
+					Typ_Kt == #N142_Erhaltungszone
+					OR
+					Typ_Kt == #N150_Zone_fuer_oeffentliche_Bauten
+					OR
+					Typ_Kt == #N151_Zone_fuer_oeffentliche_Anlagen
+					OR
+					Typ_Kt == #N160_Gruen_und_Freihaltezone_innerhalb_Bauzone
+					OR
+					Typ_Kt == #N161_kommunale_Uferschutzzone_innerhalb_Bauzone
+					OR
+					Typ_Kt == #N162_Landwirtschaftliche_Kernzone
+					OR
+					Typ_Kt == #N163_Weilerzone
+					OR
+					Typ_Kt == #N169_weitere_eingeschraenkte_Bauzonen
+					OR
+					Typ_Kt == #N170_Zone_fuer_Freizeit_und_Erholung
+					OR
+					Typ_Kt == #N190_Spezialzone
+					OR
+					Typ_Kt == #N220_Spezielle_Landwirtschaftszone
+					OR
+					Typ_Kt == #N230_Rebbauzone
+					OR
+					Typ_Kt == #N290_weitere_Landwirtschaftszonen
+					OR
+					Typ_Kt == #N310_kommunale_Naturschutzzone
+					OR
+					Typ_Kt == #N311_Waldrandschutzzone
+					OR
+					Typ_Kt == #N319_weitere_Schutzzonen_fuer_Lebensraeume_und_Landschaften
+					OR
+					Typ_Kt == #N390_weitere_Schutzzonen_ausserhalb_Bauzonen
+					OR
+					Typ_Kt == #N490_Golfzone
+					OR
+					Typ_Kt == #N491_Abbauzone
+					OR
+					Typ_Kt == #N492_Deponiezone
+					OR
+					Typ_Kt == #N499_weitere_Bauzonen_nach_Art18_RPG_ausserhalb_Bauzonen
+				)
+    		) 
+    		OR 
+    		(
+				Typ_Kt == #N180_Verkehrszone_Strasse
+				OR
+				Typ_Kt == #N181_Verkehrszone_Bahnareal
+				OR
+				Typ_Kt == #N182_Verkehrszone_Flugplatzareal
+				OR            
+				Typ_Kt == #N189_weitere_Verkehrszonen
+				OR
+				Typ_Kt == #N210_Landwirtschaftszone
+				OR
+				Typ_Kt == #N320_Gewaesser
+				OR
+				Typ_Kt == #N329_weitere_Zonen_fuer_Gewaesser_und_ihre_Ufer
+				OR
+				Typ_Kt == #N420_Verkehrsflaeche_Strasse
+				OR
+				Typ_Kt == #N421_Verkehrsflaeche_Bahnareal
+				OR
+				Typ_Kt == #N422_Verkehrsflaeche_Flugplatzareal
+				OR
+				Typ_Kt == #N429_weitere_Verkehrsflaechen
+				OR
+				Typ_Kt == #N430_Reservezone_Wohnzone_Mischzone_Kernzone_Zentrumszone
+				OR
+				Typ_Kt == #N431_Reservezone_Arbeiten
+				OR
+				Typ_Kt == #N432_Reservezone_OeBA
+				OR
+				Typ_Kt == #N439_Reservezone
+				OR
+				Typ_Kt == #N440_Wald
+    		); 
+    END;
 
     /** Siehe in der Arbeitshilfe
      */
@@ -365,7 +487,7 @@ VERSION "2017-11-18"  =
       Typ_Ueberlagernd_Flaeche -- {0..*} Typ_Ueberlagernd_Flaeche;
       Dokument (EXTERNAL) -- {0..*} SO_Nutzungsplanung_20171118.Rechtsvorschriften.Dokument;
     END Typ_Ueberlagernd_Flaeche_Dokument;
-
+    
     /** Siehe in der Arbeitshilfe
      */
     ASSOCIATION Typ_Ueberlagernd_Linie_Dokument =
@@ -380,9 +502,138 @@ VERSION "2017-11-18"  =
       Dokument (EXTERNAL) -- {0..*} SO_Nutzungsplanung_20171118.Rechtsvorschriften.Dokument;
     END Typ_Ueberlagernd_Punkt_Dokument;
 
+    
+    CONSTRAINTS OF Typ_Ueberlagernd_Flaeche = 
+        !!@ ilivalid.msg = "Typ '{Typ_Kt}' (Typ_Ueberlagernd_Flaeche) ist mit keinem Dokument verknüpft."
+    	MANDATORY CONSTRAINT 
+    		(
+				INTERLIS.objectCount(Dokument)>=1 
+				AND 
+				(
+					Typ_Kt == #N510_ueberlagernde_Ortsbildschutzzone
+					OR
+					Typ_Kt == #N523_Landschaftsschutzzone
+					OR
+					Typ_Kt == #N526_kantonale_Landwirtschafts_und_Schutzzone_Witi
+					OR
+					Typ_Kt == #N527_kantonale_Uferschutzzone
+					OR
+					Typ_Kt == #N528_kommunale_Uferschutzzone_ausserhalb_Bauzonen
+					OR
+					Typ_Kt == #N529_weitere_Schutzzonen_fuer_Lebensraeume_und_Landschaften
+					OR
+					Typ_Kt == #N590_Hofstattzone_Freihaltezone
+					OR
+					Typ_Kt == #N591_Bauliche_Einschraenkungen
+					OR
+					Typ_Kt == #N690_kantonales_Vorranggebiet_Natur_und_Landschaft
+					OR
+					Typ_Kt == #N691_kommunales_Vorranggebiet_Natur_und_Landschaft
+					OR
+					Typ_Kt == #N692_Planungszone
+					OR
+					(Typ_Kt == #N699_weitere_flaechenbezogene_Festlegungen_NP AND Verbindlichkeit == #Nutzungsplanfestlegung)
+					OR
+					Typ_Kt == #N812_geologisches_Objekt
+					OR
+					Typ_Kt == #N813_Naturobjekt
+					OR
+					Typ_Kt == #N822_schuetzenswertes_Kulturobjekt
+					OR
+					Typ_Kt == #N823_erhaltenswertes_Kulturobjekt
+					OR
+					Typ_Kt == #N610_Perimeter_kantonaler_Nutzungsplan
+					OR
+					Typ_Kt == #N611_Perimeter_kommunaler_Gestaltungsplan
+					OR
+					Typ_Kt == #N620_Perimeter_Gestaltungsplanpflicht
+					OR
+					Typ_Kt == #N680_Empfindlichkeitsstufe_I
+					OR
+					Typ_Kt == #N681_Empfindlichkeitsstufe_II
+					OR
+					Typ_Kt == #N682_Empfindlichkeitsstufe_II_aufgestuft
+					OR
+					Typ_Kt == #N683_Empfindlichkeitsstufe_III
+					OR
+					Typ_Kt == #N684_Empfindlichkeitsstufe_III_aufgestuft
+					OR
+					Typ_Kt == #N685_Empfindlichkeitsstufe_IV
+					OR
+					Typ_Kt == #N686_keine_Empfindlichkeitsstufe
+				)
+    		) 
+    		OR 
+    		(
+				Typ_Kt == #N520_BLN_Gebiet
+				OR
+				Typ_Kt == #N521_Juraschutzzone
+				OR
+				Typ_Kt == #N522_Naturreservat_inkl_Geotope
+				OR
+				Typ_Kt == #N524_Siedlungstrennguertel_von_kommunaler_Bedeutung
+				OR
+				Typ_Kt == #N525_Siedlungstrennguertel_von_kantonaler_Bedeutung
+				OR
+				Typ_Kt == #N530_Naturgefahren_erhebliche_Gefaehrdung
+				OR
+				Typ_Kt == #N531_Naturgefahren_mittlere_Gefaehrdung
+				OR
+				Typ_Kt == #N532_Naturgefahren_geringe_Gefaehrdung
+				OR
+				Typ_Kt == #N533_Naturgefahren_Restgefaehrdung
+				OR
+				Typ_Kt == #N592_Hecken_Feldgehoelz_Ufergehoelz
+				OR
+				Typ_Kt == #N593_Grundwasserschutzzone_S1
+				OR
+				Typ_Kt == #N594_Grundwasserschutzzone_S2
+				OR
+				Typ_Kt == #N595_Grundwasserschutzzone_S3
+				OR
+				Typ_Kt == #N596_Grundwasserschutzareal
+				OR
+				Typ_Kt == #N599_weitere_ueberlagernde_Nutzungszonen
+				OR
+				(Typ_Kt == #N699_weitere_flaechenbezogene_Festlegungen_NP AND Verbindlichkeit <> #Nutzungsplanfestlegung)				
+				OR
+				Typ_Kt == #N820_kantonal_geschuetztes_Kulturobjekt
+				OR
+				Typ_Kt == #N821_kommunal_geschuetztes_Kulturobjekt
+    		); 
+    END;    
+
+    CONSTRAINTS OF Typ_Ueberlagernd_Punkt = 
+        !!@ ilivalid.msg = "Typ '{Typ_Kt}' (Typ_Ueberlagernd_Punkt) ist mit keinem Dokument verknüpft."
+    	MANDATORY CONSTRAINT 
+    		(
+				INTERLIS.objectCount(Dokument)>=1 
+				AND 
+				(
+					Typ_Kt == #N811_erhaltenswerter_Einzelbaum
+					OR
+					Typ_Kt == #N822_schuetzenswertes_Kulturobjekt
+					OR
+					Typ_Kt == #N823_erhaltenswertes_Kulturobjekt
+				)
+    		) 
+    		OR 
+    		(
+				Typ_Kt == #N810_geschuetzter_Einzelbaum
+				OR
+				Typ_Kt == #N812_geologisches_Objekt
+				OR
+				Typ_Kt == #N813_Naturobjekt
+				OR
+				Typ_Kt == #N820_kantonal_geschuetztes_Kulturobjekt
+				OR
+				Typ_Kt == #N899_weitere_punktbezogene_Festlegungen_NP
+    		); 
+    END; 
+    
     CLASS Grundnutzung =
-      /** Geometrie als Gebietseinteilung. ï¿½berlappungen bei Radien mit einer
-       * Pfeilhï¿½he <1 mm werden toleriert.
+      /** Geometrie als Gebietseinteilung. Überlappungen bei Radien mit einer
+       * Pfeilhöhe <1 mm werden toleriert.
        */
       Geometrie : MANDATORY SO_Nutzungsplanung_20171118.Gebietseinteilung;
       /** Leer lassen
@@ -404,7 +655,7 @@ VERSION "2017-11-18"  =
     END Grundnutzung;
 
     CLASS Ueberlagernd_Flaeche =
-      /** Flï¿½che, welche die Grundnutzung ï¿½berlagert.
+      /** Fläche, welche die Grundnutzung überlagert.
        */
       Geometrie : MANDATORY SO_Nutzungsplanung_20171118.Einzelflaeche;
       /** leer lassen
@@ -414,7 +665,7 @@ VERSION "2017-11-18"  =
       /** Datum des Regierungsratsbeschlusses
        */
       publiziertAb : MANDATORY INTERLIS.XMLDate;
-      /** Bemerkung zu der einzelnen ï¿½berlagernden Objekte.
+      /** Bemerkung zu der einzelnen überlagernden Objekte.
        */
       Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
       /** Name der Firma die die Daten erfasst hat.
@@ -426,7 +677,7 @@ VERSION "2017-11-18"  =
     END Ueberlagernd_Flaeche;
 
     CLASS Ueberlagernd_Linie =
-      /** Linie, welche die Grundnutzung ï¿½berlagert.
+      /** Linie, welche die Grundnutzung überlagert.
        */
       Geometrie : MANDATORY GeometryCHLV95_V1.Line;
       /** leer lassen
@@ -436,7 +687,7 @@ VERSION "2017-11-18"  =
       /** Datum des Regierungsratsbeschlusses
        */
       publiziertAb : MANDATORY INTERLIS.XMLDate;
-      /** Bemerkung zu der einzelnen ï¿½berlagernden Objekte.
+      /** Bemerkung zu der einzelnen überlagernden Objekte.
        */
       Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
       /** Name der Firma die die Daten erfasst hat.
@@ -448,7 +699,7 @@ VERSION "2017-11-18"  =
     END Ueberlagernd_Linie;
 
     CLASS Ueberlagernd_Punkt =
-      /** Punkt, welche die Grundnutzung ï¿½berlagert.
+      /** Punkt, welche die Grundnutzung überlagert.
        */
       Geometrie : MANDATORY GeometryCHLV95_V1.Coord2;
       /** leer lassen
@@ -458,7 +709,7 @@ VERSION "2017-11-18"  =
       /** Datum des Regierungsratsbeschlusses
        */
       publiziertAb : MANDATORY INTERLIS.XMLDate;
-      /** Bemerkung zu der einzelnen ï¿½berlagernden Objekte.
+      /** Bemerkung zu der einzelnen überlagernden Objekte.
        */
       Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
       /** Name der Firma die die Daten erfasst hat.
@@ -476,21 +727,44 @@ VERSION "2017-11-18"  =
       Grundnutzung -- {0..*} Grundnutzung;
     END Typ_Grundnutzung_Grundnutzung;
 
-    /** Ein Typ_Ueberlagernd_Flaeche kann mehrere ï¿½berlagernde Geometrien haben.
+    /** Ein Typ_Ueberlagernd_Flaeche kann mehrere überlagernde Geometrien haben.
      */
     ASSOCIATION Typ_Ueberlagernd_Flaeche_Flaeche =
       Typ_Ueberlagernd_Flaeche -<> {1} Typ_Ueberlagernd_Flaeche;
       Ueberlagernd_Flaeche -- {0..*} Ueberlagernd_Flaeche;
     END Typ_Ueberlagernd_Flaeche_Flaeche;
+        
+    CONSTRAINTS OF Ueberlagernd_Flaeche = 
+    	!!@ name = laermempfindlichkeitsAreaCheck
+      	!! !!@ ilivalid.msg = "Lärmempfindlichkeitstypen überlappen sich."
+    	SET CONSTRAINT 
+    		WHERE 
+    		(
+				Typ_Ueberlagernd_Flaeche->Typ_Kt==#N680_Empfindlichkeitsstufe_I 
+				OR 
+				Typ_Ueberlagernd_Flaeche->Typ_Kt==#N681_Empfindlichkeitsstufe_II				
+				OR 
+				Typ_Ueberlagernd_Flaeche->Typ_Kt==#N682_Empfindlichkeitsstufe_II_aufgestuft				
+				OR 
+				Typ_Ueberlagernd_Flaeche->Typ_Kt==#N683_Empfindlichkeitsstufe_III
+				OR 
+				Typ_Ueberlagernd_Flaeche->Typ_Kt==#N684_Empfindlichkeitsstufe_III_aufgestuft			
+				OR 
+				Typ_Ueberlagernd_Flaeche->Typ_Kt==#N685_Empfindlichkeitsstufe_IV				
+				OR 
+				Typ_Ueberlagernd_Flaeche->Typ_Kt==#N686_keine_Empfindlichkeitsstufe								
+    		) : INTERLIS.areAreas(ALL, UNDEFINED, >> Geometrie);
+    	!!SET CONSTRAINT INTERLIS.areAreas(ALL, UNDEFINED, >> Geometrie);
+    END;       
 
-    /** Ein Typ_Ueberlagernd_Linie kann mehrere ï¿½berlagernde Geometrien haben.
+    /** Ein Typ_Ueberlagernd_Linie kann mehrere überlagernde Geometrien haben.
      */
     ASSOCIATION Typ_Ueberlagernd_Linie_Linie =
       Typ_Ueberlagernd_Linie -<> {1} Typ_Ueberlagernd_Linie;
       Ueberlagernd_Linie -- {0..*} Ueberlagernd_Linie;
     END Typ_Ueberlagernd_Linie_Linie;
 
-    /** Ein Typ_Ueberlagernd_Punkt kann mehrere ï¿½berlagernde Geometrien haben.
+    /** Ein Typ_Ueberlagernd_Punkt kann mehrere überlagernde Geometrien haben.
      */
     ASSOCIATION Typ_Ueberlagernd_Punkt_Punkt =
       Typ_Ueberlagernd_Punkt -<> {1} Typ_Ueberlagernd_Punkt;
@@ -513,28 +787,28 @@ VERSION "2017-11-18"  =
     EXTENDS Pos =
     END Ueberlagernd_Punkt_Pos;
 
-    /** Beschriftet wir die Abkï¿½rzung welche in der Klasse Typ_Grundnutzung erfasst wird.
+    /** Beschriftet wir die Abkürzung welche in der Klasse Typ_Grundnutzung erfasst wird.
      */
     ASSOCIATION Grundnutzung_Grundnutzung_Pos =
       Grundnutzung -<> {1} Grundnutzung;
       Grundnutzung_Pos -- {0..*} Grundnutzung_Pos;
     END Grundnutzung_Grundnutzung_Pos;
 
-    /** Beschriftet wir die Abkï¿½rzung welche in der Klasse Typ_Ueberlagernd_Flaeche erfasst wird.
+    /** Beschriftet wir die Abkürzung welche in der Klasse Typ_Ueberlagernd_Flaeche erfasst wird.
      */
     ASSOCIATION Ueberlagernd_Flaeche_Flaeche_Pos =
       Ueberlagernd_Flaeche -<> {1} Ueberlagernd_Flaeche;
       Ueberlagernd_Flaeche_Pos -- {0..*} Ueberlagernd_Flaeche_Pos;
     END Ueberlagernd_Flaeche_Flaeche_Pos;
 
-    /** Beschriftet wir die Abkï¿½rzung welche in der Klasse Typ_Ueberlagernd_Linie erfasst wird.
+    /** Beschriftet wir die Abkürzung welche in der Klasse Typ_Ueberlagernd_Linie erfasst wird.
      */
     ASSOCIATION Ueberlagernd_Linie_Linie_Pos =
       Ueberlagernd_Linie -<> {1} Ueberlagernd_Linie;
       Ueberlagernd_Linie_Pos -- {0..*} Ueberlagernd_Linie_Pos;
     END Ueberlagernd_Linie_Linie_Pos;
 
-    /** Beschriftet wir die Abkï¿½rzung welche in der Klasse Typ_Ueberlagernd_Punkt erfasst wird.
+    /** Beschriftet wir die Abkürzung welche in der Klasse Typ_Ueberlagernd_Punkt erfasst wird.
      */
     ASSOCIATION Ueberlagernd_Punkt_Punkt_Pos =
       Ueberlagernd_Punkt -<> {1} Ueberlagernd_Punkt;
@@ -639,7 +913,7 @@ VERSION "2017-11-18"  =
     EXTENDS SO_Nutzungsplanung_20171118.Nutzungsplanung.Pos =
     END Erschliessung_Flaechenobjekt_Pos;
 
-    /** Beschriftet wir die Abkï¿½rzung, welche in der Klasse Typ_Erschliessung_Flaecheobjekt erfasst wird.
+    /** Beschriftet wir die Abkürzung, welche in der Klasse Typ_Erschliessung_Flaecheobjekt erfasst wird.
      */
     ASSOCIATION Erschliessung_Flaechenobjekt_Flaeche_Pos =
       Erschliessung_Flaechenobjekt -<> {1} Erschliessung_Flaechenobjekt;
@@ -661,6 +935,54 @@ VERSION "2017-11-18"  =
       Dokument (EXTERNAL) -- {0..*} SO_Nutzungsplanung_20171118.Rechtsvorschriften.Dokument;
     END Typ_Erschliessung_Linienobjekt_Dokument;
 
+    CONSTRAINTS OF Typ_Erschliessung_Linienobjekt = 
+        !!@ ilivalid.msg = "Typ '{Typ_Kt}' (Typ_Erschliessung_Linienobjekt) ist mit keinem Dokument verknüpft."
+    	MANDATORY CONSTRAINT 
+    		(
+				INTERLIS.objectCount(Dokument)>=1 
+				AND 
+				(
+					Typ_Kt == #E711_Baulinie_Strasse_kantonal
+					OR
+					Typ_Kt == #E712_Vorbaulinie_kantonal
+					OR
+					Typ_Kt == #E713_Gestaltungsbaulinie_kantonal
+					OR
+					Typ_Kt == #E714_Rueckwaertige_Baulinie_kantonal
+					OR
+					Typ_Kt == #E715_Baulinie_Infrastruktur_kantonal
+					OR
+					Typ_Kt == #E719_weitere_nationale_und_kantonale_Baulinien
+					OR
+					Typ_Kt == #E720_Baulinie_Strasse
+					OR
+					Typ_Kt == #E721_Vorbaulinie
+					OR
+					Typ_Kt == #E722_Gestaltungsbaulinie
+					OR
+					Typ_Kt == #E723_Rueckwaertige_Baulinie
+					OR
+					Typ_Kt == #E724_Baulinie_Infrastruktur
+					OR
+					Typ_Kt == #E725_Waldabstandslinie
+					OR
+					Typ_Kt == #E726_Baulinie_Hecke
+					OR
+					Typ_Kt == #E727_Baulinie_Gewaesser
+					OR
+					Typ_Kt == #E728_Immissionsstreifen
+					OR
+					Typ_Kt == #E729_weitere_kommunale_Baulinien
+				)
+    		) 
+    		OR 
+    		(
+				Typ_Kt == #E710_nationale_Baulinie
+				OR
+				Typ_Kt == #E789_weitere_linienbezogene_Objekte_EP
+    		); 
+    END; 
+    
     CLASS Erschliessung_Linienobjekt =
       Geometrie : MANDATORY GeometryCHLV95_V1.Line;
       /** leer lassen
@@ -692,7 +1014,7 @@ VERSION "2017-11-18"  =
     EXTENDS SO_Nutzungsplanung_20171118.Nutzungsplanung.Pos =
     END Erschliessung_Linienobjekt_Pos;
 
-    /** Beschriftet wir die Abkï¿½rzung, welche in der Klasse Typ_Erschliessung_Linienobjekt  erfasst wird.
+    /** Beschriftet wir die Abkürzung, welche in der Klasse Typ_Erschliessung_Linienobjekt  erfasst wird.
      */
     ASSOCIATION Erschliessung_Linienobjekt_Linie_Pos =
       Erschliessung_Linienobjekt -<> {1} Erschliessung_Linienobjekt;
@@ -745,7 +1067,7 @@ VERSION "2017-11-18"  =
     EXTENDS SO_Nutzungsplanung_20171118.Nutzungsplanung.Pos =
     END Erschliessung_Punktobjekt_Pos;
 
-    /** Beschriftet wir die Abkï¿½rzung, welche in der Klasse Typ_Erschliessung_Punktobjekt  erfasst wird.
+    /** Beschriftet wir die Abkürzung, welche in der Klasse Typ_Erschliessung_Punktobjekt  erfasst wird.
      */
     ASSOCIATION Erschliessung_Punktobjekt_Punkt_Pos =
       Erschliessung_Punktobjekt -<> {1} Erschliessung_Punktobjekt;
@@ -775,7 +1097,7 @@ VERSION "2017-11-18"  =
       );
 
     CLASS VS_Perimeter_Verfahrensstand =
-      /** Geltungsbereich fï¿½r die Mutation
+      /** Geltungsbereich für die Mutation
        */
       Geometrie : MANDATORY SO_Nutzungsplanung_20171118.Einzelflaeche;
       Planungsart : MANDATORY Planungsart;
@@ -783,7 +1105,7 @@ VERSION "2017-11-18"  =
       /** Leer lassen
        */
       Name_Nummer : TEXT*20;
-      /** Erlï¿½uternder Text oder Bemerkungen zum Verfahrenstand.
+      /** Erläuternder Text oder Bemerkungen zum Verfahrenstand.
        */
       Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
       /** Name des der Firma
@@ -825,7 +1147,7 @@ VERSION "2017-11-18"  =
       /** Datum der Datenlieferung
        */
       Lieferdatum : INTERLIS.XMLDate;
-      /** Erlï¿½uternder Text oder Bemerkungen zum Datenbestand.
+      /** Erläuternder Text oder Bemerkungen zum Datenbestand.
        */
       Bemerkungen : SO_Nutzungsplanung_20171118.Bemerkungen_Typ;
     END Datenbestand;
