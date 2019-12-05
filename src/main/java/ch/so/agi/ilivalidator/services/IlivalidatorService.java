@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -84,7 +86,6 @@ public class IlivalidatorService {
                 Files.copy(is, jarFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 IOUtils.closeQuietly(is);
             }
-//            EhiLogger.getInstance().setTraceFilter(false);
             settings.setValue(Validator.SETTING_PLUGINFOLDER, new File(FilenameUtils.getFullPath(inputFileName)).getAbsolutePath());
             log.info("Plugin folder: " + settings.getValue(Validator.SETTING_PLUGINFOLDER));
         } catch (FileNotFoundException e) {
@@ -130,11 +131,13 @@ public class IlivalidatorService {
                 settings.setValue(Validator.SETTING_CONFIGFILE, configFile.getAbsolutePath());
             } catch (FileNotFoundException e) {
                 log.info(e.getMessage());
-                log.info("Configuration file " + modelName.toLowerCase()
-                        + ".toml not available. Continue validation without configuration file.");
+                log.info("Configuration file " + modelName.toLowerCase() + ".toml not available. Continue validation without configuration file.");
             }
         }
+        //EhiLogger.getInstance().setTraceFilter(false);
 
+//        settings.setValue(Validator.SETTING_MODELNAMES, "GB2AV");
+        
         boolean valid = Validator.runValidation(inputFileName, settings);
 
         return valid;
