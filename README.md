@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/sogis/ilivalidator-web-service.svg?branch=master)](https://travis-ci.org/sogis/ilivalidator-web-service)
+[![Build Status](https://github.com/sogis/ilivalidator-web-service/workflows/Java%20CI/badge.svg)](https://github.com/sogis/ilivalidator-web-service/workflows/Java%20CI/badge.svg)
 
 # ilivalidator web service - a minimalist INTERLIS check service
 
