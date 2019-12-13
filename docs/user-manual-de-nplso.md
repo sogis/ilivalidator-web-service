@@ -1,5 +1,5 @@
 ## Zusätzliche Tests
-Bei den zusätzlichen Tests handelt es sich entweder um Verbesserungen im Kern der [Validierungsbibliothek](https://github.com/claeis/ilivalidator) oder um vom Kanton selber definierte Tests, die für das weitere Prozessieren der Daten für die verschiedenen Fragestellungen notwendig sind.
+Bei den zusätzlichen Tests handelt es sich entweder um Verbesserungen im Kern der [Validierungsbibliothek](https://github.com/claeis/ilivalidator) oder um vom Kanton selber definierte und programmierte Tests. Diese zusätzlichen Tests sind notwendig, damit die Daten in späteren Prozessierungsschritten nicht zu falschen Aussagen und Interpretationen führen.
 
 ### Doppelte Koordinaten
 Es dürfen keine doppelten Koordinaten in einer Geometrie vorkommen.
