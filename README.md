@@ -5,6 +5,10 @@
 
 The ilivalidator web service is a [spring boot](https://projects.spring.io/spring-boot/) application and uses [ilivalidator](https://github.com/claeis/ilivalidator) for the INTERLIS transfer file validation.
 
+## TODO
+- Find out a smart way to deploy the extension functions models.
+- Publish `SO_FunctionsExt.ili` and `SO_Nutzungsplanung_20171118_Validierung_20190129.ili` in official INTERLIS repo. 
+
 ## Features
 
 * checks INTERLIS 1+2 transfer files
@@ -35,15 +39,22 @@ Use your favorite IDE (e.g. [Spring Tool Suite](https://spring.io/tools/sts/all)
 
 Ilivalidator needs a toml file if you want to apply an additional model for your additional checks. The toml file must be all lower case, placed in the `toml` folder and named like the base model itself, e.g. `SO_Nutzungsplanung_20171118` -> `so_nutzungsplanung_20171118.toml`. The additional model can be placed in the `ili` folder or in any model repository that ilivalidator finds out-of-the-box.
 
-**TODO:** Find out a smart way to deploy the extension functions models.
-
 ### Ilivalidator custom functions
 
 Your very own (Java) custom functions need be registered to ilivalidator during runtime. For this it is not enough to put the jar file containing the custom function classes available into the classpath (Guess it's because of knowing the qualified INTERLIS function name). The Gradle task `copyToLibsExt` will copy the Jar file from a defined maven repository into the `libs-text` folder before the `build` task. Use `--refresh-dependencies` if you need to update the custom function jar.
 
 If the custom functions have dependencies, you will need to add them in the ilivalidator web service as dependency as well.
 
-**SO_Nutzungsplanung_20171118:** I end up putting this model also in the `ili` folder because I want to use an additional constraint in `ASSOCIATION` which is not possible at the moment if the association is in a topic view: https://github.com/claeis/ili2c/issues/6. 
+#### Land use planning
+
+Für die Validierung der Nutzungsplanung werden zusätzliche Prüfungen vorgenommen. Sowohl mit "einfachen", zusätzlichen Constraints, aber auch mit zusätzlichen Java-Funktionen. Wegen einigen Bugs resp. fehlenden Funktionen, muss dazu die Originial-INTERLIS-Modell-Datei angepasst werden. Aus diesem Grund ist ein angepasstes `SO_Nutzungsplanung_20171118`-Modell im `ili`-Ordner.
+
+- https://github.com/claeis/ilivalidator/issues/180
+- https://github.com/claeis/ilivalidator/issues/196 (fixed)
+- https://github.com/claeis/ilivalidator/issues/203 (fixed)
+- https://github.com/claeis/ilivalidator/issues/204
+- https://github.com/claeis/ilivalidator/issues/205
+- https://github.com/claeis/ili2c/issues/6
 
 ### Testing
 
