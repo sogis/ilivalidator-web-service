@@ -1,6 +1,7 @@
 package ch.so.agi.ilivalidator.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -44,6 +45,12 @@ public class IlivalidatorService {
 
     @Autowired
     private ResourceLoader resourceLoader;
+    
+    @Value("${app.connectTimeout}")
+    private String connectTimeout;
+    
+    @Value("${app.readTimeout}")
+    private String readTimeout;
 
     /**
      * This method validates an INTERLIS transfer file with
@@ -63,8 +70,8 @@ public class IlivalidatorService {
             throws IoxException, IOException {
         // Set some timeouts for fetching models. Some repos have problems and/or some
         // urls make problems with our waf.
-        System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
-        System.setProperty("sun.net.client.defaultReadTimeout", "10000");
+        System.setProperty("sun.net.client.defaultConnectTimeout", connectTimeout);
+        System.setProperty("sun.net.client.defaultReadTimeout", readTimeout);
 
         Settings settings = new Settings();
         settings.setValue(Validator.SETTING_ILIDIRS, Validator.SETTING_DEFAULT_ILIDIRS);
