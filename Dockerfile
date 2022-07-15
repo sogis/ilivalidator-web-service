@@ -1,21 +1,18 @@
-FROM adoptopenjdk/openjdk11:latest
+FROM bellsoft/liberica-openjdk-alpine-musl:17.0.3
 
-RUN apt-get update && \
-    apt-get install -y curl
+ARG UID=1001
+RUN adduser -S ilivalidator -u $UID
 
+ENV HOME=/work
+WORKDIR $HOME
+
+COPY ./build/libs/ilivalidator-web-service-*-exec.jar ./application.jar
+RUN chown $UID:0 . && \
+    chmod 0775 . && \
+    ls -la
+
+USER $UID
 EXPOSE 8888
 
-WORKDIR /home/ilivalidator
-
-ARG DEPENDENCY=build/dependency
-COPY ${DEPENDENCY}/BOOT-INF/lib /home/ilivalidator/app/lib
-COPY ${DEPENDENCY}/META-INF /home/ilivalidator/app/META-INF
-COPY ${DEPENDENCY}/BOOT-INF/classes /home/ilivalidator/app
-RUN chown -R 1001:0 /home/ilivalidator && \
-    chmod -R g=u /home/ilivalidator
-
-USER 1001
-
-ENTRYPOINT ["java","-cp","app:app/lib/*","ch.so.agi.ilivalidator.IlivalidatorApplication"]
-
-HEALTHCHECK --interval=30s --timeout=30s --start-period=60s CMD curl http://localhost:8888/actuator/health
+ENV LOG4J_FORMAT_MSG_NO_LOOKUPS=true
+CMD java -XX:+UseParallelGC -XX:MaxRAMPercentage=80.0 -jar application.jar

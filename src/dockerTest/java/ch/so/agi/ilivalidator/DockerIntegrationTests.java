@@ -1,28 +1,31 @@
 package ch.so.agi.ilivalidator;
 
-import ch.so.agi.ilivalidator.IntegrationTests;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
 
-import org.junit.Before;
-
-import io.restassured.RestAssured;
-
+@Testcontainers
+@TestInstance(Lifecycle.PER_CLASS)
 public class DockerIntegrationTests extends IntegrationTests {
+    private static int exposedPort = 8080;
+    
+    @Container
+    public static GenericContainer<?> ilivalidatorWebService = new GenericContainer<>("edigonzales/ilivalidator-web-service:latest")
+            .waitingFor(Wait.forHttp("/actuator/health"))
+            .withEnv("AWS_ACCESS_KEY_ID", System.getenv("AWS_ACCESS_KEY_ID"))
+            .withEnv("AWS_SECRET_ACCESS_KEY", System.getenv("AWS_SECRET_ACCESS_KEY")) 
+            .withEnv("DOC_BASE", "/tmp/")
+            .withEnv("WORK_DIRECTORY", "/tmp/")
+            .withExposedPorts(exposedPort)
+            .withLogConsumer(new Slf4jLogConsumer(logger));
 
-	@Before
+    @BeforeAll
     public void setup() {
-    		String port = System.getProperty("server.port");
-    		if (port == null) {
-    			// TODO: make port configurable 
-    			RestAssured.port = Integer.valueOf(8888);
-    		} else {
-    			RestAssured.port = Integer.valueOf(port);
-    		}
-    		
-    		String baseHost = System.getProperty("server.host");
-    		if(baseHost == null) {
-    			baseHost = "http://localhost";
-    		}
-    		RestAssured.baseURI = baseHost;
-
+        port = String.valueOf(ilivalidatorWebService.getMappedPort(exposedPort));
     }
 }

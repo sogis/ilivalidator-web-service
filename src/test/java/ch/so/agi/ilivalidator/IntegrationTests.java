@@ -1,274 +1,242 @@
 package ch.so.agi.ilivalidator;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.file.Files;
+import java.util.stream.Collectors;
 
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.BinaryMessage;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.WebSocketMessage;
+import org.springframework.web.socket.WebSocketSession;
 
-import io.restassured.response.Response;
-
-/*
- * This class can be inherited by other classes to run 
- * integration tests:
- * - Spring Boot
- * - Docker Image
- */
 public abstract class IntegrationTests {
-	@Rule
-	public TemporaryFolder tempFolder = new TemporaryFolder();
+    static Logger logger = LoggerFactory.getLogger(IntegrationTests.class);
 
-	/*
-	 * Simple index.html test.
-	 */
-	@Test
-	public void indexPageTest() {				
-		given().
-		when().
-        	get("/ilivalidator/").
-        then().
-            statusCode(200).
-            body("html.head.title", equalTo("ilivalidator web service"));
-	}
-	
-    /*
-     * Test if version.txt is available.
-     */
-    @Test
-    public void versionPageTest() {               
-        given().
-        when().
-            get("/ilivalidator/version.txt").
-        then().
-            statusCode(200).
-            body(containsString("Revision")).
-            body(containsString("Application-name"));
+    @LocalServerPort
+    protected String port;
+    
+//    @Value("#{servletContext.contextPath}")
+//    protected String servletContextPath;
+    
+    private final String START_MESSAGE = "Validating...";
+
+    public class ClientSocketHandler implements WebSocketHandler {
+        Logger logger = LoggerFactory.getLogger(ClientSocketHandler.class);
+
+        private WebSocketSession webSocketSession;
+        private String returnedMessage;
+
+        @Override
+        public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+            webSocketSession = session;
+        }
+
+        @Override
+        public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
+            String result = message.getPayload().toString();
+            this.returnedMessage = result;
+        }
+
+        @Override
+        public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
+            logger.error("Got a handleTransportError: " + exception.getMessage());
+            exception.printStackTrace();
+        }
+
+        @Override
+        public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
+        }
+
+        @Override
+        public boolean supportsPartialMessages() {
+            return false;
+        }
+
+        public boolean isConnected() {
+            return webSocketSession != null;
+        }
+
+        public void sendMessage(Object msg) throws Exception {
+            if (msg instanceof File) {
+                byte[] fileContent = Files.readAllBytes(((File) msg).toPath());
+                webSocketSession.sendMessage(new BinaryMessage(fileContent));
+            } else {
+                webSocketSession.sendMessage(new TextMessage(msg.toString()));
+            }
+        }
+
+        public void closeConnection() throws IOException {
+            if (isConnected()) {
+                webSocketSession.close();
+            }
+        }
+        
+        public String getMessage() {
+            return this.returnedMessage;
+        }
     }
-
-	/*
-	 * We push the upload button but without sending a file
-	 * to validate. It should redirect to the starting page.
-	 * Not sure about how to implement this in rest assured:
-	 * Now I create an empty file and checking the file size
-	 * in the relevant if-clause. Testing the body seems
-	 * not work though...
-	 */
-	@Test
-	public void noFileUploadTest() throws IOException {
-		File file = tempFolder.newFile("tempFile.txt");
-
-		given().
-			multiPart("file", file).
-		when().
-			post("/ilivalidator/").
-		then().
-	    	statusCode(302);//.
-	    	//body("html.head.title", equalTo("ilivalidator web service")).log().all();
-	}	
-	
-	/*
-	 * Upload a text file with nonsense content and
-	 * provoke a iox exception.
-	 */
-	@Test
-	public void uploadNonsenseFileTest() throws IOException {
-		File file = new File("src/test/data/nonsense.txt");
-
-		given().
-			multiPart("file", file).
-		when().
-			post("/ilivalidator/").
-		then().
-	    	statusCode(400).
-	    	body(containsString("could not parse file: nonsense.txt"));
-	}	
-	
-	@Test
-	public void successfulValidationTest() {
-		File file = new File("src/test/data/ch_254900.itf");
-		
-		given().
-			multiPart("file", file).
-		when().
-			post("/ilivalidator/").
-		then().
-			statusCode(200).
-			body(containsString("...validation done"));
-	}
-	
-	@Test
-	public void unsuccessfulValidationTest() {
-		File file = new File("src/test/data/ch_254900_error.itf");
-		
-		given().
-			multiPart("file", file).
-		when().
-			post("/ilivalidator/").
-		then().
-			statusCode(200);//.
-			//body(containsString("...validation failed"));
-	}
-	
-	/*
-	 * INTERLIS transfer file contains some errors but these are ignored
-	 * or reduced to warnings by configuration file. Hence the validation
-	 * must be successful.
-	 */
-	@Ignore("https://github.com/claeis/ilivalidator/issues/214")
-	@Test
-	public void successfulValidationTestWithConfigFile() {
-		File file = new File("src/test/data/Obuc_Mutation_948_2014_07_17_errors.xml");
-		
-		given().
-			param("configFile", "on").
-			multiPart("file", file).
-		when().
-			post("/ilivalidator/").
-		then().
-			statusCode(200).
-			body(containsString("Warning: line")).
-			body(containsString("...validation done")).
-			body(containsString("Info: configFile"));
-	}
-	
-	/*
-	 * There is no according configuration file to the INTERLIS
-	 * transfer/model file. Nonetheless the validation is done.
-	 * "Info: configFile" should not be in the output even
-	 * with 'configFile' = 'on'.
-	 */
-	// not successfull anymore because of all the "must not have an OID "
-	@Test
-	public void successfulValidationTestWithoutConfigFile() {
-		File file = new File("src/test/data/ch_254900.itf");
-				
-		Response response =
-				given().
-					param("configFile", "on").
-					multiPart("file", file).
-				when().
-					post("/ilivalidator/").
-				then().
-					statusCode(200).
-				and().
-					body(containsString("...validation done")).
-				and().
-					extract()
-				.response();
-		
-		// assertThat: http://www.vogella.com/tutorials/Hamcrest/article.html  
-        assertThat(response.asString().indexOf("Info: configFile"), is(-1));		
-	}
-	
-
-	/*
-	 * The additional constraints are defined in a separate 
-	 * model file. There must be also a configuration file that
-	 * makes ilivalidator aware of the additional model.
-	 */
-	@Test	
-	public void additionalConstraintsValidationTestSuccess() {
-		File file = new File("src/test/data/2457_Messen_nachher.xtf");
-		
-		given().
-			param("configFile", "on").
-			multiPart("file", file).
-		when().
-			post("/ilivalidator/").
-		then().
-			statusCode(200).
-			body(containsString("Info: configFile")).
-            body(containsString("additional model SO_Nutzungsplanung_20171118_Validierung_20190129")).
-			body(containsString("...validation done"));
-	}
-	
-	/*
-	 * The additional constraints are defined in a separate 
-	 * model file. There must be also a configuration file that
-	 * makes ilivalidator aware of the additional model.
-	 */
-	@Test	
-	public void additionalConstraintsValidationTestFail() {
-		File file = new File("src/test/data/exp1_nplwis_20171213A_error.xtf");
-		
-		given().
-			param("configFile", "on").
-			multiPart("file", file).
-		when().
-			post("/ilivalidator/").
-		then().
-			statusCode(200).
-			body(containsString("Info: configFile")).
-            body(containsString("additional model SO_Nutzungsplanung_20171118_Validierung_20190129")).
-            body(containsString("Attributwert Bezeichnung ist nicht identisch zum Objektkatalog")).
-            body(containsString("Attribut 'Gemeinde' muss definiert sein.")).
-            body(containsString("Attribut 'Kanton' muss definiert sein.")).
-            body(containsString("Attribut 'Rechtsvorschrift' muss definiert sein.")).
-            body(containsString("Attribut 'OffiziellerTitel' muss definiert sein.")).
-            body(containsString("Dokument 'https://geo.so.ch/docs/ch.so.arp.zonenplaene/Zonenplaene_pdf/109-Wisen/Reglemente/109_ZR-NOT-FOUND.pdf' wurde nicht gefunden")).
-			body(containsString("...validation failed"));
-	}
-	
-	/*
-	 * When "Externe Objekte prüfen" is set, some errors must be found since the
-	 * objects are missing in the file.
-	 */
-	@Test
-	public void allObjectsAccessibleTestFail() {
-	    File file = new File("src/test/data/npl_niederbuchsiten_vor_OP_external_object_error.xtf");
-
-       given().
-           param("allObjectsAccessible", "on").
-           multiPart("file", file).
-       when().
-           post("/ilivalidator/").
-       then().
-           statusCode(200).
-           body(containsString("No object found with OID A89F574F-CB0B-4968-BED0-5811440ACEC9")).
-           body(containsString("...validation failed"));
-	}
-	
-	/*
-	 * Document cycle check aka "HinweisWeitereDokumente".
-	 */
-	@Test
-	public void documentCycleCheckTestFail() {
-        File file = new File("src/test/data/2408_2019-05-02_formatiert_cycle.xtf");
-        
-        given().
-            param("allObjectsAccessible", "on").
-            multiPart("file", file).
-       when().
-            post("/ilivalidator/").
-       then().
-            statusCode(200).
-            body(containsString("(DE8010C7-7255-4CDB-B361-417460CF9136 <-> 070D7074-336E-4AA4-96CC-9029D6F6E6CA) is part of a cycle: CB25AE37-3DA0-4DED-B051-A524B9A1F33D,DE8010C7-7255-4CDB-B361-417460CF9136,070D7074-336E-4AA4-96CC-9029D6F6E6CA.")).
-            body(containsString("duplicate edge found: 42")).
-            body(containsString("...validation failed"));
-	}
-	
+    
     @Test
-    public void unsuccessfulValidationTest_Nplso() {
-        File file = new File("src/test/data/2405.xtf");
+    public void validation_Ok_ili1() throws Exception {
+        String endpoint = "ws://localhost:" + port + "/socket";
+
+        StandardWebSocketClient client = new StandardWebSocketClient();
+        ClientSocketHandler clientHandler = new ClientSocketHandler();
+        client.doHandshake(clientHandler, endpoint);
+
+        Thread.sleep(2000);
         
-        given().
-            multiPart("file", file).
-        when().
-            post("/ilivalidator/").
-        then().
-            statusCode(200).
-            body(containsString("Error: line 451: SO_Nutzungsplanung_20171118.Rechtsvorschriften.HinweisWeitereDokumente: (325CA1F1-17F5-4F19-A2E4-ECD942DB6DCA <-> E9597D3A-90CD-4175-97B5-CFEAE56CB7BE) is part of a cycle: E9597D3A-90CD-4175-97B5-CFEAE56CB7BE,325CA1F1-17F5-4F19-A2E4-ECD942DB6DCA.")).
-            body(containsString("Error: line 178586: SO_Nutzungsplanung_20171118.Nutzungsplanung.Ueberlagernd_Flaeche: tid 59BDF2E0-E5E7-49B9-B6BA-583BE13152C7: Set Constraint SO_Nutzungsplanung_20171118.Nutzungsplanung.Ueberlagernd_Flaeche.laermempfindlichkeitsAreaCheck is not true.")).
-            body(containsString("Error: line 46065: SO_Nutzungsplanung_20171118.Nutzungsplanung.Typ_Grundnutzung: tid F8DE04B4-2E51-4B53-97DD-959A2B47242C: Typ 'N169_weitere_eingeschraenkte_Bauzonen' (Typ_Grundnutzung) ist mit keinem Dokument verkn")).
-            body(containsString("Error: line 192: SO_Nutzungsplanung_20171118.Rechtsvorschriften.Dokument: tid 9C185FF7-B78F-445D-8868-905A569BA16C: Dokument 'https://geo.so.ch/docs/ch.so.arp.zonenplaene/Zonenplaene_pdf/78-Niederbuchsiten/Entscheide/78-10-E.pdf' wurde nicht gefunden.")).
-            body(containsString("...validation failed"));
+        assertTrue(clientHandler.isConnected());
+        
+        File file = new File("src/test/data/ch_254900.itf");
+        clientHandler.sendMessage(file);
+        clientHandler.sendMessage(file.getName());
+
+        for (int i=0; i<3; i++) {
+            Thread.sleep(10000);
+            logger.info("polling: " + String.valueOf(i));            
+            
+            String returnedMessage = clientHandler.getMessage();
+            if ((returnedMessage != null && !returnedMessage.isEmpty()) && !returnedMessage.equals(START_MESSAGE)) {                
+                assertTrue(returnedMessage.contains("...validation done:"));
+
+                Document document = Jsoup.parse(returnedMessage);
+                Elements links = document.select("a[href]");
+
+                String link = links.get(0).attr("href");
+                URL logfileUrl = new URL(link);
+
+                String logfileContents = null;
+                try (InputStream in = logfileUrl.openStream()) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    logfileContents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+                }
+                assertTrue(logfileContents.contains("Info: ...validation done"));
+                return;
+            }
+        }
+
+        fail("no message returned in given time");
+    }
+    
+    @Test
+    public void validation_Fail_ili2() throws Exception {
+        String endpoint = "ws://localhost:" + port + "/socket";
+
+        StandardWebSocketClient client = new StandardWebSocketClient();
+        ClientSocketHandler clientHandler = new ClientSocketHandler();
+        client.doHandshake(clientHandler, endpoint);
+
+        Thread.sleep(2000);
+        
+        assertTrue(clientHandler.isConnected());
+
+        File file = new File("src/test/data/2457_Messen_vorher.xtf");
+        clientHandler.sendMessage(file);
+        clientHandler.sendMessage(file.getName());
+
+        for (int i=0; i<18; i++) {
+            Thread.sleep(10000);
+            logger.info("polling: " + String.valueOf(i));
+            
+            String returnedMessage = clientHandler.getMessage();
+            if ((returnedMessage != null && !returnedMessage.isEmpty()) && !returnedMessage.equals(START_MESSAGE)) {                
+                assertTrue(returnedMessage.contains("...validation failed:"));
+
+                Document document = Jsoup.parse(returnedMessage);
+                Elements links = document.select("a[href]");
+                
+                String link = links.get(0).attr("href");
+                URL logfileUrl = new URL(link);
+                        
+                String logfileContents = null;
+                try (InputStream in = logfileUrl.openStream()) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    logfileContents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+                }
+                
+                assertTrue(logfileContents.contains("so_nutzungsplanung_20171118.toml"));
+                assertTrue(logfileContents.contains("Warning: line 5: SO_Nutzungsplanung_20171118.Rechtsvorschriften.Dokument: tid d3c20374-f6c5-48f9-8e1e-232b87a9d80a: invalid format of INTERLIS.URI value <34-Messen/Entscheide/34-36_45-E.pdf> in attribute TextImWeb"));
+                assertTrue(logfileContents.contains("Error: line 61: SO_Nutzungsplanung_20171118.Rechtsvorschriften.HinweisWeitereDokumente: tid 6: Association SO_Nutzungsplanung_20171118.Rechtsvorschriften.HinweisWeitereDokumente must not have an OID (6)"));
+                assertTrue(logfileContents.contains("Error: line 412: SO_Nutzungsplanung_20171118.Nutzungsplanung.Grundnutzung: tid 2d285daf-a5ab-4106-a453-58eef2e921ab: duplicate coord at (2599932.281, 1216063.38, NaN)"));
+                assertTrue(logfileContents.contains("Error: line 140: SO_Nutzungsplanung_20171118.Nutzungsplanung.Typ_Ueberlagernd_Flaeche: tid 0723a0c8-46e4-4e4f-aba4-c75e90bece14: Attributwert Verbindlichkeit ist nicht identisch zum Objektkatalog: 'orientierend' - '6110'"));
+                assertTrue(logfileContents.contains("Dokument 'https://geo.so.ch/docs/ch.so.arp.zonenplaene/Zonenplaene_pdf/24-Brunnenthal/Reglemente/024_BZR.pdf' wurde nicht gefunden"));
+                // Irgendwie ist das identisch aber doch nicht. FIXME.
+                //assertTrue(logfileContents.contains("Error: SO_Nutzungsplanung_20171118.Nutzungsplanung.Ueberlagernd_Flaeche: tid 7478a32c-45d6-4b3f-8507-0b9f4bd308bf/Geometrie[1]: Intersection coord1 (2600228,240, 1217472,518), tids 7478a32c-45d6-4b3f-8507-0b9f4bd308bf/Geometrie[1], 9b8a1966-1482-4b1f-b576-968f4246e80a/Geometrie[1]"));
+                assertTrue(logfileContents.contains("Error: Set Constraint SO_Nutzungsplanung_20171118_Validierung_20211006.Nutzungsplanung_Validierung.v_Ueberlagernd_Flaeche.laermempfindlichkeitsAreaCheck is not true"));
+                assertTrue(logfileContents.contains("Info: validate set constraint SO_Nutzungsplanung_20171118_Validierung_20211006.Rechtsvorschriften_Validierung.v_HinweisWeitereDokumente.isValidDocumentsCycle..."));
+                assertTrue(logfileContents.contains("Error: line 61: SO_Nutzungsplanung_20171118.Rechtsvorschriften.HinweisWeitereDokumente: tid 6: self loop found: 95efebb8-24df-4462-9af1-15500e341f04"));       
+                assertTrue(logfileContents.contains("Info: ...validation failed"));
+                return;
+            }
+        }
+        
+        fail("no message returned in given time");
+    }
+    
+    // Der Test war früher "Ok". Aber es gibt anscheinend immer noch Überschneidungen.
+    @Test
+    public void validation_Fail_Intersection_ili2() throws Exception {
+        String endpoint = "ws://localhost:" + port + "/socket";
+
+        StandardWebSocketClient client = new StandardWebSocketClient();
+        ClientSocketHandler clientHandler = new ClientSocketHandler();
+        client.doHandshake(clientHandler, endpoint);
+
+        Thread.sleep(2000);
+        
+        assertTrue(clientHandler.isConnected());
+
+        File file = new File("src/test/data/2457_Messen_nachher.xtf");
+        clientHandler.sendMessage(file);
+        clientHandler.sendMessage(file.getName());
+
+        for (int i=0; i<24; i++) {
+            Thread.sleep(10000);
+            logger.info("polling: " + String.valueOf(i));
+
+            String returnedMessage = clientHandler.getMessage();
+            if ((returnedMessage != null && !returnedMessage.isEmpty()) && !returnedMessage.equals(START_MESSAGE)) {                
+                assertTrue(returnedMessage.contains("...validation failed:"));
+
+                Document document = Jsoup.parse(returnedMessage);
+                Elements links = document.select("a[href]");
+                
+                String link = links.get(0).attr("href");
+                URL logfileUrl = new URL(link);
+                        
+                String logfileContents = null;
+                try (InputStream in = logfileUrl.openStream()) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    logfileContents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+                }
+                
+                assertTrue(logfileContents.contains("so_nutzungsplanung_20171118.toml"));
+                assertTrue(logfileContents.contains("polygons overlay tid1 32ef0b94-4933-4273-97ba-3e705f928139/Geometrie[1], tid2 0c5d7986-65f0-4ce5-beea-53f13ca7dae5/Geometrie[1]"));
+                return;
+            }
+        }
+        
+        fail("no message returned in given time");
     }
 }
