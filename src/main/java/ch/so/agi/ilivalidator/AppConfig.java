@@ -2,6 +2,7 @@ package ch.so.agi.ilivalidator;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.filter.ForwardedHeaderFilter;
 
 @Configuration
@@ -9,6 +10,11 @@ public class AppConfig {
     @Bean
     ForwardedHeaderFilter forwardedHeaderFilter() {
         return new ForwardedHeaderFilter();
+    }
+
+    @Bean
+    RequestContextListener requestContextListener() {
+        return new RequestContextListener();
     }
 
     @Bean

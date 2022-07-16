@@ -108,8 +108,14 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
             //FIXME: java.lang.IllegalStateException: No current ServletRequestAttributes
             // Ich bin nicht in einem Servlet, sondern in einem WebSocketHandler...
             
-            TextMessage resultMessage = new TextMessage(resultText + " <a href='https://localhost:8080/"+getHost()+logKey+"' target='_blank'>Download log file</a> / "
-                    + " <a href='https://localhost:8080/"+getHost()+xtfLogKey+"'' target='_blank'>Download XTF log file.</a><br/><br/>   ");
+            log.info(session.getHandshakeHeaders().toSingleValueMap().toString());
+            log.info(session.getLocalAddress().getHostName());
+            log.info(session.getLocalAddress().getAddress().getHostName());
+            log.info(session.getUri().toString());
+            
+            
+            TextMessage resultMessage = new TextMessage(resultText + " <a href='https://localhost:8080/"+logKey+"' target='_blank'>Download log file</a> / "
+                    + " <a href='https://localhost:8080/"+xtfLogKey+"'' target='_blank'>Download XTF log file.</a><br/><br/>   ");
             session.sendMessage(resultMessage);
             
             // Die Websocket-Session und damit das dazugehörige Transferfile aus
