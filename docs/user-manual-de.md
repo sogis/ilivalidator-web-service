@@ -42,3 +42,5 @@ Neben der normalen Log-Datei steht ebenfalls die XTF-Log-Datei zum Download zur 
 
 ![QGIS XTF Log](./images/qgisplugin02.png)
 
+## REST-Schnittstelle
+

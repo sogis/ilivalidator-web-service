@@ -1,4 +1,4 @@
-package ch.so.agi.ilivalidator;
+package ch.so.agi.ilivalidator.service;
 
 import java.io.File;
 import java.io.IOException;

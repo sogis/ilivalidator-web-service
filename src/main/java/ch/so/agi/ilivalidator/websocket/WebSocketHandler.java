@@ -1,19 +1,14 @@
-package ch.so.agi.ilivalidator;
+package ch.so.agi.ilivalidator.websocket;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
-import software.amazon.awssdk.services.s3.model.PutObjectAclRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.S3Client;
+import ch.so.agi.ilivalidator.service.IlivalidatorService;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,7 +20,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +27,7 @@ import org.slf4j.LoggerFactory;
 public class WebSocketHandler extends AbstractWebSocketHandler {    
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private static String FOLDER_PREFIX = "ilivalidator_";
+//    private static String FOLDER_PREFIX = "ilivalidator_";
     private static String LOG_ENDPOINT = "log";
     private static String HEX_COLOR_SUCCESS = "#58D68D";
     private static String HEX_COLOR_FAIL = "#EC7063";
@@ -46,10 +40,13 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
 
     @Value("${app.workDirectory}")
     private String workDirectory;
+    
+    @Value("${app.folderPrefix}")
+    private String folderPrefix;
 
     @Autowired
     IlivalidatorService ilivalidator;
-
+    
     // Dient dem Verwalten der Websocket-Session und
     // dem Zugriff der zu prüfenden Datein über verschiedene Methoden
     // hinweg. Die Kombination Session-Id und Datei ist eindeutig,
@@ -78,25 +75,11 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
         String allObjectsAccessible = "true";
 
         boolean valid;
-//        String logKey;
-//        String xtfLogKey;
         try {
             // Run the validation.
             session.sendMessage(new TextMessage("Validating..."));
             valid = ilivalidator.validate(allObjectsAccessible, configFile, namedFile.toFile().getAbsolutePath(), logFilename);
-            
-            // Upload log file to S3.
-            log.info("log file: " + logFilename);
-//            Region region = Region.EU_CENTRAL_1;
-//            S3Client s3 = S3Client.builder().region(region).build();
-                    
-//            String subfolder = new File(new File(logFilename).getParent()).getName();
-//            log.info(subfolder);
-//            String s3Logfilename = new File(logFilename).getName();
-//            logKey = subfolder + "/" + s3Logfilename;
-//            String s3XtfLogfilename = new File(logFilename + ".xtf").getName();
-//            xtfLogKey = subfolder + "/" + s3XtfLogfilename;
-            
+                        
             String logKey = new File(new File(logFilename).getParent()).getName() + "/" + new File(logFilename).getName();
             String xtfLogKey = logKey + ".xtf";
             
@@ -105,33 +88,17 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
                 resultText = "<span style='background-color:"+HEX_COLOR_FAIL+"'>...validation failed:</span>";
             }
             
-            //FIXME: java.lang.IllegalStateException: No current ServletRequestAttributes
-            // Ich bin nicht in einem Servlet, sondern in einem WebSocketHandler...
+            String scheme = session.getUri().getScheme().length() == 3 ? "https" : "http";
+            String host = session.getUri().getHost();
+            String port = session.getUri().getPort() != 80 ? ":"+String.valueOf(session.getUri().getPort()) : "";
+            String path = session.getUri().getPath().replaceFirst("/socket", "");
+            String baseUrl = scheme+"://"+host+port+"/"+path+"/logs/";
             
-            log.info(session.getHandshakeHeaders().toSingleValueMap().toString());
-            log.info(session.getLocalAddress().getHostName());
-            log.info(session.getLocalAddress().getAddress().getHostName());
-            log.info(session.getUri().toString());
-            
-            
-            TextMessage resultMessage = new TextMessage(resultText + " <a href='https://localhost:8080/"+logKey+"' target='_blank'>Download log file</a> / "
-                    + " <a href='https://localhost:8080/"+xtfLogKey+"'' target='_blank'>Download XTF log file.</a><br/><br/>   ");
+            TextMessage resultMessage = new TextMessage(resultText 
+                    + " <a href='"+fixUrl(baseUrl+logKey)+"' target='_blank'>Download log file</a> / "
+                    + " <a href='"+fixUrl(baseUrl+xtfLogKey)+"' target='_blank'>Download XTF log file.</a><br/><br/>");
             session.sendMessage(resultMessage);
             
-            // Die Websocket-Session und damit das dazugehörige Transferfile aus
-            // der Websocket-Map löschen. 
-            sessionFileMap.remove(session.getId());
-
-//            log.info("Uploading objects... " + logKey + ", " + xtfLogKey);
-////            s3.putObject(PutObjectRequest.builder().bucket(s3Bucket).key(logKey).contentType("plain/text; charset=utf-8").build(), new File(logFilename).toPath());
-////            s3.putObjectAcl(PutObjectAclRequest.builder().bucket(s3Bucket).key(logKey).acl(ObjectCannedACL.PUBLIC_READ).build());
-////            s3.putObject(PutObjectRequest.builder().bucket(s3Bucket).key(xtfLogKey).contentType("text/xml").build(), new File(logFilename + ".xtf").toPath());
-////            s3.putObjectAcl(PutObjectAclRequest.builder().bucket(s3Bucket).key(xtfLogKey).acl(ObjectCannedACL.PUBLIC_READ).build());
-//            log.info("Upload complete");
-            
-//            s3.close();            
-                        
-            //FileUtils.deleteDirectory(new File(file.getParent()));
         } catch (Exception e) {
             e.printStackTrace();            
             log.error(e.getMessage());
@@ -139,19 +106,17 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
             TextMessage errorMessage = new TextMessage("An error occured while validating the data:<br>" + e.getMessage());
             session.sendMessage(errorMessage);
             
-            // Temp-Verzeichnis mit der Transferdatei löschen.
-            // TODO: Warum nicht aus der Session löschen???
-            // finally und sonst der Rest hier?
-            //FileUtils.deleteDirectory(namedFile.toFile().getParentFile());
             return;
-        } 
-                
-        //FileUtils.deleteDirectory(namedFile.toFile().getParentFile());
+        } finally {
+            // Die Websocket-Session und damit das dazugehörige Transferfile aus
+            // der Websocket-Map löschen. 
+            sessionFileMap.remove(session.getId());
+        }
     }
     
     @Override
     protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws IOException {
-        Path tmpDirectory = Files.createTempDirectory(Paths.get(workDirectory), FOLDER_PREFIX);
+        Path tmpDirectory = Files.createTempDirectory(Paths.get(workDirectory), folderPrefix);
         
         // ilivalidator muss wissen, ob es sich um eine ili1- oder ili2-Datei handelt.
         // Der Namen muss jedoch separat mitgeschickt werden. Gespeichert wird die Datei mit einem
@@ -168,11 +133,12 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
         // benötigten Infos hat) die Prüfung durchführen kann.
         sessionFileMap.put(session.getId(), uploadFilePath.toFile());
     }
-    
-    private String getHost() {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
-    }
-    
-    // TODO
-    // delete directories older than.... (siehe oereb-web-service)
+        
+    /*
+     * - It finds multiple slashes in url preserving ones after protocol regardless of it.
+     * - ... 
+     */
+    private static String fixUrl(String url) {
+        return url.replaceAll("(?<=[^:\\s])(\\/+\\/)", "/");
+  }
 }

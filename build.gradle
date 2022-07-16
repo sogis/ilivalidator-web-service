@@ -53,11 +53,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
-    implementation 'commons-io:commons-io:2.6'  
+    implementation 'commons-io:commons-io:2.11.0'  
     implementation 'ch.interlis:ilivalidator:1.11.15-SNAPSHOT'
     implementation 'io.github.sogis:ilivalidator-custom-functions:1.1.47'
-    implementation platform('software.amazon.awssdk:bom:2.15.33')
-    implementation 'software.amazon.awssdk:s3'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {

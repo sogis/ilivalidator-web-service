@@ -13,6 +13,18 @@ The ilivalidator web service is a [spring boot](https://projects.spring.io/sprin
  * naming convention, damit toml greifen.
  * ...
 
+
+
+```
+2022-07-16 14:58:53.988  INFO 1 --- [nio-8888-exec-9] c.s.a.ilivalidator.IlivalidatorService   : Validation end.
+2022-07-16 14:58:53.990  INFO 1 --- [nio-8888-exec-9] ch.so.agi.ilivalidator.WebSocketHandler  : ************: {host=geo-t.so.ch, upgrade=WebSocket, connection=upgrade, pragma=no-cache, cache-control=no-cache, user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36, origin=https://geo-t.so.ch, sec-websocket-version=13, accept-encoding=gzip, deflate, br, accept-language=en,es;q=0.9,de;q=0.8,en-US;q=0.7,fr;q=0.6,nb;q=0.5, sec-websocket-key=dcXQM/DvOFqVkxxWYCtU6A==, sec-websocket-extensions=permessage-deflate; client_max_window_bits, hsp_client_addr=46.255.172.215, hsp-listeneruri=https://geo-t.so.ch, requestcorrelator=7f0100-1326-2022.07.16_1458.46.451-001, connectioncorrelator=7f0100-1326-2022.07.16_1458.46.451-001, hsp_client_city=Koppigen, hsp_client_country=CH, hsp_client_continent=EU, x-forwarded-server=geo-t.so.ch, 127.0.0.1, clientcorrelator=NThxRHP4V9E$}
+2022-07-16 14:58:53.990  INFO 1 --- [nio-8888-exec-9] ch.so.agi.ilivalidator.WebSocketHandler  : ************: ilivalidator-web-service-34-2j4fr
+2022-07-16 14:58:53.990  INFO 1 --- [nio-8888-exec-9] ch.so.agi.ilivalidator.WebSocketHandler  : ************: ilivalidator-web-service-34-2j4fr
+2022-07-16 14:58:53.990  INFO 1 --- [nio-8888-exec-9] ch.so.agi.ilivalidator.WebSocketHandler  : ************: wss://geo-t.so.ch/ilivalidator//socket
+2022-07-16 14:58:53.990  INFO 1 --- [nio-8888-exec-9] ch.so.agi.ilivalidator.WebSocketHandler  : log file: /tmp/ilivalidator_14573654641354684883/254900.itf.log
+
+```
+
 ## Features
 
 * checks INTERLIS 1+2 transfer files

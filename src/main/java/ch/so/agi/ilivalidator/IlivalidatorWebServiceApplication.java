@@ -21,13 +21,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+@EnableScheduling
 @SpringBootApplication
 public class IlivalidatorWebServiceApplication {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    private ResourceLoader resourceLoader;
 
     @Value("${app.connectTimeout}")
     private String connectTimeout;

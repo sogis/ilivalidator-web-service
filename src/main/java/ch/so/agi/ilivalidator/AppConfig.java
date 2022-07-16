@@ -13,11 +13,6 @@ public class AppConfig {
     }
 
     @Bean
-    RequestContextListener requestContextListener() {
-        return new RequestContextListener();
-    }
-
-    @Bean
     void setPluginClasses() {
         System.setProperty("ch.ehi.iox-ili.pluginClasses",
                 "ch.so.agi.ilivalidator.ext.AreaIoxPlugin,"

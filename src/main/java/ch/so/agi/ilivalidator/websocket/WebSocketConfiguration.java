@@ -1,4 +1,4 @@
-package ch.so.agi.ilivalidator;
+package ch.so.agi.ilivalidator.websocket;
 
 import java.util.concurrent.TimeUnit;
 
