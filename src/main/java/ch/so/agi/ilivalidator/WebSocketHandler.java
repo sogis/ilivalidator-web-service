@@ -78,8 +78,8 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
         String allObjectsAccessible = "true";
 
         boolean valid;
-        String logKey;
-        String xtfLogKey;
+//        String logKey;
+//        String xtfLogKey;
         try {
             // Run the validation.
             session.sendMessage(new TextMessage("Validating..."));
@@ -87,25 +87,45 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
             
             // Upload log file to S3.
             log.info("log file: " + logFilename);
-            Region region = Region.EU_CENTRAL_1;
-            S3Client s3 = S3Client.builder().region(region).build();
+//            Region region = Region.EU_CENTRAL_1;
+//            S3Client s3 = S3Client.builder().region(region).build();
                     
-            String subfolder = new File(new File(logFilename).getParent()).getName();
-            String s3Logfilename = new File(logFilename).getName();
-            logKey = subfolder + "/" + s3Logfilename;
-            String s3XtfLogfilename = new File(logFilename + ".xtf").getName();
-            xtfLogKey = subfolder + "/" + s3XtfLogfilename;
-  
-            log.info("Uploading objects... " + logKey + ", " + xtfLogKey);
-            s3.putObject(PutObjectRequest.builder().bucket(s3Bucket).key(logKey).contentType("plain/text; charset=utf-8").build(), new File(logFilename).toPath());
-            s3.putObjectAcl(PutObjectAclRequest.builder().bucket(s3Bucket).key(logKey).acl(ObjectCannedACL.PUBLIC_READ).build());
-            s3.putObject(PutObjectRequest.builder().bucket(s3Bucket).key(xtfLogKey).contentType("text/xml").build(), new File(logFilename + ".xtf").toPath());
-            s3.putObjectAcl(PutObjectAclRequest.builder().bucket(s3Bucket).key(xtfLogKey).acl(ObjectCannedACL.PUBLIC_READ).build());
-            log.info("Upload complete");
+//            String subfolder = new File(new File(logFilename).getParent()).getName();
+//            log.info(subfolder);
+//            String s3Logfilename = new File(logFilename).getName();
+//            logKey = subfolder + "/" + s3Logfilename;
+//            String s3XtfLogfilename = new File(logFilename + ".xtf").getName();
+//            xtfLogKey = subfolder + "/" + s3XtfLogfilename;
             
-            s3.close();            
+            String logKey = new File(new File(logFilename).getParent()).getName() + "/" + new File(logFilename).getName();
+            String xtfLogKey = logKey + ".xtf";
+            
+            String resultText = "<span style='background-color:"+HEX_COLOR_SUCCESS+";'>...validation done:</span>";
+            if (!valid) {
+                resultText = "<span style='background-color:"+HEX_COLOR_FAIL+"'>...validation failed:</span>";
+            }
+            
+            //FIXME: java.lang.IllegalStateException: No current ServletRequestAttributes
+            // Ich bin nicht in einem Servlet, sondern in einem WebSocketHandler...
+            
+            TextMessage resultMessage = new TextMessage(resultText + " <a href='https://localhost:8080/"+getHost()+logKey+"' target='_blank'>Download log file</a> / "
+                    + " <a href='https://localhost:8080/"+getHost()+xtfLogKey+"'' target='_blank'>Download XTF log file.</a><br/><br/>   ");
+            session.sendMessage(resultMessage);
+            
+            // Die Websocket-Session und damit das dazugehörige Transferfile aus
+            // der Websocket-Map löschen. 
+            sessionFileMap.remove(session.getId());
+
+//            log.info("Uploading objects... " + logKey + ", " + xtfLogKey);
+////            s3.putObject(PutObjectRequest.builder().bucket(s3Bucket).key(logKey).contentType("plain/text; charset=utf-8").build(), new File(logFilename).toPath());
+////            s3.putObjectAcl(PutObjectAclRequest.builder().bucket(s3Bucket).key(logKey).acl(ObjectCannedACL.PUBLIC_READ).build());
+////            s3.putObject(PutObjectRequest.builder().bucket(s3Bucket).key(xtfLogKey).contentType("text/xml").build(), new File(logFilename + ".xtf").toPath());
+////            s3.putObjectAcl(PutObjectAclRequest.builder().bucket(s3Bucket).key(xtfLogKey).acl(ObjectCannedACL.PUBLIC_READ).build());
+//            log.info("Upload complete");
+            
+//            s3.close();            
                         
-            FileUtils.deleteDirectory(new File(file.getParent()));
+            //FileUtils.deleteDirectory(new File(file.getParent()));
         } catch (Exception e) {
             e.printStackTrace();            
             log.error(e.getMessage());
@@ -116,26 +136,11 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
             // Temp-Verzeichnis mit der Transferdatei löschen.
             // TODO: Warum nicht aus der Session löschen???
             // finally und sonst der Rest hier?
-            FileUtils.deleteDirectory(namedFile.toFile().getParentFile());
+            //FileUtils.deleteDirectory(namedFile.toFile().getParentFile());
             return;
         } 
                 
-        // Browser response.
-        // TODO: "getHost()" oder ähnlich (siehe unten).
-        String resultText = "<span style='background-color:"+HEX_COLOR_SUCCESS+";'>...validation done:</span>";
-        if (!valid) {
-            resultText = "<span style='background-color:"+HEX_COLOR_FAIL+"'>...validation failed:</span>";
-        }
-        
-        TextMessage resultMessage = new TextMessage(resultText + " <a href='https://s3."+Region.EU_CENTRAL_1.id()+".amazonaws.com/"+s3Bucket+"/"+logKey+"' target='_blank'>Download log file</a> / "
-                + " <a href='https://s3."+Region.EU_CENTRAL_1.id()+".amazonaws.com/"+s3Bucket+"/"+xtfLogKey+"' target='_blank'>Download XTF log file.</a><br/><br/>   ");
-        session.sendMessage(resultMessage);
-        
-        // Die Websocket-Session und damit das dazugehörige Transferfile aus
-        // der Websocket-Map löschen. Das Temp-Verzeichnis in dem die Transferdatei
-        // gespeichert wurde, wird ebenfalls gelöscht.
-        sessionFileMap.remove(session.getId());
-        FileUtils.deleteDirectory(namedFile.toFile().getParentFile());
+        //FileUtils.deleteDirectory(namedFile.toFile().getParentFile());
     }
     
     @Override
@@ -152,7 +157,7 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
         fc.write(message.getPayload());
         fc.close();
 
-        // Die Datei wird in eine Map kopiert, damit man via
+        // Die Datei wird in eine Map "kopiert", damit man via
         // Websocket-Session-Id Zugriff hat und in einer anderen Methode (wenn man alle 
         // benötigten Infos hat) die Prüfung durchführen kann.
         sessionFileMap.put(session.getId(), uploadFilePath.toFile());
@@ -161,4 +166,7 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
     private String getHost() {
         return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
     }
+    
+    // TODO
+    // delete directories older than.... (siehe oereb-web-service)
 }
