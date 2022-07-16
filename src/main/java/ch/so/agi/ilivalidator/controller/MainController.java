@@ -2,6 +2,7 @@ package ch.so.agi.ilivalidator.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -44,9 +45,6 @@ public class MainController {
     @Value("${app.folderPrefix}")
     private String folderPrefix;
     
-    @Autowired
-    private FileStorageService fileStorageService;
-
     @GetMapping("/ping")
     public ResponseEntity<?> ping()  {
         return new ResponseEntity<String>("ilivalidator-web-service", HttpStatus.OK);
@@ -72,35 +70,7 @@ public class MainController {
             throw new IllegalStateException(e);  
         }
     }
-    
-    @PostMapping("/rest/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam(name="file", required=true) MultipartFile file, 
-            @RequestParam(name="allObjectsAccessible", required=false, defaultValue="true") Boolean allObjectsAccessible, 
-            @RequestParam(name="configFile", required=false, defaultValue="on") Boolean configFile) {
-        
-        log.debug(allObjectsAccessible.toString());
-        log.debug(configFile.toString());
-
-        Path uploadedFile = fileStorageService.storeFile(file);        
-        log.debug(uploadedFile.toAbsolutePath().toString());
-
-        return ResponseEntity.ok()
-                .body("fubar");
-
-        
-//        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-//                .path("/downloadFile/")
-//                .path(fileName)
-//                .toUriString();
-
-//        return new UploadFileResponse(fileName, fileDownloadUri,
-//                file.getContentType(), file.getSize());
-    }
-
-    
-    
-    
-    
+  
     /*
      * Verzeichnisse löschen, die älter als 60x60 Sekunden alt sind.
      */
@@ -127,5 +97,4 @@ public class MainController {
             }
         }
     }
-
 }

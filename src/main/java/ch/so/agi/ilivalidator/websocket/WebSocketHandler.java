@@ -27,16 +27,12 @@ import org.slf4j.LoggerFactory;
 public class WebSocketHandler extends AbstractWebSocketHandler {    
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-//    private static String FOLDER_PREFIX = "ilivalidator_";
-    private static String LOG_ENDPOINT = "log";
+    private static String LOG_ENDPOINT = "logs";
     private static String HEX_COLOR_SUCCESS = "#58D68D";
     private static String HEX_COLOR_FAIL = "#EC7063";
     
     @Value("${server.port}")
     protected String serverPort;
-    
-    @Value("${app.s3Bucket}")
-    private String s3Bucket;
 
     @Value("${app.workDirectory}")
     private String workDirectory;
@@ -98,15 +94,12 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
                     + " <a href='"+fixUrl(baseUrl+logKey)+"' target='_blank'>Download log file</a> / "
                     + " <a href='"+fixUrl(baseUrl+xtfLogKey)+"' target='_blank'>Download XTF log file.</a><br/><br/>");
             session.sendMessage(resultMessage);
-            
         } catch (Exception e) {
             e.printStackTrace();            
             log.error(e.getMessage());
             
             TextMessage errorMessage = new TextMessage("An error occured while validating the data:<br>" + e.getMessage());
             session.sendMessage(errorMessage);
-            
-            return;
         } finally {
             // Die Websocket-Session und damit das dazugehörige Transferfile aus
             // der Websocket-Map löschen. 
