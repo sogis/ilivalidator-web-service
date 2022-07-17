@@ -2,6 +2,8 @@ package ch.so.agi.ilivalidator.controller;
 
 import java.nio.file.Path;
 
+import org.jobrunr.jobs.JobId;
+import org.jobrunr.scheduling.JobScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import ch.so.agi.ilivalidator.service.FileStorageService;
+import ch.so.agi.ilivalidator.service.IlivalidatorJobService;
 
 @ConditionalOnProperty(
         value="app.restApiEnabled", 
@@ -32,6 +35,12 @@ public class ApiController {
     @Autowired
     private FileStorageService fileStorageService;
 
+    @Autowired
+    private JobScheduler jobScheduler;
+    
+    @Autowired
+    private IlivalidatorJobService ilivalidatorService;
+
     @PostMapping("/rest/upload")
     public ResponseEntity<?> uploadFile(@RequestParam(name="file", required=true) MultipartFile file, 
             @RequestParam(name="allObjectsAccessible", required=false, defaultValue="true") Boolean allObjectsAccessible, 
@@ -41,7 +50,12 @@ public class ApiController {
         log.debug(configFile.toString());
 
         Path uploadedFile = fileStorageService.storeFile(file);        
-        log.debug(uploadedFile.toAbsolutePath().toString());
+        log.info(uploadedFile.toAbsolutePath().toString());
+        
+        
+        String inputFilename = uploadedFile.toAbsolutePath().toString();
+        JobId jobId = jobScheduler.enqueue(() -> ilivalidatorService.validate(inputFilename));
+        log.info(jobId.toString());
 
         return ResponseEntity.ok()
                 .body("fubar");

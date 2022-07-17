@@ -1,5 +1,8 @@
 package ch.so.agi.ilivalidator;
 
+import org.jobrunr.jobs.mappers.JobMapper;
+import org.jobrunr.storage.InMemoryStorageProvider;
+import org.jobrunr.storage.StorageProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextListener;
@@ -22,4 +25,14 @@ public class AppConfig {
                         + "ch.so.agi.ilivalidator.ext.RingSelfIntersectionIoxPlugin,"
                         + "ch.so.agi.ilivalidator.ext.TooFewPointsPolylineIoxPlugin");
     }
+    
+    // Falls eine Datasource vorhanden ist, wird diese als StorageProvider verwendent.
+    // Weitere Konfiguration ist dann nicht mehr notwendig.
+//    @Bean
+//    StorageProvider storageProvider(JobMapper jobMapper) {
+//        InMemoryStorageProvider storageProvider = new InMemoryStorageProvider();
+//        storageProvider.setJobMapper(jobMapper);
+//        return storageProvider;
+//    }
+
 }
