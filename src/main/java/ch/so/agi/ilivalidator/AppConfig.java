@@ -26,7 +26,7 @@ public class AppConfig {
                         + "ch.so.agi.ilivalidator.ext.TooFewPointsPolylineIoxPlugin");
     }
     
-    // Falls eine Datasource vorhanden ist, wird diese als StorageProvider verwendent.
+    // Falls eine Datasource vorhanden ist, wird diese als StorageProvider verwendet.
     // Weitere Konfiguration ist dann nicht mehr notwendig.
 //    @Bean
 //    StorageProvider storageProvider(JobMapper jobMapper) {
