@@ -14,7 +14,7 @@ public class IlivalidatorJobService {
         log.info("validating: " + inputFilename);
         
         try {
-            Thread.sleep(30000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

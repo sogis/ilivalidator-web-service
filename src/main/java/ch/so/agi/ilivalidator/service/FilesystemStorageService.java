@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class FileStorageService {
+public class FilesystemStorageService implements StorageService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Value("${app.workDirectory}")
@@ -23,7 +23,7 @@ public class FileStorageService {
     @Value("${app.folderPrefix}")
     private String folderPrefix;
 
-    public Path storeFile(MultipartFile file) {
+    public Path store(MultipartFile file) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -43,5 +43,18 @@ public class FileStorageService {
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
+    }
+
+    @Override
+    public void init() {
+    }
+
+    @Override
+    public Path load(String filename) {
+        return null;
+    }
+
+    @Override
+    public void delete(String filename) {
     }
 }
