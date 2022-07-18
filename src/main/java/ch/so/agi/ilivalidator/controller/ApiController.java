@@ -56,6 +56,7 @@ public class ApiController {
     
     // TODO:
     // /rest/jobs als Endpunkt?
+    // openapi?
     
     @PostMapping("/rest/upload")
     public ResponseEntity<?> uploadFile(@RequestParam(name="file", required=true) MultipartFile file, 
