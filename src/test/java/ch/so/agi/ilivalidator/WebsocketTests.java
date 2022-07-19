@@ -19,7 +19,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.BinaryMessage;
@@ -29,14 +28,11 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
-public abstract class IntegrationTests {
-    static Logger logger = LoggerFactory.getLogger(IntegrationTests.class);
+public abstract class WebsocketTests {
+    static Logger logger = LoggerFactory.getLogger(WebsocketTests.class);
 
     @LocalServerPort
     protected String port;
-    
-//    @Value("#{servletContext.contextPath}")
-//    protected String servletContextPath;
     
     private final String START_MESSAGE = "Validating...";
 

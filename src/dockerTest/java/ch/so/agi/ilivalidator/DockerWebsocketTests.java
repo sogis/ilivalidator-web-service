@@ -11,7 +11,7 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
 
 @Testcontainers
 @TestInstance(Lifecycle.PER_CLASS)
-public class DockerIntegrationTests extends IntegrationTests {
+public class DockerWebsocketTests extends WebsocketTests {
     private static int exposedPort = 8080;
     
     @Container

@@ -75,7 +75,7 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
         try {
             // Run the validation.
             session.sendMessage(new TextMessage("Validating..."));
-            valid = ilivalidator.validate(allObjectsAccessible, configFile, namedFile.toFile().getAbsolutePath(), logFileName);
+            valid = ilivalidator.validate(namedFile.toFile().getAbsolutePath(), logFileName, allObjectsAccessible, configFile);
                         
             String logKey = Utils.getLogFileUrlPathElement(logFileName);
             String xtfLogKey = logKey + ".xtf";

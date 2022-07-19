@@ -3,9 +3,12 @@ package ch.so.agi.ilivalidator.controller;
 import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
+import org.jobrunr.jobs.Job;
 import org.jobrunr.jobs.JobId;
 import org.jobrunr.scheduling.JobScheduler;
+import org.jobrunr.storage.StorageProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,10 +62,9 @@ public class ApiController {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    StorageProvider storageProvider;
 
-    // TODO:
-    // openapi?
-    
     @PostMapping(value="/rest/jobs", consumes = {"multipart/form-data"})
     public ResponseEntity<?> uploadFile(@RequestParam(name="file", required=true) @RequestBody MultipartFile file, 
             @RequestParam(name="allObjectsAccessible", required=false, defaultValue="true") String allObjectsAccessible, 
@@ -88,6 +90,11 @@ public class ApiController {
     
     @GetMapping("/rest/jobs/{jobId}")
     public ResponseEntity<?> getJobById(@PathVariable String jobId) {
+        
+        Job job = storageProvider.getJobById(UUID.fromString(jobId));
+        log.info(job.getJobDetails().getJobParameters().get(0).getObject().toString());
+        log.info(job.getJobDetails().getJobParameters().get(0).getObject().toString());
+        
         String stmt = """
 SELECT
     id, jobAsJson, state, createdAt, updatedAt
