@@ -9,9 +9,8 @@ import org.jobrunr.scheduling.JobScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,9 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
+import ch.so.agi.ilivalidator.Utils;
 import ch.so.agi.ilivalidator.model.JobResponse;
 import ch.so.agi.ilivalidator.service.FilesystemStorageService;
-import ch.so.agi.ilivalidator.service.IlivalidatorJobService;
+import ch.so.agi.ilivalidator.service.IlivalidatorService;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @ConditionalOnProperty(
         value="app.restApiEnabled", 
@@ -35,11 +42,7 @@ import ch.so.agi.ilivalidator.service.IlivalidatorJobService;
 public class ApiController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-//    @Value("${app.workDirectory}")
-//    private String workDirectory;
-//    
-//    @Value("${app.folderPrefix}")
-//    private String folderPrefix;
+    private static String LOG_ENDPOINT = "logs";
     
     @Autowired
     private FilesystemStorageService fileStorageService;
@@ -48,78 +51,82 @@ public class ApiController {
     private JobScheduler jobScheduler;
     
     @Autowired
-    private IlivalidatorJobService ilivalidatorService;
+    private IlivalidatorService ilivalidatorService;
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
-
+    private JdbcTemplate jdbcTemplate;
     
+    @Autowired
+    private ObjectMapper objectMapper;
+
+
     // TODO:
-    // /rest/jobs als Endpunkt?
     // openapi?
     
-    @PostMapping("/rest/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam(name="file", required=true) MultipartFile file, 
-            @RequestParam(name="allObjectsAccessible", required=false, defaultValue="true") Boolean allObjectsAccessible, 
-            @RequestParam(name="configFile", required=false, defaultValue="on") Boolean configFile) {
+    @PostMapping(value="/rest/jobs", consumes = {"multipart/form-data"})
+    public ResponseEntity<?> uploadFile(@RequestParam(name="file", required=true) @RequestBody MultipartFile file, 
+            @RequestParam(name="allObjectsAccessible", required=false, defaultValue="true") String allObjectsAccessible, 
+            @RequestParam(name="configFile", required=false, defaultValue="on") String configFile) {
         
         log.debug(allObjectsAccessible.toString());
         log.debug(configFile.toString());
 
         Path uploadedFile = fileStorageService.store(file);        
-        log.info(uploadedFile.toAbsolutePath().toString());
+        log.debug(uploadedFile.toAbsolutePath().toString());
         
-        String inputFilename = uploadedFile.toAbsolutePath().toString();
-        JobId jobId = jobScheduler.enqueue(() -> ilivalidatorService.validate(inputFilename));
-        log.info(jobId.toString());
+        String inputFileName = uploadedFile.toAbsolutePath().toString();
+        String logFileName = Utils.getLogFileName(inputFileName);
+        
+        JobId jobId = jobScheduler.enqueue(() -> ilivalidatorService.validate(inputFileName, logFileName, allObjectsAccessible, configFile));
+        log.debug(jobId.toString());
 
         return ResponseEntity
                 .accepted()
-                .header("Operation-Location", getHost()+"/rest/operations/"+jobId)
-                .body(null);
-        
-
-        
-//        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-//                .path("/downloadFile/")
-//                .path(fileName)
-//                .toUriString();
-
-//        return new UploadFileResponse(fileName, fileDownloadUri,
-//                file.getContentType(), file.getSize());
+                .header("Operation-Location", getHost()+"/rest/jobs/"+jobId)
+                .body(null);        
     }
     
-    @GetMapping("/rest/operations/{jobId}")
+    @GetMapping("/rest/jobs/{jobId}")
     public ResponseEntity<?> getJobById(@PathVariable String jobId) {
         String stmt = """
 SELECT
-    id, state, createdAt, updatedAt
+    id, jobAsJson, state, createdAt, updatedAt
 FROM
     jobrunr_jobs
 WHERE
     id =?             
-""";
-        
-        // TODO: 
-        // - record ohne null in json
-        // - mehrere constructors für record.
-        
+""";        
         JobResponse jobResponse = jdbcTemplate.queryForObject(stmt, new RowMapper<JobResponse>() {
             @Override
-            public JobResponse mapRow(ResultSet rs, int rowNum) throws SQLException {                
-                JobResponse jobResponse = new JobResponse(
-                        rs.getTimestamp("createdAt").toLocalDateTime(),
-                        rs.getTimestamp("updatedAt").toLocalDateTime(),
-                        rs.getString("state"),
-                        null,
-                        null
-                    );
+            public JobResponse mapRow(ResultSet rs, int rowNum) throws SQLException {   
+                String state = rs.getString("state");
+
+                String logFileLocation = null;
+                String xtfLogFileLocation = null;
+                if (state.equalsIgnoreCase("SUCCEEDED")) {
+                    try {
+                        JsonNode response = objectMapper.readTree(rs.getString("jobAsJson"));                    
+                        ArrayNode jobParameters = (ArrayNode) response.get("jobDetails").get("jobParameters");
+                        String logFileName = jobParameters.get(1).get("object").asText();            
+                        logFileLocation = Utils.fixUrl(getHost() + "/" + LOG_ENDPOINT + "/" + Utils.getLogFileUrlPathElement(logFileName));
+                        xtfLogFileLocation = logFileLocation + ".xtf";
+                    } catch (JsonProcessingException e) {
+                        new RuntimeException(e.getMessage());
+                    }
+                }
+
+                JobResponse jobResponse = null;
+                    jobResponse = new JobResponse(
+                            rs.getTimestamp("createdAt").toLocalDateTime(),
+                            rs.getTimestamp("updatedAt").toLocalDateTime(),
+                            state,
+                            logFileLocation,
+                            xtfLogFileLocation
+                        );
 
                 return jobResponse;
             }
         }, jobId);
-        
-        log.info(jobResponse.toString());
         
         if (!jobResponse.status().equalsIgnoreCase("SUCCEEDED")) {
             return ResponseEntity.ok().header("Retry-After", "30").body(jobResponse);

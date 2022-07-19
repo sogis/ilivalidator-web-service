@@ -20,6 +20,7 @@ import ch.interlis.iox_j.StartBasketEvent;
 
 import org.apache.commons.io.FilenameUtils;
 import org.interlis2.validator.Validator;
+import org.jobrunr.jobs.annotations.Job;
 
 @Service
 public class IlivalidatorService {
@@ -41,7 +42,8 @@ public class IlivalidatorService {
      * @throws IOException  If config file cannot be read or copied to file system.
      * @return boolean      True, if transfer file is valid. False, if errors were found.
      */
-    public synchronized boolean validate(String allObjectsAccessible, String doConfigFile, String inputFileName, String logFileName)
+    @Job(name="Ilivalidator")
+    public synchronized boolean validate(String inputFileName, String logFileName, String allObjectsAccessible, String doConfigFile)
             throws IoxException, IOException {        
         Settings settings = new Settings();
         settings.setValue(Validator.SETTING_LOGFILE, logFileName);
@@ -69,7 +71,7 @@ public class IlivalidatorService {
         // Es wird nach einer Toml-Datei gesucht, die in Kleinbuchstaben gleich heisst, wie das Modell gegen
         // das geprüft werden soll.
         // Ist die Datei vorhanden, wird sie ilivalidator als Config-Datei bekannt gemacht.
-        if (doConfigFile != null) {
+        if (doConfigFile.equalsIgnoreCase("on")) {
             File configFile = Paths.get(docBase, configDirectoryName, "toml", modelName.toLowerCase() + ".toml").toFile();
             if (configFile.exists()) {
                 settings.setValue(Validator.SETTING_CONFIGFILE, configFile.getAbsolutePath());

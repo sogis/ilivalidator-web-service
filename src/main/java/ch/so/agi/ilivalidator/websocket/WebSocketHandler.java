@@ -8,6 +8,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
+import ch.so.agi.ilivalidator.Utils;
 import ch.so.agi.ilivalidator.service.IlivalidatorService;
 
 import java.io.File;
@@ -61,8 +62,8 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
         
         session.sendMessage(new TextMessage("Received: " + filename));
         
-        String logFilename = namedFile.toFile().getAbsolutePath() + ".log";
-        log.info(logFilename);
+        String logFileName = Utils.getLogFileName(namedFile);
+        log.info(logFileName);
         
         // Zurzeit wird diese Option im GUI nicht exponiert.
         String configFile = "on";
@@ -74,9 +75,9 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
         try {
             // Run the validation.
             session.sendMessage(new TextMessage("Validating..."));
-            valid = ilivalidator.validate(allObjectsAccessible, configFile, namedFile.toFile().getAbsolutePath(), logFilename);
+            valid = ilivalidator.validate(allObjectsAccessible, configFile, namedFile.toFile().getAbsolutePath(), logFileName);
                         
-            String logKey = new File(new File(logFilename).getParent()).getName() + "/" + new File(logFilename).getName();
+            String logKey = Utils.getLogFileUrlPathElement(logFileName);
             String xtfLogKey = logKey + ".xtf";
             
             String resultText = "<span style='background-color:"+HEX_COLOR_SUCCESS+";'>...validation done:</span>";
@@ -88,11 +89,11 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
             String host = session.getUri().getHost();
             String port = session.getUri().getPort() != 80 ? ":"+String.valueOf(session.getUri().getPort()) : "";
             String path = session.getUri().getPath().replaceFirst("/socket", "");
-            String baseUrl = scheme+"://"+host+port+"/"+path+"/logs/";
+            String baseUrl = scheme+"://"+host+port+"/"+path+"/"+LOG_ENDPOINT+"/";
             
             TextMessage resultMessage = new TextMessage(resultText 
-                    + " <a href='"+fixUrl(baseUrl+logKey)+"' target='_blank'>Download log file</a> / "
-                    + " <a href='"+fixUrl(baseUrl+xtfLogKey)+"' target='_blank'>Download XTF log file.</a><br/><br/>");
+                    + " <a href='"+Utils.fixUrl(baseUrl+logKey)+"' target='_blank'>Download log file</a> / "
+                    + " <a href='"+Utils.fixUrl(baseUrl+xtfLogKey)+"' target='_blank'>Download XTF log file.</a><br/><br/>");
             session.sendMessage(resultMessage);
         } catch (Exception e) {
             e.printStackTrace();            
@@ -126,12 +127,4 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
         // benötigten Infos hat) die Prüfung durchführen kann.
         sessionFileMap.put(session.getId(), uploadFilePath.toFile());
     }
-        
-    /*
-     * - It finds multiple slashes in url preserving ones after protocol regardless of it.
-     * - ... 
-     */
-    private static String fixUrl(String url) {
-        return url.replaceAll("(?<=[^:\\s])(\\/+\\/)", "/");
-  }
 }

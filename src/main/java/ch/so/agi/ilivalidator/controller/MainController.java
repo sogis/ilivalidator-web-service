@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import ch.so.agi.ilivalidator.service.FilesystemStorageService;
+import io.swagger.v3.oas.annotations.Hidden;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,6 +36,7 @@ import java.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Hidden
 @RestController
 public class MainController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
