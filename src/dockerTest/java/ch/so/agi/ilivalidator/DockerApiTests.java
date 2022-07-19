@@ -3,6 +3,15 @@ package ch.so.agi.ilivalidator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
+import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.BootstrapWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
@@ -11,9 +20,13 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
 
 @Testcontainers
 @TestInstance(Lifecycle.PER_CLASS)
-public class DockerWebsocketTests extends WebsocketTests {
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class DockerApiTests extends ApiTests {
     private static int exposedPort = 8080;
     
+    @Autowired
+    protected TestRestTemplate restTemplate2;
+
     @Container
     public static GenericContainer<?> ilivalidatorWebService = new GenericContainer<>("edigonzales/ilivalidator-web-service:latest")
             .waitingFor(Wait.forHttp("/actuator/health"))

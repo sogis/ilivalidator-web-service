@@ -11,6 +11,8 @@ The ilivalidator web service is a [spring boot](https://projects.spring.io/sprin
  * wie werden die Verzeichnisse erstellt (d.h. falls vorhanden, nicht).
  * log-Dir muss geshared sein
  * naming convention, damit toml greifen.
+ * env-Vars
+ * es kann keine alpine image verwendet werden, wegen sqlite lib
  * ...
 
 

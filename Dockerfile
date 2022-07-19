@@ -1,7 +1,10 @@
-FROM bellsoft/liberica-openjdk-alpine-musl:17.0.3
+#FROM bellsoft/liberica-openjdk-alpine-musl:17.0.3
+FROM bellsoft/liberica-openjdk-centos:17.0.3
 
 ARG UID=1001
-RUN adduser -S ilivalidator -u $UID
+
+# --system kann nicht verwendet werden, weil dann keine Repo-Verzeichnisse angelegt werden können.
+RUN adduser -u $UID ilivalidator 
 
 ENV HOME=/work
 WORKDIR $HOME
