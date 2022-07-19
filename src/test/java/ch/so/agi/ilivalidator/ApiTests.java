@@ -20,6 +20,7 @@ import ch.so.agi.ilivalidator.model.JobResponse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.*;
 
@@ -38,11 +39,12 @@ public class ApiTests {
     private String REST_ENDPOINT = "/rest/jobs/";
     private String OPERATION_LOCATION_HEADER = "Operation-Location";
     private String RETRY_AFTER_HEADER = "Retry-After";
+    private int RESULT_POLL_INTERVAL = 5; // seconds
+    private int RESULT_WAIT = 5; // minutes
 
     @Test
     public void validation_Ok_ili1() throws Exception {
-        final String serverUrl = "http://localhost:"+port+REST_ENDPOINT;
-        System.out.println(serverUrl);
+        String serverUrl = "http://localhost:"+port+REST_ENDPOINT;
 
         MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<String, Object>();
         parameters.add("file", new FileSystemResource("src/test/data/ch_254900.itf"));
@@ -51,42 +53,46 @@ public class ApiTests {
         headers.set("Content-Type", "multipart/form-data");
         headers.set("Accept", "text/plain");
 
+        // Datei hochladen und Response-Status-Code auswerten
         ResponseEntity<String> postResponse = restTemplate.postForEntity(
                 serverUrl, new HttpEntity<MultiValueMap<String, Object>>(parameters, headers), String.class);
 
         assertEquals(202, postResponse.getStatusCode().value());
         
-        
-        
-        
-        
+        // Warten, bis die Validierung durch ist (=SUCCEEDED)
         String operationLocation = postResponse.getHeaders().toSingleValueMap().get(OPERATION_LOCATION_HEADER);
         
-        Thread.sleep(10000);
-        await().until(newUserIsAdded(operationLocation));
+        await()
+            .with().pollInterval(RESULT_POLL_INTERVAL, TimeUnit.SECONDS)
+            .and()
+            .with().atMost(RESULT_WAIT, TimeUnit.MINUTES)
+            .until(new MyCallable(operationLocation, restTemplate));
 
+        // Logfile herunterladen und auswerten
+        ResponseEntity<JobResponse> jobResponse = restTemplate.getForEntity(operationLocation, JobResponse.class);
+        System.out.println(jobResponse.getBody().logFileLocation());
         
         
-        
-//        assertEquals(200, jobResponse.getStatusCode().value());
-//
-//        System.out.println(jobResponse.getStatusCode());
-//        System.out.println(jobResponse.getBody());
-//        System.out.println(jobResponse.getHeaders().toSingleValueMap());
-
-        System.out.println(postResponse.getStatusCode());
-        System.out.println(postResponse.getBody());
-        System.out.println(postResponse.getHeaders().toSingleValueMap().get(OPERATION_LOCATION_HEADER));
 
     } 
-
     
-    
-    private Callable<Boolean> newUserIsAdded(String operationLocation) {
-        ResponseEntity<JobResponse> jobResponse = restTemplate.getForEntity(operationLocation, JobResponse.class);
-        System.out.println("****************"+operationLocation);
-        System.out.println("****************"+jobResponse.getBody().status());
-   
-        return () -> jobResponse.getBody().status().length() > 10;
+    public class MyCallable implements Callable<Boolean> {  
+        private final String operationLocation;
+        private final TestRestTemplate restTemplate;
+           
+        public MyCallable(String operationLocation, TestRestTemplate restTemplate) {
+            this.operationLocation = operationLocation;
+            this.restTemplate = restTemplate;
+        }
+       
+        @Override
+        public Boolean call() throws Exception {
+            ResponseEntity<JobResponse> jobResponse = restTemplate.getForEntity(operationLocation, JobResponse.class);
+            if (jobResponse.getBody().status().equalsIgnoreCase("SUCCEEDED")) {
+                return true;
+            } 
+            return jobResponse.getBody().status().equalsIgnoreCase("SUCCEEDED") ? true : false;            
+        }
     }
+
 }

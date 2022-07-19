@@ -3,10 +3,13 @@ package ch.so.agi.ilivalidator.controller;
 import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 import org.jobrunr.jobs.Job;
 import org.jobrunr.jobs.JobId;
+import org.jobrunr.jobs.states.StateName;
 import org.jobrunr.scheduling.JobScheduler;
 import org.jobrunr.storage.StorageProvider;
 import org.slf4j.Logger;
@@ -91,49 +94,23 @@ public class ApiController {
     @GetMapping("/rest/jobs/{jobId}")
     public ResponseEntity<?> getJobById(@PathVariable String jobId) {
         
-        Job job = storageProvider.getJobById(UUID.fromString(jobId));
-        log.info(job.getJobDetails().getJobParameters().get(0).getObject().toString());
-        log.info(job.getJobDetails().getJobParameters().get(0).getObject().toString());
+        Job job = storageProvider.getJobById(UUID.fromString(jobId));        
+        String logFileName = job.getJobDetails().getJobParameters().get(1).getObject().toString();            
+
+        String logFileLocation = null;
+        String xtfLogFileLocation = null;
+        if (job.getJobState().getName().equals(StateName.SUCCEEDED)) {
+            logFileLocation = Utils.fixUrl(getHost() + "/" + LOG_ENDPOINT + "/" + Utils.getLogFileUrlPathElement(logFileName));
+            xtfLogFileLocation = logFileLocation + ".xtf";            
+        }
         
-        String stmt = """
-SELECT
-    id, jobAsJson, state, createdAt, updatedAt
-FROM
-    jobrunr_jobs
-WHERE
-    id =?             
-""";        
-        JobResponse jobResponse = jdbcTemplate.queryForObject(stmt, new RowMapper<JobResponse>() {
-            @Override
-            public JobResponse mapRow(ResultSet rs, int rowNum) throws SQLException {   
-                String state = rs.getString("state");
-
-                String logFileLocation = null;
-                String xtfLogFileLocation = null;
-                if (state.equalsIgnoreCase("SUCCEEDED")) {
-                    try {
-                        JsonNode response = objectMapper.readTree(rs.getString("jobAsJson"));                    
-                        ArrayNode jobParameters = (ArrayNode) response.get("jobDetails").get("jobParameters");
-                        String logFileName = jobParameters.get(1).get("object").asText();            
-                        logFileLocation = Utils.fixUrl(getHost() + "/" + LOG_ENDPOINT + "/" + Utils.getLogFileUrlPathElement(logFileName));
-                        xtfLogFileLocation = logFileLocation + ".xtf";
-                    } catch (JsonProcessingException e) {
-                        new RuntimeException(e.getMessage());
-                    }
-                }
-
-                JobResponse jobResponse = null;
-                    jobResponse = new JobResponse(
-                            rs.getTimestamp("createdAt").toLocalDateTime(),
-                            rs.getTimestamp("updatedAt").toLocalDateTime(),
-                            state,
-                            logFileLocation,
-                            xtfLogFileLocation
-                        );
-
-                return jobResponse;
-            }
-        }, jobId);
+      JobResponse jobResponse = new JobResponse(
+              LocalDateTime.ofInstant(job.getCreatedAt(), ZoneId.systemDefault()),
+              LocalDateTime.ofInstant(job.getUpdatedAt(), ZoneId.systemDefault()),
+              job.getState().name(),
+              logFileLocation,
+              xtfLogFileLocation
+          );
         
         if (!jobResponse.status().equalsIgnoreCase("SUCCEEDED")) {
             return ResponseEntity.ok().header("Retry-After", "30").body(jobResponse);
