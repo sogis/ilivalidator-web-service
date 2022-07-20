@@ -6,7 +6,17 @@ ARG UID=1001
 # --system kann nicht verwendet werden, weil dann keine Repo-Verzeichnisse angelegt werden können.
 RUN adduser -u $UID ilivalidator 
 
-ENV HOME=/work
+WORKDIR /docbase
+RUN chown $UID:0 . && \
+    chmod 0775 . && \
+    ls -la
+
+WORKDIR /work
+RUN chown $UID:0 . && \
+    chmod 0775 . && \
+    ls -la
+
+ENV HOME=/ilivalidator
 WORKDIR $HOME
 
 COPY ./build/libs/ilivalidator-web-service-*-exec.jar ./application.jar
