@@ -10,6 +10,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 
 import static org.awaitility.Awaitility.*;
 
+@ActiveProfiles("test")
 public abstract class ApiTests {
     static Logger logger = LoggerFactory.getLogger(ApiTests.class);
 
