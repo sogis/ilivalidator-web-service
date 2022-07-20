@@ -1,6 +1,7 @@
 package ch.so.agi.ilivalidator;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.testcontainers.containers.GenericContainer;
@@ -9,6 +10,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 
+@Tag("docker")
 @Testcontainers
 @TestInstance(Lifecycle.PER_CLASS)
 public class DockerWebsocketTests extends WebsocketTests {

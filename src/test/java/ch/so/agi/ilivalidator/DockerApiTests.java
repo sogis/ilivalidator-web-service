@@ -1,6 +1,7 @@
 package ch.so.agi.ilivalidator;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,9 +19,10 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 
+@Tag("docker")
 @Testcontainers
 @TestInstance(Lifecycle.PER_CLASS)
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class DockerApiTests extends ApiTests {
     private static int exposedPort = 8080;
     

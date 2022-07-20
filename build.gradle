@@ -22,20 +22,6 @@ bootJar {
    archiveName = baseName + "-" + version + "-exec.jar"
 }
 
-sourceSets {
-    dockerTest {
-        java.srcDir "$projectDir/src/dockerTest/java"
-        resources.srcDir "$projectDir/src/dockerTest/resources"
-        compileClasspath += main.output + test.output
-        runtimeClasspath += main.output + test.output
-    }
-}
-
-configurations {    
-    dockerTestImplementation.extendsFrom testImplementation
-    dockerTestRuntime.extendsFrom testRuntime    
-}
-
 repositories {
     mavenCentral()
     maven { url "https://jars.interlis.ch/" }
@@ -69,11 +55,12 @@ dependencies {
     testImplementation 'org.testcontainers:testcontainers:1.17.3'
     testImplementation 'org.testcontainers:junit-jupiter:1.17.3'
     testImplementation 'org.awaitility:awaitility-groovy:4.2.0'
-    dockerTestImplementation sourceSets.test.output   
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        excludeTags 'docker'
+    }
     failFast = true
     testLogging {
         showStandardStreams = true
@@ -85,7 +72,7 @@ def DOCKER_ACCOUNT = "edigonzales"
 def DOCKER_REPO = "ilivalidator-web-service"
 
 // only for testing
-task buildImage(type: Exec) {
+task buildImage4Test(type: Exec) {
     workingDir "$projectDir"
     commandLine 'docker', 'build',
                 '--no-cache', '--force-rm',
@@ -97,15 +84,14 @@ task dockerTest(type: Test) {
     description = 'Runs the docker tests.'
     group = 'verification'
     
-    useJUnitPlatform()
+    useJUnitPlatform {
+        includeTags 'docker'
+    }
     failFast = true
     testLogging {
         showStandardStreams = true
     }   
     
-    testClassesDirs = sourceSets.dockerTest.output.classesDirs
-    classpath = sourceSets.dockerTest.runtimeClasspath    
-    outputs.upToDateWhen { false }
     mustRunAfter test
 }
 
