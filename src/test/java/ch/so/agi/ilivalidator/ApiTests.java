@@ -4,14 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -77,12 +75,12 @@ public abstract class ApiTests {
         ResponseEntity<JobResponse> jobResponse = restTemplate.getForEntity(operationLocation, JobResponse.class);        
         URL logFileUrl = new URL(jobResponse.getBody().logFileLocation());
 
-        String logfileContents = null;
+        String logFileContents = null;
         try (InputStream in = logFileUrl.openStream()) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            logfileContents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+            logFileContents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
         }
-        assertTrue(logfileContents.contains("Info: ...validation done"));
+        assertTrue(logFileContents.contains("Info: ...validation done"));
     } 
     
     @Test
