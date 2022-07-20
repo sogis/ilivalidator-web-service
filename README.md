@@ -15,6 +15,7 @@ The ilivalidator web service is a [spring boot](https://projects.spring.io/sprin
  * naming convention, damit toml greifen.
  * env-Vars
  * es kann keine alpine image verwendet werden, wegen sqlite lib
+ * docker run mit env vars und/oder spring boot properties?
  * ...
 
 
