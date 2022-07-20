@@ -5,11 +5,12 @@
 The ilivalidator web service is a [spring boot](https://projects.spring.io/spring-boot/) application and uses [ilivalidator](https://github.com/claeis/ilivalidator) for the INTERLIS transfer file validation.
 
 ## TODO
+- Expose Volumes...
 - Funktioniert directory listing mit reverse proxy
 - update readme
 - update docs:
  * wie werden die Verzeichnisse erstellt (d.h. falls vorhanden, nicht).
- * log-Dir muss geshared sein
+ * log-Dir muss geshared sein (das work dir mindestens)
  * naming convention, damit toml greifen.
  * env-Vars
  * es kann keine alpine image verwendet werden, wegen sqlite lib
