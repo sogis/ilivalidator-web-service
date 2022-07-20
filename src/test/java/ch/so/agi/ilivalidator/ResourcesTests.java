@@ -22,6 +22,20 @@ public abstract class ResourcesTests {
     private String CONFIG_ENDPOINT = "/config/";
 
     @Test
+    public void isIndexAvailable() throws Exception {
+        String serverUrl = "http://localhost:"+port+"/";
+
+        URL logFileUrl = new URL(serverUrl + "index.html");
+
+        String fileContents = null;
+        try (InputStream in = logFileUrl.openStream()) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            fileContents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+        }
+        assertTrue(fileContents.contains("ilivalidator web service • Kanton Solothurn"));
+    }
+
+    @Test
     public void isTomlAvailable() throws Exception {
         String serverUrl = "http://localhost:"+port+CONFIG_ENDPOINT+"toml/";
 
