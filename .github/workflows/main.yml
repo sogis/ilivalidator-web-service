@@ -3,13 +3,17 @@ name: CI/CD
 on:
   workflow_dispatch:
   push:
+    paths-ignore:
+      - 'docs/**'
+      - 'openshift/**'
+      - '**.md'
 
 jobs:
   build:
     env:
       DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}} 
-      
+
     runs-on: ubuntu-latest
 
     steps:

@@ -11,6 +11,7 @@ The ilivalidator web service is a [spring boot](https://projects.spring.io/sprin
 - update docs:
  * wie werden die Verzeichnisse erstellt (d.h. falls vorhanden, nicht).
  * log-Dir muss geshared sein (das work dir mindestens)
+ * Beispiel mit config-files vorhanden. Wie funktioneirt das? Werden die von der Anwendung überschrieben? Dann bräuchte es doch noch einen Schalter. Sonst muss man immer wieder nach dem Starten reinkopieren. Ah Schalter gibt es bereits.
  * naming convention, damit toml greifen.
  * env-Vars
  * es kann keine alpine image verwendet werden, wegen sqlite lib
