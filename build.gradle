@@ -71,7 +71,6 @@ tasks.named('test') {
 def DOCKER_ACCOUNT = "edigonzales"
 def DOCKER_REPO = "ilivalidator-web-service"
 
-// only for testing
 task buildImage4Test(type: Exec) {
     workingDir "$projectDir"
     commandLine 'docker', 'build',

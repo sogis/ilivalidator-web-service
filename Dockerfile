@@ -28,4 +28,4 @@ USER $UID
 EXPOSE 8080
 
 ENV LOG4J_FORMAT_MSG_NO_LOOKUPS=true
-CMD java -XX:+UseParallelGC -XX:MaxRAMPercentage=80.0 -jar application.jar
+CMD java -XX:+UseParallelGC -XX:MaxRAMPercentage=80.0 -jar application.jar --spring.profiles.active=docker

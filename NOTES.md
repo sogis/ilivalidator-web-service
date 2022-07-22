@@ -17,3 +17,8 @@ docker run --rm -p8080:8080 -v /Users/stefan/tmp/foo:/tmp/ -e JDBC_URL=jdbc:sqli
 - o.j.storage.sql.common.DatabaseCreator: wird nicht ausgeführt. Scheint i.O. zu sein mit der DB.
 
 Test mit /docbase, /tmp, /work...
+
+
+```
+docker run --rm -p8080:8080 -p8000:8000 -v /Users/stefan/tmp/ilivalidator/tmp:/tmp/ -v /Users/stefan/tmp/ilivalidator/docbase:/docbase/ -v /Users/stefan/tmp/ilivalidator/work:/work/ edigonzales/ilivalidator-web-service
+```

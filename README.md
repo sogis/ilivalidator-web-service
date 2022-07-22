@@ -2,39 +2,15 @@
 
 # ilivalidator-web-service
 
-The ilivalidator web service is a [spring boot](https://projects.spring.io/spring-boot/) application and uses [ilivalidator](https://github.com/claeis/ilivalidator) for the INTERLIS transfer file validation.
-
-## TODO
-- Expose Volumes...
-- Funktioniert directory listing mit reverse proxy
-- update readme
-- update docs:
- * wie werden die Verzeichnisse erstellt (d.h. falls vorhanden, nicht).
- * log-Dir muss geshared sein (das work dir mindestens)
- * Beispiel mit config-files vorhanden. Wie funktioneirt das? Werden die von der Anwendung überschrieben? Dann bräuchte es doch noch einen Schalter. Sonst muss man immer wieder nach dem Starten reinkopieren. Ah Schalter gibt es bereits.
- * naming convention, damit toml greifen.
- * env-Vars
- * es kann keine alpine image verwendet werden, wegen sqlite lib
- * docker run mit env vars und/oder spring boot properties?
- * ...
-
-
-
-```
-2022-07-16 14:58:53.988  INFO 1 --- [nio-8888-exec-9] c.s.a.ilivalidator.IlivalidatorService   : Validation end.
-2022-07-16 14:58:53.990  INFO 1 --- [nio-8888-exec-9] ch.so.agi.ilivalidator.WebSocketHandler  : ************: {host=geo-t.so.ch, upgrade=WebSocket, connection=upgrade, pragma=no-cache, cache-control=no-cache, user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36, origin=https://geo-t.so.ch, sec-websocket-version=13, accept-encoding=gzip, deflate, br, accept-language=en,es;q=0.9,de;q=0.8,en-US;q=0.7,fr;q=0.6,nb;q=0.5, sec-websocket-key=dcXQM/DvOFqVkxxWYCtU6A==, sec-websocket-extensions=permessage-deflate; client_max_window_bits, hsp_client_addr=46.255.172.215, hsp-listeneruri=https://geo-t.so.ch, requestcorrelator=7f0100-1326-2022.07.16_1458.46.451-001, connectioncorrelator=7f0100-1326-2022.07.16_1458.46.451-001, hsp_client_city=Koppigen, hsp_client_country=CH, hsp_client_continent=EU, x-forwarded-server=geo-t.so.ch, 127.0.0.1, clientcorrelator=NThxRHP4V9E$}
-2022-07-16 14:58:53.990  INFO 1 --- [nio-8888-exec-9] ch.so.agi.ilivalidator.WebSocketHandler  : ************: ilivalidator-web-service-34-2j4fr
-2022-07-16 14:58:53.990  INFO 1 --- [nio-8888-exec-9] ch.so.agi.ilivalidator.WebSocketHandler  : ************: ilivalidator-web-service-34-2j4fr
-2022-07-16 14:58:53.990  INFO 1 --- [nio-8888-exec-9] ch.so.agi.ilivalidator.WebSocketHandler  : ************: wss://geo-t.so.ch/ilivalidator//socket
-2022-07-16 14:58:53.990  INFO 1 --- [nio-8888-exec-9] ch.so.agi.ilivalidator.WebSocketHandler  : log file: /tmp/ilivalidator_14573654641354684883/254900.itf.log
-
-```
+The ilivalidator web service is a [Spring Boot](https://projects.spring.io/spring-boot/) application and uses [ilivalidator](https://github.com/claeis/ilivalidator) for the INTERLIS transfer file validation.
 
 ## Features
 
-* checks INTERLIS 1+2 transfer files
+* checks INTERLIS 1+2 transfer files: see [https://github.com/claeis/ilivalidator](https://github.com/claeis/ilivalidator) for all the INTERLIS validation magic of ilivalidator
 * uses server saved config files for validation tailoring
-* see [https://github.com/claeis/ilivalidator](https://github.com/claeis/ilivalidator) for all the INTERLIS validation magic of ilivalidator 
+* user can deploy own config files for validation tailoring
+* ReST-API
+* simple clustering for horizontal scaling
 
 ## License
 
@@ -46,23 +22,98 @@ ilivalidator web service is in development state.
 
 ## System Requirements
 
-For the current version of ilivalidator web service, you will need a JRE (Java Runtime Environment) installed on your system, version 1.8 or later.
-
-## Configuration
-See `application.properties`. 
-
-`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` must be set as ENV vars directly. Also for testing!
+For the current version of ilivalidator web service, you will need a JRE (Java Runtime Environment) installed on your system, version 17 or later.
 
 ## Developing
 
 ilivalidator web service is build as a Spring Boot Application.
 
-`git clone https://github.com/sogis/ilivalidator-web-service-websocket.git` 
+`git clone https://github.com/sogis/ilivalidator-web-service.git` 
 
 Use your favorite IDE (e.g. [Spring Tool Suite](https://spring.io/tools/sts/all)) for coding.
 
-### Log files
-It uses S3 for storing the log files to be independent of the deployment: If we run more than one pod and the pods have on common volume, it is possible that the link to the log file after the validation will end on the pod that did not the validation. 
+### Testing
+
+Since ilivalidator is heavily tested in its own project, there are only functional tests of the web service implemented.
+
+`./gradlew clean test` will run all tests by starting the web service and uploading an INTERLIS transfer file.
+
+If you want to test the Docker image as well, you have to run:
+
+```
+./gradlew clean build -x test
+./gradlew buildImage4Test dockerTest
+```
+
+The tests are the same.
+
+### Building
+
+`./gradlew clean build` will create an executable JAR. Ilivalidator custom functions will not work. Not sure why but must be something with how the plugin loader works. 
+
+Since there is no sqlite native driver on Alpine Linu for `aarch64` x, we will use `bellsoft/liberica-openjdk-centos:17.0.3` as base image (instead of `bellsoft/liberica-openjdk-alpine-musl:17.0.3`).
+
+### Release management / versioning
+
+It uses a simple release management and versioning mechanism: Local builds are tagged as `2.x.LOCALBUILD`. Builds on Github Action will append the build number, e.g. `2.0.127`. Major version will be increased after "major" changes. After every commit to the repository a docker image will be build and pushed to `hub.docker.com`. It will be tagged as `latest` and with the build number (`2`, `2.0` and `2.0.127`).
+
+## Configuration and running
+
+Die Anwendung kann als gewöhnliche Spring Boot Anwendung gestartet werden:
+
+```
+java -jar build/libs/ilivalidator-web-service-<VERSION>-exec.jar
+```
+
+Konfiguration via application.properties im Verzeichnis in dem der Service gestartet wird. Oder entsprechende alternative Konfigurationsmöglichkeiten von [Spring Boot](https://docs.spring.io/spring-boot/docs/2.7.1/reference/htmlsingle/#features.external-config).
+
+Die Anwendung beinhaltet bereits eine _application.properties_-Datei. Siehe [application.properties](src/main/resources/application.properties), welche beim obigen Aufruf verwendet wird.
+
+Das Dockerimage wird wie folgt gestartet:
+
+```
+docker run -p8080:8080 sogis/ilivalidator-web-service:<VERSION>
+```
+
+Der Dockercontainer verwendet eine leicht angepasster Konfiguration ([application-docker.properties](src/main/resources/application.properties)), damit das Mounten von Verzeichnissen hoffentlich einfacher fällt und weniger Fehler passieren.
+
+Die allermeisten Optionen sind via Umgebungsvariablen exponiert und somit veränderbar. Im Extremfall kann immer noch ein neues Dockerimage erstellt werden mit einer ganz eigenen Konfiguration.
+
+### Optionen (Umgebungsvariablen)
+
+| Name | Beschreibung | Standard |
+|-----|-----|-----|
+| `MAX_FILE_SIZE` | Die maximale Grösse einer Datei, die hochgeladen werden kann in Megabyte. Sowohl für die ReST-API wie auch via GUI über Websocket. | `100` |
+| `LOG_LEVEL_FRAMEWORK` | Das Logging-Level des Spring Boot Frameworks. | `info` |
+| `LOG_LEVEL_DB_CONNECTION_POOL` | Das Logging-Level des DB-Connection-Poolsocket. | `info` |
+| `LOG_LEVEL_APPLICATION` | Das Logging-Level der Anwendung (= selber geschriebener Code). | `info` |
+| `CONNECT_TIMEOUT` | Die Zeit in Millisekunden, die bis zu einem erfolgreichem Connect gewartet wird. Betrifft sämtliche Methoden, welche `sun.net.client.defaultConnectTimeout` berücksichtigen. Die Option dient dazu damit langsame INTERLIS-Modellablage schneller zu einem Timeout führen. | `5000` |
+| `READ_TIMEOUT` | Die Zeit in Millisekunden, die bis zu einem erfolgreichem Lesen gewartet wird. Betrifft sämtliche Methoden, welche `sun.net.client.defaultConnectTimeout` berücksichtigen. Die Option dient dazu damit langsame INTERLIS-Modellablage schneller zu einem Timeout führen. | `5000` |
+| `DOC_BASE` | Verzeichnis auf dem Filesystem, das als Root-Verzeichnis für das Directory-Listing des Webservers dient. Das Root-Verzeichnis selber ist nicht sichtbar. | `/docbase/` |
+| `CONFIG_DIRECTORY_NAME` | Unterverzeichnis im `DOC_BASE`-Verzeichnis, welches die _toml_- und _ili_-Verzeichnisse enthält. Dieses Verzeichnis ist unter http://localhost:8080/config erreichbar. Es muss nicht manuell erstellt werden. Es wird beim Starten der Anwendung erstellt. Das Verzeichnis muss bei einem Betrieb mit mehreren Containern geteilt werden, falls zusätzliche _toml_- und _ili_-Dateien in die entsprechenden Verzeichnisse kopiert werden. | `config` |
+| `UNPACK_CONFIG_FILES` | In der Anwendung enthaltene _toml_- und _ili_-Dateien werden bei jedem Start der Anwendung in die entsprechenden Verzeichnisse kopiert. | `true` |
+| `WORK_DIRECTORY` | Verzeichnis, in das die zu prüfenden INTERLIS-Transferdatei und die Logdateien kopiert werden (in ein temporäres Unterverzeichnis). Es ist das einzige Verzeichnis, welches bei einem Betrieb mit mehreren Containern zwingend geteilt werden muss. Sonst ist nicht sichergestellt, dass man die Logdatei(en) herunterladen kann. | `/work/` |
+| `FOLDER_PREFIX` | Für jede zu prüfende Datei wird im `WORK`-Verzeichnis ein temporäres Verzeichnis erstellt. Der Prefix wird dem Namen des temporären Verzeichnisses vorangestellt. | `ilivalidator_` |
+| `REST_API_ENABLED` | Dient zum Ein- und Ausschalten des ReST-API-Controllers und damit der eigentlichen Funktionalität (auch wenn Jobrunr trotzdem initialisiert wird). | `true` |
+| `JDBC_URL` | Die JDBC-Url der Sqlite-Datei, die dem Speichern der Jobs dient, welche mittels ReST-API getriggert wurden. Die Datei wird im Standard-`WORK`-Verzeichnis gespeichert, da dieses beim Multi-Container-Betrieb geteilt werden muss. Andere JDBC-fähige Datenbanken sind ebenfalls möglich. Dann müssten noch mindestens Login und Password exponiert werden. | `jdbc:sqlite:/work/jobrunr_db.sqlite` |
+| `JOBRUNR_SERVER_ENABLED` | Dient die Instanz als sogenannter Background-Jobserver, d.h. werden mittels ReST-API hochgeladene INTERLIS-Transferdateien validiert. Wird nur eine Instanz betrieben, muss die Option zwingen `true` sein, da sonst der Job nicht ausgeführt wird. | `true` |
+| `JOBRUNR_DASHBOARD_ENABLED` | Das Jobrunr-Dashboard wird auf dem Port 8000 gestartet. | `true` |
+| `JOBRUNR_DASHBOARD_USER` | Username für Jobrunr-Dasboard. Achtung: Basic Authentication. | `admin` |
+| `JOBRUNR_DASHBOARD_PWD` | Passwort für Jobrunr-Dasboard. Achtung: Basic Authentication. | `admin` |
+
+Ein `docker-run`-Befehl könnte circa so aussehen:
+
+```
+docker run --rm -p8080:8080 -p8000:8000 -v /shared_storage/docbase:/docbase/ -v /shared_storage/work:/work/ sogis/ilivalidator-web-service:2
+```
+
+Es werden zwei Ports gemapped. Der Port 8080 ist der Port der Anwendung und zwingend notwendig. Der Port 8000 dient dazu, dass das Jobrunr-Dashboard verfügbar ist.
+
+Im lokalen Filesystem (oder Kubernetes-PV-Whatever etc.) müssen die beiden Verzeichnisse _/shared_storage/docbase/_ und _/shared_storage/work/_ vorhanden sein. Die beiden Verzeichnisse _/docbase/_ und _/work/_ werden unter den lokalen Verzeichnissen gemountet. Im _docbase_-Verzeichnis wird das Verzeichnis _config_ erstellt, falls es nicht existiert. Im selbigen wiederum werden die beiden Verzeichnisse _ili_ und _toml_ erstellt und in diese einige Dateien kopiert. Die Sqlite-Datenbank, die dazu dient die ReST-API-Jobs zu koordinieren, befindet sich im _/shared_storage/work/_-Verzeichnis. 
+
+### Clean up
+
+Ein Scheduler löscht jede Stunde (momentan hardcodiert) alle temporären Verzeichnisse, die älter als 60x60 Sekunden sind.
 
 ### Additional models
 
@@ -72,55 +123,26 @@ Ilivalidator needs a toml file if you want to apply an additional model for your
 
 Custom-Funktionen können in zwei Varianten verwendet werden. Die Jar-Datei mit den Funktionen muss in einem Verzeichnis liegen und vor jeder Prüfung werden die Klassen dynamisch geladen. Das hat den Nachteil, dass man so kein Native-Image (GraalVM) mit Custom-Funktionen herstellen kann und man z.B. bei einem Webservice die Klassen nicht einfach als Dependency definiert kann, sondern die Jar-Datei muss in einem Verzeichnis liegen, welches beim Aufruf von _ilivalidator_ als Option übergeben wird. Bei der zweiten (neueren) Variante kann man die Custom-Funktionen als normale Dependency im Java-Projekt definieren. Zusätzlich müssen die einzelnen Klassen als Systemproperty der Anwendung bekannt gemacht werden. 
 
-Im vorliegenden Fall wird die zweite Variante gewählt. Das notwendige Systemproperty wird in der `AppConfig`-Klasse gesetzt. Falls man die erste Variante vorzieht oder aus anderen Gründen verwenden will, macht man z.B. ein Verzeichnis `src/main/resources/libs-ext/` und kopiert beim Builden die Jar-Datei in dieses Verzeichnis. Dazu wird eine Gradle-Konfiguration benötigt. Zur Laufzeit (also wenn geprüft wird) muss man die Jar-Datei auf das Filesystem kopieren und dieses Verzeichnis als Options _ilivalidator_ übergeben. Siehe dazu Code vor dem "aot"-Merge.
+Im vorliegenden Fall wird die zweite Variante gewählt. Das notwendige Systemproperty wird in der `AppConfig`-Klasse gesetzt. Falls man die erste Variante vorzieht oder aus anderen Gründen verwenden will, macht man z.B. ein Verzeichnis `src/main/resources/libs-ext/` und kopiert beim Builden die Jar-Datei in dieses Verzeichnis. Dazu wird eine Gradle-Konfiguration benötigt. Zur Laufzeit (also wenn geprüft wird) muss man die Jar-Datei auf das Filesystem kopieren und dieses Verzeichnis als Options _ilivalidator_ übergeben. Siehe dazu Code vor dem "aot"-Merge (welches Repo?).
 
-#### Land use planning
+### Clustering
+**TODO**
 
-Für die Validierung der Nutzungsplanung werden zusätzliche Prüfungen vorgenommen. Sowohl mit "einfachen", zusätzlichen Constraints, aber auch mit zusätzlichen Java-Funktionen. 
+Disclaimer: Das Clustering funktioniert momentan nur via ReST-Schnittstelle. Bei der Bedienung mittels GUI (Websocket) wird die Ausführung des Validierungs-Prozesses noch nicht via _Jobrunr_ gesteuert.
 
-- https://github.com/claeis/ilivalidator/issues/180 (fixed)
-- https://github.com/claeis/ilivalidator/issues/196 (fixed)
-- https://github.com/claeis/ilivalidator/issues/203 (fixed)
-- https://github.com/claeis/ilivalidator/issues/204
-- https://github.com/claeis/ilivalidator/issues/205
-- https://github.com/claeis/ili2c/issues/6 (fixed)
-
-Wegen früheren Bugs musste das Originalmodell angepasst werden, damit die Constraints funktioneren. Das ist nicht mehr der Fall. Sämtliche Constraints sind im Validierungsmodell. Beide Modell werden zur Laufzeit von der Modellablage bezogen.
-
-### Testing
-
-Since ilivalidator is heavily tested in its own project, there are only functional tests of the web service implemented.
-
-`./gradlew clean test` will run all tests by starting the web service and uploading an INTERLIS transfer file.
-
-### Building
-
-`./gradlew clean build` will create an executable JAR. Ilivalidator custom functions will not work. Not sure why but must be something with how the plugin loader works. 
-
-### Release management / versioning
-
-It uses a simple release management and versioning mechanism: Local builds are tagged as `1.0.LOCALBUILD`. Builds on Travis or Jenkins will append the build number, e.g. `1.0.48`. Major version will be increased after "major" changes. After every commit to the repository a docker image will be build and pushed to `hub.docker.com`. It will be tagged as `latest` and with the build number (`1.0.48`).
-
-## Running
-
-### JVM
-TODO
+Lorem ipsum... Jobrunr...
 
 
-### Docker
-```
-docker run -p 8888:8888 -e AWS_ACCESS_KEY_ID=xxxx -e AWS_SECRET_ACCESS_KEY=yyyy sogis/ilivalidator-web-service
-```
 
-### SO!GIS
-TODO: Link to Openshift stuff.
+## Configuration and running (SO!GIS)
+**FIXME**
 
+## User manual
 
-## ilivalidator configuration files
-
-The ilivalidator configurations files (aka `toml` files) are part of the distributed application and cannot be changed or overriden at the moment. There can be only one configuration file per INTERLIS model.
-
-These configuration files can be found in the resource directory of the source tree.
+- GUI: [docs/user-manual-de.md](docs/user-manual-de.md)
+- Nutzungsplanung: [docs/user-manual-de-nplso.md](docs/user-manual-de-nplso.md)
+- **TODO** IPW-Validator: [docs/user-manual-de-ipw.md](docs/user-manual-de-ipw.md)
+- **TODO** ReST_API: [docs/rest-api-de.md](docs/rest-api-de.md)
 
 
 
