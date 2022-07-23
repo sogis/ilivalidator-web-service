@@ -143,7 +143,7 @@ Lorem ipsum... Jobrunr...
 - GUI: [docs/user-manual-de.md](docs/user-manual-de.md)
 - Nutzungsplanung: [docs/user-manual-de-nplso.md](docs/user-manual-de-nplso.md)
 - **TODO** IPW-Validator: [docs/user-manual-de-ipw.md](docs/user-manual-de-ipw.md)
-- **TODO** ReST_API: [docs/rest-api-de.md](docs/rest-api-de.md)
+- ReST_API: [docs/rest-api-de.md](docs/rest-api-de.md)
 
 
 
