@@ -9,7 +9,6 @@
 
 Es gibt einen Endpunkt ("/rest/jobs"). Er dient dazu eine INTERLIS-Transferdatei hochzuladen (`POST`) und einen Validierungsprozess zu starten und um den Stand und das Resultat der Validierung abzufragen (`GET`).
 
-### Daten hochladen
 
 ```
 curl -i -X POST -F file=@254900.itf http://localhost:8080/rest/jobs
@@ -54,3 +53,8 @@ Date: Sat, 23 Jul 2022 16:43:29 GMT
 
 {"createdAt":"2022-07-23T16:42:15.68317767","updatedAt":"2022-07-23T16:43:16.011457796","status":"SUCCEEDED","logFileLocation":"http://localhost:8080/logs/ilivalidator_8148789347157812698/254900.itf.log","xtfLogFileLocation":"http://localhost:8080/logs/ilivalidator_8148789347157812698/254900.itf.log.xtf"}
 ```
+
+## Links
+
+- https://dunnhq.com/posts/2021/long-running-rest-requests/
+- https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md#1327-the-typical-flow-polling

@@ -1,0 +1,42 @@
+version: '3'
+services:
+  frontend:
+    image: edigonzales/ilivalidator-web-service:latest
+    environment:
+      TZ: Europe/Zurich
+    ports:
+      - 8080:8080
+      - 8000:8000
+    volumes:
+      - type: bind
+        source: /Users/stefan/tmp/ilivalidator/docbase
+        target: /docbase
+      - type: bind
+        source: /Users/stefan/tmp/ilivalidator/work
+        target: /work
+  worker:
+    image: edigonzales/ilivalidator-web-service:latest
+    deploy:
+      replicas: 2
+      # Mit Version 3 funktioniert cpus nur im swarm mode. 
+      # Mit Version 2 auch im nicht-swarm mode.
+      resources:
+        limits:
+          #cpus: '0.005' # Anzahl CPUs des Hosts (!?)
+          memory: 2000M
+    environment:
+      TZ: Europe/Zurich
+      JOBRUNR_DASHBOARD_ENABLED: "false"
+      REST_API_ENABLED: "false"
+      UNPACK_CONFIG_FILES: "false"
+      CLEANER_ENABLED: "false"
+    # ports:
+    #   - 8080:8080
+    #   - 8000:8000
+    volumes:
+      - type: bind
+        source: /Users/stefan/tmp/ilivalidator/docbase
+        target: /docbase
+      - type: bind
+        source: /Users/stefan/tmp/ilivalidator/work
+        target: /work
