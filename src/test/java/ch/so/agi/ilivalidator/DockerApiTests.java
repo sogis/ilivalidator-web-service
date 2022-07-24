@@ -30,7 +30,7 @@ public class DockerApiTests extends ApiTests {
     protected TestRestTemplate restTemplate2;
 
     @Container
-    public static GenericContainer<?> ilivalidatorWebService = new GenericContainer<>("edigonzales/ilivalidator-web-service:latest")
+    public static GenericContainer<?> ilivalidatorWebService = new GenericContainer<>("sogis/ilivalidator-web-service:latest")
             .waitingFor(Wait.forHttp("/actuator/health"))
             .withEnv("JDBC_URL", "jdbc:sqlite:./jobrunr_db.sqlite")
             .withEnv("DOC_BASE", "/tmp/")
