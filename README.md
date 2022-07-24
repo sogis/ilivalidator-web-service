@@ -127,13 +127,50 @@ Custom-Funktionen können in zwei Varianten verwendet werden. Die Jar-Datei mit 
 Im vorliegenden Fall wird die zweite Variante gewählt. Das notwendige Systemproperty wird in der `AppConfig`-Klasse gesetzt. Falls man die erste Variante vorzieht oder aus anderen Gründen verwenden will, macht man z.B. ein Verzeichnis `src/main/resources/libs-ext/` und kopiert beim Builden die Jar-Datei in dieses Verzeichnis. Dazu wird eine Gradle-Konfiguration benötigt. Zur Laufzeit (also wenn geprüft wird) muss man die Jar-Datei auf das Filesystem kopieren und dieses Verzeichnis als Options _ilivalidator_ übergeben. Siehe dazu Code vor dem "aot"-Merge (welches Repo?).
 
 ### Clustering
-**TODO**
 
 Disclaimer: Das Clustering funktioniert momentan nur via ReST-Schnittstelle. Bei der Bedienung mittels GUI (Websocket) wird die Ausführung des Validierungs-Prozesses noch nicht via _Jobrunr_ gesteuert.
 
-Lorem ipsum... Jobrunr...
+Eine einfache aber effiziente Variante ist das Hochfahren des gleichen Images mit unterschiedlicher Konfiguration. Mit `docker-compose` kann das so aussehen:
 
+```
+version: '3'
+services:
+  frontend:
+    image: sogis/ilivalidator-web-service:2
+    environment:
+      TZ: Europe/Zurich
+    ports:
+      - 8080:8080
+      - 8000:8000
+    volumes:
+      - type: bind
+        source: /tmp/docbase
+        target: /docbase
+      - type: bind
+        source: /tmp/work
+        target: /work
+  worker:
+    image: sogis/ilivalidator-web-service:2
+    deploy:
+      replicas: 2
+    environment:
+      TZ: Europe/Zurich
+      JOBRUNR_DASHBOARD_ENABLED: "false"
+      REST_API_ENABLED: "false"
+      UNPACK_CONFIG_FILES: "false"
+      CLEANER_ENABLED: "false"
+    volumes:
+      - type: bind
+        source: /tmp/docbase
+        target: /docbase
+      - type: bind
+        source: /tmp/work
+        target: /work
+```
 
+Es wird ein "frontend"-Service gestartet, welche als Schnittstelle gegen aussen dient. Es werden mehrere "worker"-Services gestartet (`replicas`), die nur für das Validieren einer INTERLIS-Transferdatei zuständig sind. Es sind keine Port exponiert, da keiner dieser Service von aussen verfügbar sein muss. Es werden verschiedene Applikationsfunktionen ausgeschaltet (sieh Umgebungsvariablen). Das Jobmanagement wird mit [Jobrunr](https://jobrunr.io) gemacht.
+
+Achtung: Mit Docker Compose Version 3 kann im Nicht-Swarm-Mode keine CPU-Limits gesetzt werden.
 
 ## Configuration and running (SO!GIS)
 **FIXME**
