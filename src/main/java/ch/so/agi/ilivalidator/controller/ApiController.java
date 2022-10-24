@@ -1,6 +1,9 @@
 package ch.so.agi.ilivalidator.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.UUID;
@@ -8,6 +11,7 @@ import java.util.UUID;
 import org.jobrunr.jobs.Job;
 import org.jobrunr.jobs.JobId;
 import org.jobrunr.jobs.states.StateName;
+import org.jobrunr.scheduling.BackgroundJob;
 import org.jobrunr.scheduling.JobScheduler;
 import org.jobrunr.storage.StorageProvider;
 import org.slf4j.Logger;
@@ -28,7 +32,7 @@ import ch.so.agi.ilivalidator.Utils;
 import ch.so.agi.ilivalidator.model.JobResponse;
 import ch.so.agi.ilivalidator.service.FilesystemStorageService;
 import ch.so.agi.ilivalidator.service.IlivalidatorService;
-
+import ch.so.agi.ilivalidator.service.ValidationResult;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @ConditionalOnProperty(
@@ -84,15 +88,32 @@ public class ApiController {
 
         String logFileLocation = null;
         String xtfLogFileLocation = null;
+        String validationResult = null;
         if (job.getJobState().getName().equals(StateName.SUCCEEDED)) {
             logFileLocation = Utils.fixUrl(getHost() + "/" + LOG_ENDPOINT + "/" + Utils.getLogFileUrlPathElement(logFileName));
-            xtfLogFileLocation = logFileLocation + ".xtf";            
+            xtfLogFileLocation = logFileLocation + ".xtf"; 
+            
+            try {
+                // JobResult nur bei Pro-Version
+                String content = Files.readString(Paths.get(logFileName));
+                if (content.contains("...validation done")) {
+                    validationResult = ValidationResult.SUCCEEDED.toString();
+                } else if (content.contains("...validation failed")) {
+                    validationResult = ValidationResult.FAILED.toString();
+                } else {
+                    validationResult = ValidationResult.UNKNOWN.toString();
+                }
+            } catch (IOException e) {
+                validationResult = ValidationResult.UNKNOWN.toString();
+                e.printStackTrace();
+            }
         }
         
       JobResponse jobResponse = new JobResponse(
               LocalDateTime.ofInstant(job.getCreatedAt(), ZoneId.systemDefault()),
               LocalDateTime.ofInstant(job.getUpdatedAt(), ZoneId.systemDefault()),
               job.getState().name(),
+              validationResult,
               logFileLocation,
               xtfLogFileLocation
           );

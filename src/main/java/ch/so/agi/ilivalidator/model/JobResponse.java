@@ -9,6 +9,7 @@ public record JobResponse(
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
             String status,
+            String validationStatus,
             String logFileLocation,
             String xtfLogFileLocation
         ) {}
