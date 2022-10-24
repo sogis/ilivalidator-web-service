@@ -51,7 +51,7 @@ Content-Type: application/json
 Transfer-Encoding: chunked
 Date: Sat, 23 Jul 2022 16:43:29 GMT
 
-{"createdAt":"2022-07-23T16:42:15.68317767","updatedAt":"2022-07-23T16:43:16.011457796","status":"SUCCEEDED","logFileLocation":"http://localhost:8080/logs/ilivalidator_8148789347157812698/254900.itf.log","xtfLogFileLocation":"http://localhost:8080/logs/ilivalidator_8148789347157812698/254900.itf.log.xtf"}
+{"createdAt":"2022-07-23T16:42:15.68317767","updatedAt":"2022-07-23T16:43:16.011457796","status":"SUCCEEDED","validationResult":"SUCCEEDED","logFileLocation":"http://localhost:8080/logs/ilivalidator_8148789347157812698/254900.itf.log","xtfLogFileLocation":"http://localhost:8080/logs/ilivalidator_8148789347157812698/254900.itf.log.xtf"}
 ```
 
 ## Links
